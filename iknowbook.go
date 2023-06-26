@@ -1,20 +1,33 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
 type Book struct {
-	isbn            string
-	title           string
-	publicationDate string
-	price           string
-	author          string
-	translator      string
-	language        string
+	Isbn            string
+	Title           string
+	PublicationDate string
+	Price           string
+	Author          string
+	Translator      string
+	Language        string
 }
 
 func main() {
-	var fileName = "iknowbook.txt"
-	fmt.Println(ReadFileAsString(fileName))
+	PrintBookTitle("json/book_single.json")
+}
+
+func PrintBookTitle(jsonFile string) {
+	content := ReadFileAsString(jsonFile)
+
+	var books Book
+	err := json.Unmarshal([]byte(content), &books)
+
+	if err == nil {
+		fmt.Println(books.Title)
+	} else {
+		fmt.Println(err)
+	}
 }
