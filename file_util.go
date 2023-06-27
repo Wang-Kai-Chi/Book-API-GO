@@ -17,11 +17,15 @@ func CreateFile(fileName string, content string) {
 		log.Fatalf("failed writing to file: %s", err)
 	}
 }
+
 func ReadFileAsString(fileName string) string {
+	return string(ReadFile(fileName)[:])
+}
+
+func ReadFile(fileName string) []byte {
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Panicf("failed reading data from file: %s", err)
 	}
-	//return the data converted from []byte to string
-	return string(data[:])
+	return data
 }

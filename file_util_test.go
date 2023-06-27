@@ -17,7 +17,7 @@ func TestCreateFile(t *testing.T) {
 	fileName := GetFileName()
 	CreateFile(fileName, GetContent())
 
-	_, err := os.Stat("./" + fileName)
+	_, err := os.Stat(fileName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,3 +30,4 @@ func TestReadFileAsString(t *testing.T) {
 		t.Fatal()
 	}
 }
+
