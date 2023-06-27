@@ -1,9 +1,19 @@
-package main
+package handler
 
 import (
 	"encoding/json"
 	"log"
 )
+
+type Book struct {
+	Isbn            string
+	Title           string
+	PublicationDate string
+	Price           string
+	Author          string
+	Translator      string
+	Language        string
+}
 
 func GetBookFromJson(jsonFile string) Book {
 	content := ReadFile(jsonFile)

@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 )
 
 func GetFileName() string {
-	return "output/iknowbook.txt"
+	return "../output/iknowbook.txt"
 }
 
 func GetContent() string {
@@ -30,4 +30,3 @@ func TestReadFileAsString(t *testing.T) {
 		t.Fatal()
 	}
 }
-
