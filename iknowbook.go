@@ -7,5 +7,8 @@ import (
 )
 
 func main() {
-	fmt.Println(handler.GetBookFromJson("./json/book_single.json").PublicationDate)
+	content := handler.ReadFileAsString("./json/book_single.json")
+	fmt.Println(handler.GetBookFromJson(content).PublicationDate)
+
+	ServerStart()
 }

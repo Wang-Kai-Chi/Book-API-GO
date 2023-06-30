@@ -30,3 +30,11 @@ func TestReadFileAsString(t *testing.T) {
 		t.Fatal()
 	}
 }
+
+func TestReadFile(t *testing.T) {
+	result := ReadFile(GetFileName())
+
+	if len(result) == 0 {
+		t.Fatal()
+	}
+}

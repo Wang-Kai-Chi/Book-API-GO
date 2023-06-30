@@ -13,7 +13,8 @@ func GetJsonFolder() string {
 }
 
 func TestGetBookFromJson(t *testing.T) {
-	isbn := GetBookFromJson(GetJsonFolder() + "book_single.json").Isbn
+	path := GetJsonFolder() + "book_single.json"
+	isbn := GetBookFromJson(ReadFileAsString(path)).Isbn
 
 	if isbn != GetIsbnForTest() {
 		t.Fatal()
@@ -21,7 +22,8 @@ func TestGetBookFromJson(t *testing.T) {
 }
 
 func TestGetBookArrayFromJson(t *testing.T) {
-	isbn := GetBookArrayFromJson(GetJsonFolder() + "book_arr.json")[0].Isbn
+	path := GetJsonFolder() + "book_arr.json"
+	isbn := GetBookArrayFromJson(ReadFileAsString(path))[0].Isbn
 
 	if isbn != GetIsbnForTest() {
 		t.Fatal()
