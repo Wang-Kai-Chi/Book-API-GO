@@ -5,17 +5,12 @@ import (
 	"testing"
 )
 
-func GetFileName() string {
-	return "../output/iknowbook.txt"
-}
-
-func GetContent() string {
-	return "Welcome to IKnowBook Store~!"
-}
+const FILE_NAME = "../output/iknowbook.txt"
+const CONTENT = "Welcome to IKnowBook Store~!"
 
 func TestCreateFile(t *testing.T) {
-	fileName := GetFileName()
-	CreateFile(fileName, GetContent())
+	fileName := FILE_NAME
+	CreateFile(fileName, CONTENT)
 
 	_, err := os.Stat(fileName)
 	if err != nil {
@@ -24,7 +19,7 @@ func TestCreateFile(t *testing.T) {
 }
 
 func TestReadFileAsString(t *testing.T) {
-	result := ReadFileAsString(GetFileName())
+	result := ReadFileAsString(FILE_NAME)
 
 	if result == "" {
 		t.Fatal()
@@ -32,7 +27,7 @@ func TestReadFileAsString(t *testing.T) {
 }
 
 func TestReadFile(t *testing.T) {
-	result := ReadFile(GetFileName())
+	result := ReadFile(FILE_NAME)
 
 	if len(result) == 0 {
 		t.Fatal()
