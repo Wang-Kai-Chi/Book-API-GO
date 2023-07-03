@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -17,24 +16,18 @@ import (
 func ServerStart() {
 	fmt.Printf("Starting server at port 8080\n")
 
-	http.Handle("/", GetFileServer("./static"))
+	http.Handle("/", http.FileServer(http.Dir("./static")))
 
 	GetRequest("/hello")
 	GetRequest("/books")
 
 	PostRequest("/userinfo")
 
-	fmt.Println(GetMongoBookCollec())
-
 	err := http.ListenAndServe(":8080", nil)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func GetFileServer(dirPath string) http.Handler {
-	return http.FileServer(http.Dir(dirPath))
 }
 
 func GetRequest(pattern string) {
@@ -48,35 +41,48 @@ func GetRequest(pattern string) {
 	}
 	if pattern == BOOKS {
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, handler.ReadFileAsString("./json/book.json"))
+			fmt.Fprintf(w, handler.BooksToString(GetMongoBook()))
 		})
 	}
 }
 
-func GetMongoBookCollec() string {
-	uri := "mongodb://localhost:27017/?timeoutMS=5000"
+func GetMongoBook() []handler.Book {
+	ctx := context.TODO()
+	queryStr := bson.D{{}}
 
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	coll := GetMongoCollection("book")
+	cur, err := coll.Find(ctx, queryStr)
 
-	var result bson.M
+	var books []handler.Book
 
-	if err != nil {
-		panic(err)
-	}
-	coll := client.Database("iknowbook").Collection("book")
-	err = coll.FindOne(context.TODO(), bson.D{{"price", "90元"}}).Decode(&result)
-
-	if err != nil {
-		panic(err)
-	}
-
-	jsonData, err := json.MarshalIndent(result, "", "    ")
-
-	if err != nil {
-		panic(err)
+	if err == nil {
+		for cur.Next(context.Background()) {
+			var book handler.Book
+			err := cur.Decode(&book)
+			if err == nil {
+				books = append(books, book)
+			}
+		}
 	}
 
-	return string(jsonData)
+	return books
+}
+
+func GetMongoCollection(collectionName string) *mongo.Collection {
+	const URI = "mongodb://localhost:27017/?timeoutMS=5000"
+	applyUri := options.Client().ApplyURI(URI)
+	ctx := context.TODO()
+
+	client, err := mongo.Connect(ctx, applyUri)
+
+	var coll *mongo.Collection
+
+	if err == nil {
+		coll = client.Database("iknowbook").Collection(collectionName)
+	} else {
+		panic(err)
+	}
+	return coll
 }
 
 func PostRequest(pattern string) {

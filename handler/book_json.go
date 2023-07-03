@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 )
 
 type Book struct {
@@ -15,12 +14,27 @@ type Book struct {
 	Language        string
 }
 
+func BookToString(book Book) string {
+	data, err := json.Marshal(book)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func BooksToString(books []Book) string {
+	data, err := json.Marshal(books)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
 func GetBookFromJson(content string) Book {
 	var book Book
 	err := json.Unmarshal([]byte(content), &book)
-
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	return book
 }
@@ -30,7 +44,7 @@ func GetBookArrayFromJson(content string) []Book {
 	err := json.Unmarshal([]byte(content), &books)
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	return books
 }
