@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -30,12 +29,4 @@ func TestGetBookArrayFromJson(t *testing.T) {
 	if isbn != ISBN {
 		t.Fatal()
 	}
-}
-
-func TestBookToString(t *testing.T) {
-	fmt.Println(BookToString(GetSingleBook()))
-}
-
-func TestBooksToString(t *testing.T) {
-	fmt.Println(BooksToString(GetBooks()))
 }

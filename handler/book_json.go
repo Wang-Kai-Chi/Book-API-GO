@@ -14,22 +14,6 @@ type Book struct {
 	Language        string
 }
 
-func BookToString(book Book) string {
-	data, err := json.Marshal(book)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func BooksToString(books []Book) string {
-	data, err := json.Marshal(books)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
 func GetBookFromJson(content string) Book {
 	var book Book
 	err := json.Unmarshal([]byte(content), &book)

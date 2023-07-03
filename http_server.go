@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -41,12 +42,16 @@ func GetRequest(pattern string) {
 	}
 	if pattern == BOOKS {
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, handler.BooksToString(GetMongoBook()))
+			result, err := json.Marshal(GetBooksFromMongo())
+
+			if err == nil {
+				fmt.Fprintf(w, string(result))
+			}
 		})
 	}
 }
 
-func GetMongoBook() []handler.Book {
+func GetBooksFromMongo() []handler.Book {
 	ctx := context.TODO()
 	queryStr := bson.D{{}}
 
