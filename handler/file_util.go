@@ -19,10 +19,10 @@ func CreateFile(fileName string, content string) {
 }
 
 func ReadFileAsString(fileName string) string {
-	return string(ReadFile(fileName)[:])
+	return string(MustReadFile(fileName)[:])
 }
 
-func ReadFile(fileName string) []byte {
+func MustReadFile(fileName string) []byte {
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Panicf("failed reading data from file: %s", err)

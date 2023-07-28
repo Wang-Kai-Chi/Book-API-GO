@@ -14,13 +14,18 @@ import (
 	"iknowbook.com/handler"
 )
 
+const (
+	HELLO = "/hello"
+	BOOKS = "/books"
+)
+
 func ServerStart() {
 	fmt.Printf("Starting server at port 8080\n")
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	GetRequest("/hello")
-	GetRequest("/books")
+	GetRequest(HELLO)
+	GetRequest(BOOKS)
 
 	PostRequest("/userinfo")
 
@@ -32,9 +37,6 @@ func ServerStart() {
 }
 
 func GetRequest(pattern string) {
-	const HELLO = "/hello"
-	const BOOKS = "/books"
-
 	if pattern == HELLO {
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Hello!")
@@ -42,7 +44,9 @@ func GetRequest(pattern string) {
 	}
 	if pattern == BOOKS {
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-			result, err := json.Marshal(GetBooksFromMongo())
+			books := GetBooksFromMongo()
+
+			result, err := json.Marshal(books)
 
 			if err == nil {
 				fmt.Fprintf(w, string(result))

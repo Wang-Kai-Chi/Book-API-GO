@@ -27,7 +27,7 @@ func TestReadFileAsString(t *testing.T) {
 }
 
 func TestReadFile(t *testing.T) {
-	result := ReadFile(FILE_NAME)
+	result := MustReadFile(FILE_NAME)
 
 	if len(result) == 0 {
 		t.Fatal()

@@ -14,7 +14,7 @@ type Book struct {
 	Language        string
 }
 
-func GetBookFromJson(content string) Book {
+func MustGetBookFromJson(content string) Book {
 	var book Book
 	err := json.Unmarshal([]byte(content), &book)
 	if err != nil {
@@ -23,10 +23,9 @@ func GetBookFromJson(content string) Book {
 	return book
 }
 
-func GetBookArrayFromJson(content string) []Book {
+func MustGetBookArrayFromJson(content string) []Book {
 	var books []Book
 	err := json.Unmarshal([]byte(content), &books)
-
 	if err != nil {
 		panic(err)
 	}
