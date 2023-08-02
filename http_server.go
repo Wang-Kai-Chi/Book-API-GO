@@ -10,8 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-
-	"iknowbook.com/handler"
 )
 
 const (
@@ -30,19 +28,18 @@ func ServerStart() {
 	PostRequest("/userinfo")
 
 	err := http.ListenAndServe(":8080", nil)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 func GetRequest(pattern string) {
-	if pattern == HELLO {
+	switch pattern {
+	case HELLO:
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Hello!")
 		})
-	}
-	if pattern == BOOKS {
+	case BOOKS:
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 			books := GetBooksFromMongo()
 
@@ -55,18 +52,18 @@ func GetRequest(pattern string) {
 	}
 }
 
-func GetBooksFromMongo() []handler.Book {
+func GetBooksFromMongo() []Book {
 	ctx := context.TODO()
 	queryStr := bson.D{{}}
 
 	coll := GetMongoCollection("book")
 	cur, err := coll.Find(ctx, queryStr)
 
-	var books []handler.Book
+	var books []Book
 
 	if err == nil {
 		for cur.Next(context.Background()) {
-			var book handler.Book
+			var book Book
 			err := cur.Decode(&book)
 			if err == nil {
 				books = append(books, book)

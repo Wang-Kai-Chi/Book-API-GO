@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 )
@@ -23,7 +22,7 @@ func ReadFileAsString(fileName string) string {
 }
 
 func MustReadFile(fileName string) []byte {
-	data, err := ioutil.ReadFile(fileName)
+	data, err := os.ReadFile(fileName)
 	if err != nil {
 		log.Panicf("failed reading data from file: %s", err)
 	}
