@@ -13,8 +13,9 @@ import (
 )
 
 const (
-	HELLO = "/hello"
-	BOOKS = "/books"
+	HELLO     = "/hello"
+	BOOKS     = "/books"
+	USER_INFO = "/userinfo"
 )
 
 func ServerStart() {
@@ -22,10 +23,10 @@ func ServerStart() {
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	GetRequest(HELLO)
-	GetRequest(BOOKS)
+	getRequest(HELLO)
+	getRequest(BOOKS)
 
-	PostRequest("/userinfo")
+	postRequest(USER_INFO)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -33,7 +34,7 @@ func ServerStart() {
 	}
 }
 
-func GetRequest(pattern string) {
+func getRequest(pattern string) {
 	switch pattern {
 	case HELLO:
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +42,7 @@ func GetRequest(pattern string) {
 		})
 	case BOOKS:
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-			books := GetBooksFromMongo()
+			books := getBooksFromMongo()
 
 			result, err := json.Marshal(books)
 
@@ -52,11 +53,11 @@ func GetRequest(pattern string) {
 	}
 }
 
-func GetBooksFromMongo() []Book {
+func getBooksFromMongo() []Book {
 	ctx := context.TODO()
 	queryStr := bson.D{{}}
 
-	coll := GetMongoCollection("book")
+	coll := getMongoCollection("book")
 	cur, err := coll.Find(ctx, queryStr)
 
 	var books []Book
@@ -74,7 +75,7 @@ func GetBooksFromMongo() []Book {
 	return books
 }
 
-func GetMongoCollection(collectionName string) *mongo.Collection {
+func getMongoCollection(collectionName string) *mongo.Collection {
 	const URI = "mongodb://localhost:27017/?timeoutMS=5000"
 	applyUri := options.Client().ApplyURI(URI)
 	ctx := context.TODO()
@@ -91,9 +92,7 @@ func GetMongoCollection(collectionName string) *mongo.Collection {
 	return coll
 }
 
-func PostRequest(pattern string) {
-	const USER_INFO = "/userinfo"
-
+func postRequest(pattern string) {
 	if pattern == USER_INFO {
 		http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 			err := r.ParseForm()
