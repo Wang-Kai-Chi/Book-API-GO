@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-const FILE_NAME = "../output/iknowbook.txt"
+const FILE_NAME = "../../output/iknowbook.txt"
 const CONTENT = "Welcome to IKnowBook Store~!"
 
 func TestCreateFile(t *testing.T) {
