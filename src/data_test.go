@@ -28,24 +28,48 @@ func isCdCodeNotEqual(code string) bool {
 	return code != cdCodeSample()
 }
 
-func TestMustGetDataFromJson(t *testing.T) {
-	loader := NewDataTestLoader()
+func TestRawDataLoader(t *testing.T) {
+	raw := NewRawDataLoader()
 
-	rawBook := loader.getSingleRawBook
+	rawBook := raw.getSingleRawBook
 	if isIsbnNotEquals(rawBook.Isbn) {
 		t.Fatal()
 	}
+
+	rawBooks := raw.getRawBooks
+	if isIsbnNotEquals(rawBooks[0].Isbn) {
+		t.Fatal()
+	}
+	rawDvd := raw.getSingleRawDvd
+	if isDvdCodeNotEquals(rawDvd.Barcode) {
+		t.Fatal()
+	}
+
+	rawDvds := raw.getRawDvds
+	if isDvdCodeNotEquals(rawDvds[0].Barcode) {
+		t.Fatal()
+	}
+
+	rawCd := raw.getSingleRawCd
+	if isCdCodeNotEqual(rawCd.Barcode) {
+		t.Fatal()
+	}
+
+	rawCds := raw.getRawCds
+	if isCdCodeNotEqual(rawCds[0].Barcode) {
+		t.Fatal()
+	}
+
+}
+
+func TestRawDataConvertor(t *testing.T) {
+	raw := NewRawDataLoader()
+	loader := NewRawDataConvertor(raw)
 
 	book := loader.getSingleBook
 	if isIsbnNotEquals(book.Product_.Barcode) {
 		t.Fatal()
 	}
-
-	rawBooks := loader.getRawBooks
-	if isIsbnNotEquals(rawBooks[0].Isbn) {
-		t.Fatal()
-	}
-
 	books := loader.getBooks
 	if isIsbnNotEquals(books[0].Product_.Barcode) {
 		t.Fatal()
@@ -56,18 +80,8 @@ func TestMustGetDataFromJson(t *testing.T) {
 		t.Fatal()
 	}
 
-	rawDvd := loader.getSingleRawDvd
-	if isDvdCodeNotEquals(rawDvd.Barcode) {
-		t.Fatal()
-	}
-
 	dvds := loader.getDvds
 	if isDvdCodeNotEquals(dvds[0].Product_.Barcode) {
-		t.Fatal()
-	}
-
-	rawDvds := loader.getRawDvds
-	if isDvdCodeNotEquals(rawDvds[0].Barcode) {
 		t.Fatal()
 	}
 
@@ -78,16 +92,6 @@ func TestMustGetDataFromJson(t *testing.T) {
 
 	cds := loader.getCds
 	if isCdCodeNotEqual(cds[0].Product_.Barcode) {
-		t.Fatal()
-	}
-
-	rawCd := loader.getSingleRawCd
-	if isCdCodeNotEqual(rawCd.Barcode) {
-		t.Fatal()
-	}
-
-	rawCds := loader.getRawCds
-	if isCdCodeNotEqual(rawCds[0].Barcode) {
 		t.Fatal()
 	}
 }

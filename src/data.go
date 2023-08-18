@@ -8,12 +8,30 @@ type Product struct {
 	Description   string
 }
 
+type Data interface {
+	Book | []Book | Dvd | []Dvd | Cd | []Cd
+}
 type Book struct {
 	Product_        Product
 	PublicationDate string
 	Author          string
 	Translator      string
 	Language        string
+}
+
+type Dvd struct {
+	Product_        Product
+	PublicationDate string
+	Publisher       string
+}
+type Cd struct {
+	Product_        Product
+	PublicationDate string
+	Publisher       string
+}
+
+type RawData interface {
+	RawBook | []RawBook | RawDvd | []RawDvd | RawCd | []RawCd
 }
 
 type RawBook struct {
@@ -25,22 +43,11 @@ type RawBook struct {
 	Translator      string
 	Language        string
 }
-
-type Dvd struct {
-	Product_        Product
-	PublicationDate string
-	Publisher       string
-}
 type RawDvd struct {
 	Barcode         string
 	Title           string
 	PublicationDate string
 	Price           string
-	Publisher       string
-}
-type Cd struct {
-	Product_        Product
-	PublicationDate string
 	Publisher       string
 }
 type RawCd struct {
@@ -50,10 +57,4 @@ type RawCd struct {
 	Price           string
 	Publisher       string
 	Description     string
-}
-
-type Data interface {
-	Book | []Book | RawBook | []RawBook |
-		Dvd | []Dvd | RawDvd | []RawDvd |
-		Cd | []Cd | RawCd | []RawCd
 }
