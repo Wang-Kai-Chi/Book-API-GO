@@ -16,6 +16,11 @@ type DataTestLoader struct {
 	getDvds         []Dvd
 	getSingleRawDvd RawDvd
 	getRawDvds      []RawDvd
+
+	getSingleCd    Cd
+	getCds         []Cd
+	getSingleRawCd RawCd
+	getRawCds      []RawCd
 }
 
 func NewDataTestLoader() DataTestLoader {
@@ -85,6 +90,37 @@ func NewDataTestLoader() DataTestLoader {
 		return mustGetDataFromJson[[]RawDvd](handler.ReadFileAsString(path))
 	}
 
+	cd := func(raw RawCd) Cd {
+		return Cd{
+			Product_: Product{
+				Barcode:     raw.Barcode,
+				Price:       raw.Price,
+				Description: raw.Description,
+			},
+			PublicationDate: raw.PublicationDate,
+			Publisher:       raw.Publisher,
+		}
+	}
+
+	cds := func(raws []RawCd) []Cd {
+		cds := make([]Cd, len(raws))
+
+		for i, v := range raws {
+			cds[i] = cd(v)
+		}
+		return cds
+	}
+
+	rawCd := func() RawCd {
+		path := "../json/cd_single.json"
+		return mustGetDataFromJson[RawCd](handler.ReadFileAsString(path))
+	}
+
+	rawCds := func() []RawCd {
+		path := "../json/cd_arr.json"
+		return mustGetDataFromJson[[]RawCd](handler.ReadFileAsString(path))
+	}
+
 	return DataTestLoader{
 		getSingleBook:    singleBook(singleRawBook()),
 		getBooks:         books(rawBooks()),
@@ -95,6 +131,11 @@ func NewDataTestLoader() DataTestLoader {
 		getDvds:         dvds(rawDvds()),
 		getSingleRawDvd: singleRawDvd(),
 		getRawDvds:      rawDvds(),
+
+		getSingleCd:    cd(rawCd()),
+		getCds:         cds(rawCds()),
+		getSingleRawCd: rawCd(),
+		getRawCds:      rawCds(),
 	}
 }
 

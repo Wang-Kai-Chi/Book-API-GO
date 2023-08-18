@@ -38,8 +38,12 @@ type RawDvd struct {
 	Price           string
 	Publisher       string
 }
-
 type Cd struct {
+	Product_        Product
+	PublicationDate string
+	Publisher       string
+}
+type RawCd struct {
 	Barcode         string
 	Title           string
 	PublicationDate string
@@ -49,5 +53,7 @@ type Cd struct {
 }
 
 type Data interface {
-	Book | []Book | Dvd | []Dvd | RawDvd | []RawDvd | Cd | []Cd | RawBook | []RawBook
+	Book | []Book | RawBook | []RawBook |
+		Dvd | []Dvd | RawDvd | []RawDvd |
+		Cd | []Cd | RawCd | []RawCd
 }
