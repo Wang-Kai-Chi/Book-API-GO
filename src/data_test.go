@@ -1,58 +1,9 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"testing"
-
-	"iknowbook.com/handler"
 )
-
-func TestMustGetDataFromJson(t *testing.T) {
-	if getSingleBook().Isbn != isbnSample() {
-		t.Fatal()
-	}
-
-	if getBooks()[0].Isbn != isbnSample() {
-		t.Fatal()
-	}
-
-	if getSingleDvd().Barcode != upacSample() {
-		t.Fatal()
-	}
-
-	if getDvds()[0].Barcode != upacSample() {
-		t.Fatal()
-	}
-}
-
-func mustGetDataFromJson[T Data](content string) T {
-	var entity T
-	err := json.Unmarshal([]byte(content), &entity)
-	if err != nil {
-		panic(err)
-	}
-	return entity
-}
-
-func getSingleBook() Book {
-	path := "../json/book_single.json"
-	return mustGetDataFromJson[Book](handler.ReadFileAsString(path))
-}
-
-func getBooks() []Book {
-	path := "../json/book_arr.json"
-	return mustGetDataFromJson[[]Book](handler.ReadFileAsString(path))
-}
-
-func getSingleDvd() Dvd {
-	path := "../json/dvd_single.json"
-	return mustGetDataFromJson[Dvd](handler.ReadFileAsString(path))
-}
-
-func getDvds() []Dvd {
-	path := "../json/dvd_array.json"
-	return mustGetDataFromJson[[]Dvd](handler.ReadFileAsString(path))
-}
 
 func isbnSample() string {
 	return "9789571313887"
@@ -60,4 +11,50 @@ func isbnSample() string {
 
 func upacSample() string {
 	return "4715219794386"
+}
+
+func TestMustGetDataFromJson(t *testing.T) {
+	loader := NewDataTestLoader()
+
+	rawBook := loader.getSingleRawBook
+
+	if rawBook.Isbn == isbnSample() {
+		fmt.Println(rawBook)
+	} else {
+		fmt.Println(rawBook)
+		t.Fatal()
+	}
+
+	book := loader.getSingleBook
+
+	if book.Product_.Barcode == isbnSample() {
+		fmt.Println(book)
+	} else {
+		t.Fatal()
+	}
+
+	rawBooks := loader.getRawBooks
+
+	if rawBooks[0].Isbn == isbnSample() {
+		fmt.Println(rawBooks)
+	} else {
+		t.Fatal()
+	}
+
+	dvd := loader.getSingleRawDvd
+
+	if dvd.Barcode == upacSample() {
+		fmt.Println(dvd)
+	} else {
+		fmt.Println(dvd)
+		t.Fatal()
+	}
+
+	dvds := loader.getRawDvds
+
+	if dvds[0].Barcode == upacSample() {
+		fmt.Println(dvds)
+	} else {
+		t.Fatal()
+	}
 }
