@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -13,48 +12,62 @@ func upacSample() string {
 	return "4715219794386"
 }
 
+func isIsbnNotEquals(isbn string) bool {
+	return isbn != isbnSample()
+}
+
+func isUpacNotEquals(upac string) bool {
+	return upac != upacSample()
+}
+
 func TestMustGetDataFromJson(t *testing.T) {
 	loader := NewDataTestLoader()
 
 	rawBook := loader.getSingleRawBook
 
-	if rawBook.Isbn == isbnSample() {
-		fmt.Println(rawBook)
-	} else {
-		fmt.Println(rawBook)
+	if isIsbnNotEquals(rawBook.Isbn) {
 		t.Fatal()
 	}
 
 	book := loader.getSingleBook
 
-	if book.Product_.Barcode == isbnSample() {
-		fmt.Println(book)
-	} else {
+	if isIsbnNotEquals(book.Product_.Barcode) {
 		t.Fatal()
 	}
 
 	rawBooks := loader.getRawBooks
 
-	if rawBooks[0].Isbn == isbnSample() {
-		fmt.Println(rawBooks)
-	} else {
+	if isIsbnNotEquals(rawBooks[0].Isbn) {
 		t.Fatal()
 	}
 
-	dvd := loader.getSingleRawDvd
+	books := loader.getBooks
 
-	if dvd.Barcode == upacSample() {
-		fmt.Println(dvd)
-	} else {
-		fmt.Println(dvd)
+	if isIsbnNotEquals(books[0].Product_.Barcode) {
 		t.Fatal()
 	}
 
-	dvds := loader.getRawDvds
+	dvd := loader.getSingleDvd
 
-	if dvds[0].Barcode == upacSample() {
-		fmt.Println(dvds)
-	} else {
+	if isUpacNotEquals(dvd.Product_.Barcode) {
+		t.Fatal()
+	}
+
+	rawDvd := loader.getSingleRawDvd
+
+	if isUpacNotEquals(rawDvd.Barcode) {
+		t.Fatal()
+	}
+
+	dvds := loader.getDvds
+
+	if isUpacNotEquals(dvds[0].Product_.Barcode) {
+		t.Fatal()
+	}
+
+	rawDvds := loader.getRawDvds
+
+	if isUpacNotEquals(rawDvds[0].Barcode) {
 		t.Fatal()
 	}
 }
