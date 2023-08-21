@@ -11,19 +11,25 @@ type RawDataConvertor struct {
 	getCds      []Cd
 }
 
+func DefaultQuantity() int {
+	return 1
+}
+
 func NewRawDataConvertor(raw RawDataLoader) RawDataConvertor {
 
 	singleBook := func(raw RawBook) Book {
 		return Book{
 			Product_: Product{
-				Barcode:       raw.Isbn,
-				Price:         raw.Price,
-				Product_title: raw.Title,
+				Barcode:         raw.Isbn,
+				Price:           raw.Price,
+				Product_title:   raw.Title,
+				Quantity:        DefaultQuantity(),
+				PublicationDate: raw.PublicationDate,
+				Publisher:       raw.Publisher,
 			},
-			PublicationDate: raw.PublicationDate,
-			Author:          raw.Author,
-			Translator:      raw.Translator,
-			Language:        raw.Language,
+			Author:     raw.Author,
+			Translator: raw.Translator,
+			Language:   raw.Language,
 		}
 	}
 
@@ -38,12 +44,13 @@ func NewRawDataConvertor(raw RawDataLoader) RawDataConvertor {
 	dvd := func(raw RawDvd) Dvd {
 		return Dvd{
 			Product_: Product{
-				Barcode:       raw.Barcode,
-				Price:         raw.Price,
-				Product_title: raw.Title,
+				Barcode:         raw.Barcode,
+				Price:           raw.Price,
+				Product_title:   raw.Title,
+				Quantity:        DefaultQuantity(),
+				PublicationDate: raw.PublicationDate,
+				Publisher:       raw.Publisher,
 			},
-			PublicationDate: raw.PublicationDate,
-			Publisher:       raw.Publisher,
 		}
 	}
 
@@ -59,12 +66,13 @@ func NewRawDataConvertor(raw RawDataLoader) RawDataConvertor {
 	cd := func(raw RawCd) Cd {
 		return Cd{
 			Product_: Product{
-				Barcode:     raw.Barcode,
-				Price:       raw.Price,
-				Description: raw.Description,
+				Barcode:         raw.Barcode,
+				Price:           raw.Price,
+				Description:     raw.Description,
+				Quantity:        DefaultQuantity(),
+				PublicationDate: raw.PublicationDate,
+				Publisher:       raw.Publisher,
 			},
-			PublicationDate: raw.PublicationDate,
-			Publisher:       raw.Publisher,
 		}
 	}
 
