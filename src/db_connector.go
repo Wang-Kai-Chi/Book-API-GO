@@ -7,8 +7,18 @@ import (
 )
 
 func ConnectDB() (*sql.DB, error) {
-	db, err := sql.Open("postgres", "user=user password=kaichi dbname=iknow sslmode=disable")
-	return db, err
+	config, err := GetConfig()
+
+	var dataBase *sql.DB
+	var newErr error
+
+	if err == nil {
+		db, err := sql.Open(config.DriverName, config.DBConnection)
+		dataBase = db
+		newErr = err
+	}
+
+	return dataBase, newErr
 }
 
 func QueryProduct(db *sql.DB) ([]Product, error) {

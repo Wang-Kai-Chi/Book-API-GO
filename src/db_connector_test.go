@@ -15,8 +15,10 @@ func TestConnectDB(t *testing.T) {
 
 func TestQueryProduct(t *testing.T) {
 	db, err := ConnectDB()
+
 	if err == nil {
 		products, err := QueryProduct(db)
+
 		if err != nil {
 			t.Log(err)
 			t.Fatal()
