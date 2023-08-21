@@ -1,99 +1,81 @@
 package main
 
-type RawDataConvertor struct {
-	getSingleBook Book
-	getBooks      []Book
-
-	getSingleDvd Dvd
-	getDvds      []Dvd
-
-	getSingleCd Cd
-	getCds      []Cd
-}
-
 func DefaultQuantity() int {
 	return 1
 }
 
-func NewRawDataConvertor(raw RawDataLoader) RawDataConvertor {
+type RawDataConvertor[T Data] interface {
+	ConvertRaw() T
+	ConvertRaws() T
+}
 
-	singleBook := func(raw RawBook) Book {
-		return Book{
-			Product_: Product{
-				Barcode:         raw.Isbn,
-				Price:           raw.Price,
-				Product_title:   raw.Title,
-				Quantity:        DefaultQuantity(),
-				PublicationDate: raw.PublicationDate,
-				Publisher:       raw.Publisher,
-				Description:     "",
-			},
-			Author:     raw.Author,
-			Translator: raw.Translator,
-			Language:   raw.Language,
-		}
+func (book Book) ConvertRaw(raw RawBook) Book {
+	return Book{
+		Product_: Product{
+			Barcode:         raw.Isbn,
+			Price:           raw.Price,
+			Product_title:   raw.Title,
+			Quantity:        DefaultQuantity(),
+			PublicationDate: raw.PublicationDate,
+			Publisher:       raw.Publisher,
+			Description:     "",
+		},
+		Author:     raw.Author,
+		Translator: raw.Translator,
+		Language:   raw.Language,
 	}
-
-	books := func(raws []RawBook) []Book {
-		books := make([]Book, len(raws))
-		for i, v := range raws {
-			books[i] = singleBook(v)
-		}
-		return books
+}
+func (book Book) ConvertRaws(raws []RawBook) []Book {
+	books := make([]Book, len(raws))
+	for i, v := range raws {
+		books[i] = book.ConvertRaw(v)
 	}
+	return books
+}
 
-	dvd := func(raw RawDvd) Dvd {
-		return Dvd{
-			Product_: Product{
-				Barcode:         raw.Barcode,
-				Price:           raw.Price,
-				Product_title:   raw.Title,
-				Quantity:        DefaultQuantity(),
-				PublicationDate: raw.PublicationDate,
-				Publisher:       raw.Publisher,
-			},
-		}
+func (dvd Dvd) ConvertRaw(raw RawDvd) Dvd {
+	return Dvd{
+		Product_: Product{
+			Barcode:         raw.Barcode,
+			Price:           raw.Price,
+			Product_title:   raw.Title,
+			Quantity:        DefaultQuantity(),
+			PublicationDate: raw.PublicationDate,
+			Publisher:       raw.Publisher,
+			Description:     "",
+		},
+		Director: "",
+		Category: "",
 	}
+}
 
-	dvds := func(raws []RawDvd) []Dvd {
-		dvds := make([]Dvd, len(raws))
-
-		for i, v := range raws {
-			dvds[i] = dvd(v)
-		}
-		return dvds
+func (dvd Dvd) ConvertRaws(raws []RawDvd) []Dvd {
+	dvds := make([]Dvd, len(raws))
+	for i, v := range raws {
+		dvds[i] = dvd.ConvertRaw(v)
 	}
+	return dvds
+}
 
-	cd := func(raw RawCd) Cd {
-		return Cd{
-			Product_: Product{
-				Barcode:         raw.Barcode,
-				Price:           raw.Price,
-				Description:     raw.Description,
-				Quantity:        DefaultQuantity(),
-				PublicationDate: raw.PublicationDate,
-				Publisher:       raw.Publisher,
-			},
-		}
+func (cd Cd) ConvertRaw(raw RawCd) Cd {
+	return Cd{
+		Product_: Product{
+			Barcode:         raw.Barcode,
+			Price:           raw.Price,
+			Description:     raw.Description,
+			Quantity:        DefaultQuantity(),
+			PublicationDate: raw.PublicationDate,
+			Publisher:       raw.Publisher,
+		},
+		Performer: "",
+		Genre:     "",
 	}
+}
 
-	cds := func(raws []RawCd) []Cd {
-		cds := make([]Cd, len(raws))
-
-		for i, v := range raws {
-			cds[i] = cd(v)
-		}
-		return cds
+func (cd Cd) ConvertRaws(raws []RawCd) []Cd {
+	cds := make([]Cd, len(raws))
+	for i, v := range raws {
+		cds[i] = cd.ConvertRaw(v)
 	}
-
-	return RawDataConvertor{
-		getSingleBook: singleBook(raw.getSingleRawBook),
-		getBooks:      books(raw.getRawBooks),
-
-		getSingleDvd: dvd(raw.getSingleRawDvd),
-		getDvds:      dvds(raw.getRawDvds),
-
-		getSingleCd: cd(raw.getSingleRawCd),
-		getCds:      cds(raw.getRawCds),
-	}
+	return cds
 }
