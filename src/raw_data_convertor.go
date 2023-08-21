@@ -26,6 +26,7 @@ func NewRawDataConvertor(raw RawDataLoader) RawDataConvertor {
 				Quantity:        DefaultQuantity(),
 				PublicationDate: raw.PublicationDate,
 				Publisher:       raw.Publisher,
+				Description:     "",
 			},
 			Author:     raw.Author,
 			Translator: raw.Translator,
