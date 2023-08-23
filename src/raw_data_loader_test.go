@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestRawDataLoader(t *testing.T) {
 	dt := NewDataForTest()
@@ -8,6 +10,7 @@ func TestRawDataLoader(t *testing.T) {
 	if rawBook.Isbn != dt.IsbnSample {
 		t.Fatal()
 	}
+	t.Log(rawBook)
 
 	rawBooks := LoadData[[]RawBook]("../json/book_arr.json")
 	if rawBooks[0].Isbn != dt.IsbnSample {

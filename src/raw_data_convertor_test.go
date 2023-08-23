@@ -12,6 +12,7 @@ func TestRawDataConvertor(t *testing.T) {
 	if book.Product_.Barcode != dt.IsbnSample {
 		t.Fatal()
 	}
+	t.Log(book)
 	var books []Book
 	books = book.ConvertRaws(LoadData[[]RawBook]("../json/book_arr.json"))
 	if books[0].Product_.Barcode != dt.IsbnSample {

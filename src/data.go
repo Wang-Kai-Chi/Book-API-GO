@@ -1,14 +1,14 @@
 package main
 
 type Product struct {
-	Id              int
-	Barcode         string
-	PublicationDate string
-	Product_title   string
-	Price           string
-	Publisher       string
-	Quantity        int
-	Description     string
+	Product_id       int
+	Barcode          string
+	Publication_date string
+	Product_title    string
+	Price            string
+	Publisher        string
+	Quantity         int
+	Description      string
 }
 
 type Data interface {
