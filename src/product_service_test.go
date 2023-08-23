@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 )
 
@@ -18,12 +17,12 @@ func GetProductForTest() []Product {
 	}}
 }
 
-func TestQueryProduct(t *testing.T) {
+func TestQueryAllProduct(t *testing.T) {
 	db, err := ConnectDB()
 
 	if err == nil {
 		var p Product
-		products, err := p.Query(db, 50)
+		products, err := p.QueryAll(db, 50)
 
 		if err == nil {
 			fmt.Println(products)
@@ -54,12 +53,8 @@ func TestInsertProduct(t *testing.T) {
 	}
 }
 
-func TestReflect(t *testing.T) {
-	products := GetProductForTest()
-
-	t.Log(reflect.TypeOf(products[0]))
-	t.Log(reflect.ValueOf(products[0]))
-
-	elm := reflect.ValueOf(&products[0]).Elem()
-	t.Log(elm.Type().Field(0).Name)
+func TestGetInsertSQLString(t *testing.T) {
+	var p Product
+	s := GetInsertSQLString[Product](GetProductForTest(), p, "product", []string{"Product_id"})
+	t.Log(s)
 }

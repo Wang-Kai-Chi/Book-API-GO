@@ -1,7 +1,7 @@
 package main
 
 type CrudDao interface {
-	Query()
+	QueryAll()
 	Insert()
 	Update()
 	Delete()

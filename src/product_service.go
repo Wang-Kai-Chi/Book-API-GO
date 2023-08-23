@@ -3,14 +3,17 @@ package main
 import (
 	"context"
 	"database/sql"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func (p Product) Query(db *sql.DB, limit int64) ([]Product, error) {
+func (p Product) QueryAll(db *sql.DB, limit int64) ([]Product, error) {
+	elem := reflect.ValueOf(&p).Elem()
+
 	rows, err := db.Query(
-		"SELECT product_id, barcode, product_title, publisher, publication_date, price, quantity, description FROM product LIMIT " + strconv.FormatInt(limit, 10))
+		"SELECT " + strings.Join(getStructFields(elem), ",") + " FROM product LIMIT " + strconv.FormatInt(limit, 10))
 
 	var products []Product
 
@@ -76,4 +79,60 @@ func (p Product) Insert(db *sql.DB, ps []Product) (int64, error) {
 	rows, err := res.RowsAffected()
 
 	return rows, err
+}
+
+func getStructFields(elm reflect.Value) []string {
+	var out []string
+
+	for i := 0; i < elm.NumField(); i++ {
+		n := elm.Type().Field(i).Name
+		out = append(out, strings.ToLower(n))
+	}
+	return out
+}
+func GetInsertSQLString[T AData](data []T, form T, table string, ids []string) string {
+	elm := reflect.ValueOf(&form).Elem()
+
+	sqlStr := "INSERT INTO " + table + "("
+
+	getFieldsWithoutIds := func(fields []string, ids []string) []string {
+		removeElement := func(fies []string, i int) []string {
+			copy(fies[i:], fies[i+1:])
+			fies[len(fies)-1] = ""
+			fies = fies[:len(fies)-1]
+			return fies
+		}
+		for i := 0; i < len(fields); i++ {
+			for j := 0; j < len(ids); j++ {
+				if fields[i] == strings.ToLower(ids[j]) {
+					fields = removeElement(fields, i)
+				}
+			}
+		}
+		return fields
+	}
+
+	fields := getFieldsWithoutIds(getStructFields(elm), ids)
+	sqlStr = sqlStr + strings.Join(fields, ",") + ") VALUES "
+
+	getParamStr := func(fields []string) string {
+		var params []string
+		for i := 0; i < len(fields); i++ {
+			temp := i + 1
+			n := "$" + strconv.FormatInt(int64(temp), 10)
+			params = append(params, n)
+		}
+		return "(" + strings.Join(params, ",") + ")"
+	}
+
+	paramString := getParamStr(fields)
+
+	var inserts []string
+	for i := 0; i < len(data); i++ {
+		inserts = append(inserts, paramString)
+	}
+	insertVals := strings.Join(inserts, ",")
+	sqlStr = sqlStr + insertVals
+
+	return sqlStr
 }

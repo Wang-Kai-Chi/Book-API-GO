@@ -11,8 +11,11 @@ type Product struct {
 	Description      string
 }
 
+type AData interface {
+	Product | Book | Dvd | Cd
+}
 type Data interface {
-	Book | []Book | Dvd | []Dvd | Cd | []Cd
+	Product | []Product | Book | []Book | Dvd | []Dvd | Cd | []Cd
 }
 type Book struct {
 	Product_   Product
