@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func GetProductForTest() []Product {
+func getProductForTest() []Product {
 	return []Product{{
 		Barcode:          "10000000",
 		Product_title:    "testProduct",
@@ -40,7 +40,7 @@ func TestInsertProduct(t *testing.T) {
 	if err == nil {
 		var p Product
 
-		products := GetProductForTest()
+		products := getProductForTest()
 		rows, err := p.Insert(db, products)
 
 		if err == nil {
@@ -51,10 +51,4 @@ func TestInsertProduct(t *testing.T) {
 	} else {
 		t.Fatal(err)
 	}
-}
-
-func TestGetInsertSQLString(t *testing.T) {
-	var p Product
-	s := GetInsertSQLString[Product](GetProductForTest(), p, "product", []string{"Product_id"})
-	t.Log(s)
 }

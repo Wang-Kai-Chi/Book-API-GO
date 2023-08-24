@@ -2,34 +2,21 @@ package main
 
 import (
 	"context"
-	"database/sql"
-	"reflect"
 	"strconv"
-	"strings"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
-func (p Product) QueryAll(db *sql.DB, limit int64) ([]Product, error) {
-	elem := reflect.ValueOf(&p).Elem()
-
-	rows, err := db.Query(
-		"SELECT " + strings.Join(getStructFields(elem), ",") + " FROM product LIMIT " + strconv.FormatInt(limit, 10))
+func (p Product) QueryAll(db *sqlx.DB, limit int64) ([]Product, error) {
+	rows, err := db.Queryx("SELECT * FROM product LIMIT " + strconv.FormatInt(limit, 10))
 
 	var products []Product
 
 	for rows.Next() {
 		var p Product
 
-		err := rows.Scan(
-			&p.Product_id,
-			&p.Barcode,
-			&p.Product_title,
-			&p.Publisher,
-			&p.Publication_date,
-			&p.Price,
-			&p.Quantity,
-			&p.Description,
-		)
+		err := rows.StructScan(&p)
 		if err != nil {
 			panic(err)
 		}
@@ -40,22 +27,17 @@ func (p Product) QueryAll(db *sql.DB, limit int64) ([]Product, error) {
 	return products, err
 }
 
-func (p Product) Insert(db *sql.DB, ps []Product) (int64, error) {
+func (p Product) Insert(db *sqlx.DB, ps []Product) (int64, error) {
 	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelfunc()
 
-	sqlStr := func() string {
-		sqlStr := "INSERT INTO product(barcode, product_title, publisher, publication_date, price, quantity, description) VALUES "
-
-		var inserts []string
-		for i := 0; i < len(ps); i++ {
-			inserts = append(inserts, "($1, $2, $3, $4, $5, $6, $7)")
-		}
-		insertVals := strings.Join(inserts, ",")
-		sqlStr = sqlStr + insertVals
-		return sqlStr
+	sqlC := SqlStringBuilder[Product]{
+		Data:      ps,
+		Form:      p,
+		TableName: "product",
+		Ids:       []string{"Product_id"},
 	}
-	stmt, err := db.PrepareContext(ctx, sqlStr())
+	stmt, err := db.PrepareContext(ctx, sqlC.GetInsertSQLString())
 
 	if err != nil {
 		panic(err)
@@ -64,10 +46,8 @@ func (p Product) Insert(db *sql.DB, ps []Product) (int64, error) {
 	params := func() []interface{} {
 		var params []interface{}
 		for _, v := range ps {
-			price, err := strconv.Atoi(strings.ReplaceAll(v.Price, "元", ""))
-
 			if err == nil {
-				params = append(params, v.Barcode, v.Product_title, v.Publisher, v.Publication_date, price, v.Quantity, v.Description)
+				params = append(params, v.Barcode, v.Publication_date, v.Product_title, v.Price, v.Publisher, v.Quantity, v.Description)
 			}
 		}
 		return params
@@ -79,60 +59,4 @@ func (p Product) Insert(db *sql.DB, ps []Product) (int64, error) {
 	rows, err := res.RowsAffected()
 
 	return rows, err
-}
-
-func getStructFields(elm reflect.Value) []string {
-	var out []string
-
-	for i := 0; i < elm.NumField(); i++ {
-		n := elm.Type().Field(i).Name
-		out = append(out, strings.ToLower(n))
-	}
-	return out
-}
-func GetInsertSQLString[T AData](data []T, form T, table string, ids []string) string {
-	elm := reflect.ValueOf(&form).Elem()
-
-	sqlStr := "INSERT INTO " + table + "("
-
-	getFieldsWithoutIds := func(fields []string, ids []string) []string {
-		removeElement := func(fies []string, i int) []string {
-			copy(fies[i:], fies[i+1:])
-			fies[len(fies)-1] = ""
-			fies = fies[:len(fies)-1]
-			return fies
-		}
-		for i := 0; i < len(fields); i++ {
-			for j := 0; j < len(ids); j++ {
-				if fields[i] == strings.ToLower(ids[j]) {
-					fields = removeElement(fields, i)
-				}
-			}
-		}
-		return fields
-	}
-
-	fields := getFieldsWithoutIds(getStructFields(elm), ids)
-	sqlStr = sqlStr + strings.Join(fields, ",") + ") VALUES "
-
-	getParamStr := func(fields []string) string {
-		var params []string
-		for i := 0; i < len(fields); i++ {
-			temp := i + 1
-			n := "$" + strconv.FormatInt(int64(temp), 10)
-			params = append(params, n)
-		}
-		return "(" + strings.Join(params, ",") + ")"
-	}
-
-	paramString := getParamStr(fields)
-
-	var inserts []string
-	for i := 0; i < len(data); i++ {
-		inserts = append(inserts, paramString)
-	}
-	insertVals := strings.Join(inserts, ",")
-	sqlStr = sqlStr + insertVals
-
-	return sqlStr
 }
