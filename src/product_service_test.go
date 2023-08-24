@@ -41,13 +41,8 @@ func TestInsertProduct(t *testing.T) {
 		var p Product
 
 		products := getProductForTest()
-		rows, err := p.Insert(db, products)
-
-		if err == nil {
-			fmt.Println(rows)
-		} else {
-			t.Fatal(err)
-		}
+		res := p.Insert(db, products)
+		t.Log(res)
 	} else {
 		t.Fatal(err)
 	}

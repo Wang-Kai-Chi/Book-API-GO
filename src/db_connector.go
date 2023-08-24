@@ -6,16 +6,14 @@ import (
 )
 
 func ConnectDB() (*sqlx.DB, error) {
-	config, err := GetConfig()
+	config := MustGetConfig()
 
 	var dataBase *sqlx.DB
 	var newErr error
 
-	if err == nil {
-		db, err := sqlx.Open(config.DriverName, config.DBConnection)
-		dataBase = db
-		newErr = err
-	}
+	db, err := sqlx.Connect(config.DriverName, config.DBConnection)
+	dataBase = db
+	newErr = err
 
 	return dataBase, newErr
 }

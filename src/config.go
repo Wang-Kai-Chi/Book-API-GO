@@ -9,12 +9,16 @@ import (
 type Config struct {
 	DriverName   string
 	DBConnection string
+	SqlCFolder   string
 }
 
-func GetConfig() (Config, error) {
+func MustGetConfig() Config {
 	var con Config
-	raw := handler.MustReadFile("../config.json")
+	raw := handler.MustReadFile("./resource/config.json")
 
 	err := json.Unmarshal(raw, &con)
-	return con, err
+	if err != nil {
+		panic(err)
+	}
+	return con
 }

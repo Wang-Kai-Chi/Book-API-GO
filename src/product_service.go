@@ -1,9 +1,8 @@
 package main
 
 import (
-	"context"
+	"database/sql"
 	"strconv"
-	"time"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -27,36 +26,11 @@ func (p Product) QueryAll(db *sqlx.DB, limit int64) ([]Product, error) {
 	return products, err
 }
 
-func (p Product) Insert(db *sqlx.DB, ps []Product) (int64, error) {
-	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancelfunc()
-
-	sqlC := SqlStringBuilder[Product]{
-		Data:      ps,
-		Form:      p,
-		TableName: "product",
-		Ids:       []string{"Product_id"},
-	}
-	stmt, err := db.PrepareContext(ctx, sqlC.GetInsertSQLString())
-
+func (p Product) Insert(db *sqlx.DB, ps []Product) sql.Result {
+	sqlStr := NewProductSqlC().GetInsertString()
+	res, err := db.NamedExec(sqlStr, ps)
 	if err != nil {
 		panic(err)
 	}
-
-	params := func() []interface{} {
-		var params []interface{}
-		for _, v := range ps {
-			if err == nil {
-				params = append(params, v.Barcode, v.Publication_date, v.Product_title, v.Price, v.Publisher, v.Quantity, v.Description)
-			}
-		}
-		return params
-	}
-	res, err := stmt.ExecContext(ctx, params()...)
-	if err != nil {
-		panic(err)
-	}
-	rows, err := res.RowsAffected()
-
-	return rows, err
+	return res
 }
