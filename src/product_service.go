@@ -7,7 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func (p Product) QueryAll(db *sqlx.DB, limit int64) ([]Product, error) {
+func (p Product) QueryWithLimit(db *sqlx.DB, limit int64) ([]Product, error) {
 	rows, err := db.Queryx("SELECT * FROM product LIMIT " + strconv.FormatInt(limit, 10))
 
 	var products []Product

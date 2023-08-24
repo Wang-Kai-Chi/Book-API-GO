@@ -22,7 +22,7 @@ func TestQueryAllProduct(t *testing.T) {
 
 	if err == nil {
 		var p Product
-		products, err := p.QueryAll(db, 50)
+		products, err := p.QueryWithLimit(db, 50)
 
 		if err == nil {
 			fmt.Println(products)

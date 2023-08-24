@@ -24,7 +24,7 @@ func loadSqlC[T SqlC](path string) T {
 }
 
 type ProductSqlC struct {
-	Insert string
+	InsertSQL string
 }
 
 func NewProductSqlC() ProductSqlC {
@@ -35,5 +35,5 @@ func NewProductSqlC() ProductSqlC {
 
 func (p ProductSqlC) GetInsertString() string {
 	con := MustGetConfig()
-	return handler.ReadFileAsString(string(con.SqlCFolder + p.Insert))
+	return handler.ReadFileAsString(string(con.SqlCFolder + p.InsertSQL))
 }
