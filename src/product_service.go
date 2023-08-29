@@ -22,7 +22,6 @@ func (p Product) QueryWithLimit(db *sqlx.DB, limit int64) ([]Product, error) {
 		products = append(products, p)
 	}
 	db.Close()
-
 	return products, err
 }
 
@@ -32,5 +31,7 @@ func (p Product) Insert(db *sqlx.DB, ps []Product) sql.Result {
 	if err != nil {
 		panic(err)
 	}
+	db.Close()
+
 	return res
 }

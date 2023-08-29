@@ -17,13 +17,12 @@ func getProductForTest() []Product {
 	}}
 }
 
-func TestQueryAllProduct(t *testing.T) {
+func TestQueryWithLimitProduct(t *testing.T) {
 	db, err := ConnectDB()
 
 	if err == nil {
 		var p Product
 		products, err := p.QueryWithLimit(db, 50)
-
 		if err == nil {
 			fmt.Println(products)
 		} else {
@@ -42,6 +41,28 @@ func TestInsertProduct(t *testing.T) {
 
 		products := getProductForTest()
 		res := p.Insert(db, products)
+		t.Log(res)
+	} else {
+		t.Fatal(err)
+	}
+}
+
+func TestConvertAndInsertProducts(t *testing.T) {
+	var cd Cd
+	cds := cd.ConvertRaws(LoadData[[]RawCd]("../json/cd_arr.json"))
+	products := func() []Product {
+		var ps []Product
+
+		for _, v := range cds {
+			ps = append(ps, v.Product_)
+		}
+		return ps
+	}
+	db, err := ConnectDB()
+
+	if err == nil {
+		var p Product
+		res := p.Insert(db, products())
 		t.Log(res)
 	} else {
 		t.Fatal(err)

@@ -5,9 +5,10 @@ import (
 )
 
 func TestConnectDB(t *testing.T) {
-	_, err := ConnectDB()
+	db, err := ConnectDB()
 
 	if err != nil {
 		t.Fatal()
 	}
+	db.Close()
 }

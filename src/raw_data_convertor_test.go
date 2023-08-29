@@ -35,6 +35,7 @@ func TestRawDataConvertor(t *testing.T) {
 	if cd.Product_.Barcode != dt.CdCodeSample {
 		t.Fatal()
 	}
+	t.Log(cd)
 	var cds []Cd
 	cds = cd.ConvertRaws(LoadData[[]RawCd]("../json/cd_arr.json"))
 	if cds[0].Product_.Barcode != dt.CdCodeSample {

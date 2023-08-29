@@ -66,6 +66,7 @@ func (cd Cd) ConvertRaw(raw RawCd) Cd {
 			Quantity:         DefaultQuantity(),
 			Publication_date: raw.Publication_date,
 			Publisher:        raw.Publisher,
+			Product_title:    raw.Title,
 		},
 		Performer: "",
 		Genre:     "",
