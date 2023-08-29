@@ -27,6 +27,7 @@ func TestRawDataLoader(t *testing.T) {
 	}
 
 	rawCd := LoadData[RawCd]("../json/cd_single.json")
+	t.Log(rawCd)
 	if rawCd.Barcode != dt.CdCodeSample {
 		t.Fatal()
 	}
