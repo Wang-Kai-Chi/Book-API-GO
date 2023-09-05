@@ -16,7 +16,9 @@ func (w WebController) Init() {
 	router.HandleFunc("/product/insert", p.Insert).Methods("POST")
 	router.HandleFunc("/product/query/min={min},max={max}", p.QueryWithPriceRange).Methods("GET")
 
-	err := http.ListenAndServe(":8080", router)
+	port := ":8080"
+	println("server start at localhost" + port)
+	err := http.ListenAndServe(port, router)
 
 	if err != nil {
 		panic(err)

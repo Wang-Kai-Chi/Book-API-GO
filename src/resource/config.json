@@ -1,5 +1,4 @@
 {
     "driverName":"postgres",
-    "dbConnection":"user=user password=kaichi dbname=iknow sslmode=disable",
-    "sqlCFolder":"./resource/postgres/"
+    "dbConnection":"user=user password=kaichi dbname=iknow sslmode=disable"
 }

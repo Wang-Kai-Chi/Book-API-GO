@@ -1,5 +1,5 @@
 {
-    "relatedPath":"./resource/sqlc/product/",
+    "relatedPath":"resource/sqlc/product/",
     "queryWithLimit":"query_with_limit.sql",
     "insert":"insert.sql",
     "queryWithPriceRange":"query_with_price_range.sql"

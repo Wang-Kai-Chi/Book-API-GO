@@ -1,9 +1,8 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
-
-	"iknowbook.com/handler"
 )
 
 type Config struct {
@@ -12,12 +11,19 @@ type Config struct {
 	SqlCFolder   string
 }
 
-func MustGetConfig() Config {
-	var con Config
-	raw := handler.MustReadFile("./resource/config.json")
+//go:embed resource/config.json
+var configFile embed.FS
 
-	err := json.Unmarshal(raw, &con)
-	if err != nil {
+func MustGetConfig() Config {
+	raw, err := configFile.ReadFile("resource/config.json")
+
+	var con Config
+	if err == nil {
+		err := json.Unmarshal(raw, &con)
+		if err != nil {
+			panic(err)
+		}
+	} else {
 		panic(err)
 	}
 	return con

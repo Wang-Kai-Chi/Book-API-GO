@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"embed"
 	"encoding/json"
 
 	"github.com/jmoiron/sqlx"
-	"iknowbook.com/handler"
 )
 
 type ProductSqlStr struct {
@@ -15,20 +15,31 @@ type ProductSqlStr struct {
 	QueryWithPriceRange string
 }
 
+//go:embed resource/sqlc/product/*
+var productSqlC embed.FS
+
 func NewProductSqlStr() ProductSqlStr {
+	data, err := productSqlC.ReadFile("resource/sqlc/product/productSqlStr.json")
+
 	var sqlS ProductSqlStr
-
-	err := json.Unmarshal(handler.MustReadFile("./resource/sqlc/product/productSqlStr.json"), &sqlS)
-
 	if err == nil {
-		sqlS.QueryWithLimit = handler.ReadFileAsString(sqlS.RelatedPath + sqlS.QueryWithLimit)
-		sqlS.QueryWithPriceRange = handler.ReadFileAsString(sqlS.RelatedPath + sqlS.QueryWithPriceRange)
-		sqlS.Insert = handler.ReadFileAsString(sqlS.RelatedPath + sqlS.Insert)
+		err := json.Unmarshal(data, &sqlS)
+		if err == nil {
+			sqlS.QueryWithLimit = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryWithLimit)
+			sqlS.QueryWithPriceRange = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryWithPriceRange)
+			sqlS.Insert = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Insert)
+		} else {
+			panic(err)
+		}
 	} else {
 		panic(err)
 	}
 
 	return sqlS
+}
+func getSqlFromEmbededFolder(path string) string {
+	data, _ := productSqlC.ReadFile(path)
+	return string(data)
 }
 
 type ProductService struct{}

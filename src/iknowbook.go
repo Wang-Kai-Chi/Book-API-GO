@@ -1,5 +1,6 @@
 package main
 
 func main() {
-	println("hello")
+	var web WebController
+	web.Init()
 }
