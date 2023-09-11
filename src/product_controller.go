@@ -14,6 +14,8 @@ type ProductController struct {
 
 func (controller ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if err == nil {
 		var service ProductService
 		json.NewEncoder(w).Encode(service.QueryWithLimit(db, 400))
@@ -51,6 +53,8 @@ func (controller ProductController) Insert(w http.ResponseWriter, r *http.Reques
 }
 func (controller ProductController) QueryWithPriceRange(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if err == nil {
 		var ps ProductService
 		min, err := strconv.Atoi(mux.Vars(r)["min"])

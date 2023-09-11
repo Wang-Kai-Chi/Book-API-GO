@@ -23,6 +23,7 @@ func TestNewProductSqlStr(t *testing.T) {
 	t.Log(sqlS.QueryWithLimit)
 	t.Log(sqlS.Insert)
 	t.Log(sqlS.QueryWithPriceRange)
+	t.Log(sqlS.QueryByBarcode)
 }
 
 func TestQueryWithLimitProduct(t *testing.T) {
@@ -56,7 +57,18 @@ func TestQueryWithPriceRange(t *testing.T) {
 	if err == nil {
 		var p ProductService
 
-		products := p.QueryWithPriceRange(db, 50, 150)
+		products := p.QueryWithPriceRange(db, 50, 100)
+		t.Log(products)
+	} else {
+		t.Fatal(err)
+	}
+}
+
+func TestQueryByBarcode(t *testing.T) {
+	db, err := ConnectDB()
+	if err == nil {
+		var p ProductService
+		products := p.QueryByBarcode(db, "602508588662")
 		t.Log(products)
 	} else {
 		t.Fatal(err)
