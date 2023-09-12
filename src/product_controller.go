@@ -12,10 +12,14 @@ import (
 type ProductController struct {
 }
 
-func (controller ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Request) {
-	db, err := ConnectDB()
+func setHeader(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+func (controller ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Request) {
+	db, err := ConnectDB()
+	setHeader(w)
 	if err == nil {
 		var service ProductService
 		json.NewEncoder(w).Encode(service.QueryWithLimit(db, 400))
@@ -24,7 +28,7 @@ func (controller ProductController) QueryWithLimit(w http.ResponseWriter, r *htt
 	}
 }
 
-func GetProductsFromRequestBody(r *http.Request) ([]Product, error) {
+func getProductsFromRequestBody(r *http.Request) ([]Product, error) {
 	body, _ := io.ReadAll(r.Body)
 	var ps []Product
 
@@ -34,8 +38,8 @@ func GetProductsFromRequestBody(r *http.Request) ([]Product, error) {
 }
 
 func (controller ProductController) Insert(w http.ResponseWriter, r *http.Request) {
-	ps, err := GetProductsFromRequestBody(r)
-
+	ps, err := getProductsFromRequestBody(r)
+	setHeader(w)
 	if err == nil {
 		db, err := ConnectDB()
 		if err == nil {
@@ -53,8 +57,7 @@ func (controller ProductController) Insert(w http.ResponseWriter, r *http.Reques
 }
 func (controller ProductController) QueryWithPriceRange(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	setHeader(w)
 	if err == nil {
 		var ps ProductService
 		min, err := strconv.Atoi(mux.Vars(r)["min"])
@@ -69,5 +72,17 @@ func (controller ProductController) QueryWithPriceRange(w http.ResponseWriter, r
 		json.NewEncoder(w).Encode(products)
 	} else {
 		panic(err)
+	}
+}
+
+func (controller ProductController) QueryById(w http.ResponseWriter, r *http.Request) {
+	db, err := ConnectDB()
+	setHeader(w)
+	if err == nil {
+		var ps ProductService
+		products := ps.QueryByBarcode(db, mux.Vars(r)["barcode"])
+		json.NewEncoder(w).Encode(products)
+	} else {
+		panic(nil)
 	}
 }

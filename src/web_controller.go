@@ -15,6 +15,7 @@ func (w WebController) Init() {
 	router.HandleFunc("/product/query", p.QueryWithLimit).Methods("GET")
 	router.HandleFunc("/product/insert", p.Insert).Methods("POST")
 	router.HandleFunc("/product/query/min={min},max={max}", p.QueryWithPriceRange).Methods("GET", "OPTIONS")
+	router.HandleFunc("/product/query/barcode={barcode}", p.QueryById).Methods("GET")
 
 	port := ":8080"
 	println("server start at localhost" + port)
