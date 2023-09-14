@@ -11,9 +11,11 @@ import (
 type ProductSqlStr struct {
 	RelatedPath         string
 	QueryWithLimit      string
-	Insert              string
 	QueryWithPriceRange string
 	QueryByBarcode      string
+	Insert              string
+	Update              string
+	Delete              string
 }
 
 //go:embed resource/sqlc/product/*
@@ -25,12 +27,11 @@ func initProductSql(sqlS *ProductSqlStr) {
 		return string(data)
 	}
 	sqlS.QueryWithLimit = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryWithLimit)
-
 	sqlS.QueryWithPriceRange = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryWithPriceRange)
-
-	sqlS.Insert = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Insert)
-
 	sqlS.QueryByBarcode = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryByBarcode)
+	sqlS.Insert = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Insert)
+	sqlS.Update = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Update)
+	sqlS.Delete = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Delete)
 }
 
 func NewProductSqlStr() ProductSqlStr {
@@ -81,14 +82,8 @@ func queryProducts(db *sqlx.DB, sqlStr string, params ...interface{}) []Product 
 	return products
 }
 
-func (service ProductService) QueryWithLimit(db *sqlx.DB, limit int64) []Product {
-	return queryProducts(db, NewProductSqlStr().QueryWithLimit, limit)
-}
-
-func (service ProductService) Insert(db *sqlx.DB, ps []Product) sql.Result {
-	sqlC := NewProductSqlStr()
-	sqlStr := sqlC.Insert
-	res, err := db.NamedExec(sqlStr, ps)
+func execSql(db *sqlx.DB, str string, ps []Product) sql.Result {
+	res, err := db.NamedExec(str, ps)
 	if err != nil {
 		panic(err)
 	}
@@ -97,10 +92,26 @@ func (service ProductService) Insert(db *sqlx.DB, ps []Product) sql.Result {
 	return res
 }
 
-func (service ProductService) QueryWithPriceRange(db *sqlx.DB, min int, max int) []Product {
+func (ser ProductService) QueryWithLimit(db *sqlx.DB, limit int64) []Product {
+	return queryProducts(db, NewProductSqlStr().QueryWithLimit, limit)
+}
+
+func (ser ProductService) Insert(db *sqlx.DB, ps []Product) sql.Result {
+	return execSql(db, NewProductSqlStr().Insert, ps)
+}
+
+func (ser ProductService) QueryWithPriceRange(db *sqlx.DB, min int, max int) []Product {
 	return queryProducts(db, NewProductSqlStr().QueryWithPriceRange, min, max)
 }
 
-func (service ProductService) QueryByBarcode(db *sqlx.DB, code string) []Product {
+func (ser ProductService) QueryByBarcode(db *sqlx.DB, code string) []Product {
 	return queryProducts(db, NewProductSqlStr().QueryByBarcode, code)
+}
+
+func (ser ProductService) Update(db *sqlx.DB, ps []Product) sql.Result {
+	return execSql(db, NewProductSqlStr().Update, ps)
+}
+
+func (ser ProductService) Delete(db *sqlx.DB, ps []Product) sql.Result {
+	return execSql(db, NewProductSqlStr().Delete, ps)
 }
