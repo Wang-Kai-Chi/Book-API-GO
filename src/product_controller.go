@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -17,7 +18,7 @@ func setHeader(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 }
 
-func (controller ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Request) {
+func (ctr ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
 	setHeader(w)
 	if err == nil {
@@ -37,7 +38,7 @@ func getProductsFromRequestBody(r *http.Request) ([]Product, error) {
 	return ps, err
 }
 
-func (controller ProductController) Insert(w http.ResponseWriter, r *http.Request) {
+func (ctr ProductController) Insert(w http.ResponseWriter, r *http.Request) {
 	ps, err := getProductsFromRequestBody(r)
 	setHeader(w)
 	if err == nil {
@@ -55,7 +56,7 @@ func (controller ProductController) Insert(w http.ResponseWriter, r *http.Reques
 	}
 
 }
-func (controller ProductController) QueryWithPriceRange(w http.ResponseWriter, r *http.Request) {
+func (ctr ProductController) QueryWithPriceRange(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
 	setHeader(w)
 	if err == nil {
@@ -75,7 +76,7 @@ func (controller ProductController) QueryWithPriceRange(w http.ResponseWriter, r
 	}
 }
 
-func (controller ProductController) QueryById(w http.ResponseWriter, r *http.Request) {
+func (ctr ProductController) QueryById(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
 	setHeader(w)
 	if err == nil {
@@ -84,5 +85,37 @@ func (controller ProductController) QueryById(w http.ResponseWriter, r *http.Req
 		json.NewEncoder(w).Encode(products)
 	} else {
 		panic(nil)
+	}
+}
+
+func (ctr ProductController) Update(w http.ResponseWriter, r *http.Request) {
+	ps, err := getProductsFromRequestBody(r)
+	setHeader(w)
+	if err == nil {
+		db, err := ConnectDB()
+		if err != nil {
+			panic(err)
+		}
+		var service ProductService
+		service.Update(db, ps)
+		fmt.Fprintf(w, "update successfully")
+	} else {
+		panic(err)
+	}
+}
+
+func (ctr ProductController) Delete(w http.ResponseWriter, r *http.Request) {
+	ps, err := getProductsFromRequestBody(r)
+	setHeader(w)
+	if err == nil {
+		db, err := ConnectDB()
+		if err != nil {
+			panic(err)
+		}
+		var service ProductService
+		service.Delete(db, ps)
+		fmt.Fprintln(w, "delete successfully")
+	} else {
+		panic(err)
 	}
 }
