@@ -20,6 +20,8 @@ func (w WebController) Init() {
 
 	router.HandleFunc("/product/delete", p.Delete).Methods("DELETE")
 
+	static := http.Dir("./src/static/web/")
+	router.PathPrefix("/").Handler(http.FileServer(static))
 	port := ":8080"
 	println("server start at localhost" + port)
 	err := http.ListenAndServe(port, router)

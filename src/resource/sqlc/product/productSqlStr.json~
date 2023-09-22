@@ -1,7 +1,0 @@
-{
-    "relatedPath":"resource/sqlc/product/",
-    "queryWithLimit":"query_with_limit.sql",
-    "insert":"insert.sql",
-    "queryWithPriceRange":"query_with_price_range.sql",
-    "queryByBarcode":"query_by_barcode.sql"
-}

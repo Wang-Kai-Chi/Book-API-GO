@@ -14,8 +14,12 @@ type ProductController struct {
 }
 
 func setHeader(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
 }
 
 func (ctr ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Request) {
@@ -29,32 +33,38 @@ func (ctr ProductController) QueryWithLimit(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func getProductsFromRequestBody(r *http.Request) ([]Product, error) {
-	body, _ := io.ReadAll(r.Body)
+func mustGetProductsFromRequest(r *http.Request) []Product {
+	body, err := io.ReadAll(r.Body)
+
 	var ps []Product
-
-	err := json.Unmarshal(body, &ps)
-
-	return ps, err
-}
-
-func (ctr ProductController) Insert(w http.ResponseWriter, r *http.Request) {
-	ps, err := getProductsFromRequestBody(r)
-	setHeader(w)
 	if err == nil {
-		db, err := ConnectDB()
-		if err == nil {
-			var service ProductService
-
-			service.Insert(db, ps)
-			json.NewEncoder(w).Encode(ps)
-		} else {
-			panic(err)
+		if len(body) == 0 {
+			fmt.Println("Empty body")
+		}
+		err := json.Unmarshal(body, &ps)
+		if err != nil {
+			fmt.Println("not list of products")
 		}
 	} else {
 		panic(err)
 	}
 
+	return ps
+}
+
+func (ctr ProductController) Insert(w http.ResponseWriter, r *http.Request) {
+	ps := mustGetProductsFromRequest(r)
+	setHeader(w)
+
+	db, err := ConnectDB()
+	if err == nil {
+		var service ProductService
+
+		service.Insert(db, ps)
+		json.NewEncoder(w).Encode(ps)
+	} else {
+		panic(err)
+	}
 }
 func (ctr ProductController) QueryWithPriceRange(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
@@ -89,33 +99,25 @@ func (ctr ProductController) QueryById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ctr ProductController) Update(w http.ResponseWriter, r *http.Request) {
-	ps, err := getProductsFromRequestBody(r)
+	ps := mustGetProductsFromRequest(r)
 	setHeader(w)
-	if err == nil {
-		db, err := ConnectDB()
-		if err != nil {
-			panic(err)
-		}
-		var service ProductService
-		service.Update(db, ps)
-		fmt.Fprintf(w, "update successfully")
-	} else {
+	db, err := ConnectDB()
+	if err != nil {
 		panic(err)
 	}
+	var service ProductService
+	service.Update(db, ps)
+	fmt.Fprintf(w, "update successfully")
 }
 
 func (ctr ProductController) Delete(w http.ResponseWriter, r *http.Request) {
-	ps, err := getProductsFromRequestBody(r)
+	ps := mustGetProductsFromRequest(r)
 	setHeader(w)
-	if err == nil {
-		db, err := ConnectDB()
-		if err != nil {
-			panic(err)
-		}
-		var service ProductService
-		service.Delete(db, ps)
-		fmt.Fprintln(w, "delete successfully")
-	} else {
+	db, err := ConnectDB()
+	if err != nil {
 		panic(err)
 	}
+	var service ProductService
+	service.Delete(db, ps)
+	fmt.Fprintln(w, "delete successfully")
 }

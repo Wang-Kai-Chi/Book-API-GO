@@ -4,7 +4,7 @@ type Product struct {
 	Product_id       int
 	Barcode          string
 	Publication_date string
-	Product_title    string `json:"title"`
+	Product_title    string 
 	Price            string
 	Publisher        string
 	Quantity         int
