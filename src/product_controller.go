@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	. "iknowbook.com/data"
 )
 
 type ProductController struct {

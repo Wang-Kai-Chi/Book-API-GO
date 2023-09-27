@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	. "iknowbook.com/data"
+)
 
 func convertCdToProducts() []Product {
 	var cd Cd
@@ -79,7 +83,7 @@ func TestConvertAndInsertProducts(t *testing.T) {
 	db, err := ConnectDB()
 
 	if err == nil {
-		var p Product
+		var p ProductService
 		res := p.Insert(db, ps)
 		t.Log(res)
 	} else {

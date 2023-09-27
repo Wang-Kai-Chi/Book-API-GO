@@ -5,6 +5,8 @@ import (
 	"embed"
 	"encoding/json"
 
+	. "iknowbook.com/data"
+
 	"github.com/jmoiron/sqlx"
 )
 

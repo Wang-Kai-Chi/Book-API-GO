@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"testing"
+
+	. "iknowbook.com/data"
 )
 
 func getProductForTest() []Product {

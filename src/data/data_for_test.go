@@ -1,4 +1,4 @@
-package main
+package data
 
 type DataForTest struct {
 	IsbnSample    string

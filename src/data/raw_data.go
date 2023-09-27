@@ -1,4 +1,4 @@
-package main
+package data
 
 type RawData interface {
 	RawBook | []RawBook | RawDvd | []RawDvd | RawCd | []RawCd

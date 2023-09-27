@@ -1,4 +1,4 @@
-package main
+package data
 
 func DefaultQuantity() int {
 	return 1
