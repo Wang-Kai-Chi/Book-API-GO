@@ -14,7 +14,7 @@ type CrudDao interface {
 	Delete()
 }
 
-func QueryEntity[T AData](db *sqlx.DB, sqlStr string, params ...interface{}) []T {
+func QueryEntity[T Data](db *sqlx.DB, sqlStr string, params ...interface{}) []T {
 	mustGetRowsFromQuery := func(db *sqlx.DB, sqlStr string, params ...interface{}) *sqlx.Rows {
 		query, args, err := sqlx.In(sqlStr, params...)
 		if err != nil {
@@ -45,7 +45,7 @@ func QueryEntity[T AData](db *sqlx.DB, sqlStr string, params ...interface{}) []T
 	return out
 }
 
-func ExecSql[T AData](db *sqlx.DB, str string, ps []T) sql.Result {
+func ExecSql[T Data](db *sqlx.DB, str string, ps T) sql.Result {
 	res, err := db.NamedExec(str, ps)
 	if err != nil {
 		panic(err)
@@ -53,4 +53,14 @@ func ExecSql[T AData](db *sqlx.DB, str string, ps []T) sql.Result {
 	db.Close()
 
 	return res
+}
+
+func BulkExec[T Data](db *sqlx.DB, str string, es []T) {
+	for _, v := range es {
+		_, err := db.NamedExec(str, v)
+		if err != nil {
+			panic(err)
+		}
+	}
+	db.Close()
 }

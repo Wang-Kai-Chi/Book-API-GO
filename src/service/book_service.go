@@ -1,7 +1,6 @@
 package service
 
 import (
-	"database/sql"
 	"embed"
 	"encoding/json"
 
@@ -55,6 +54,6 @@ func (serv BookService) QueryByLimit(limit int) []Book {
 	return QueryEntity[Book](serv.Connection, NewBookSqlStr().QueryByLimit, limit)
 }
 
-func (serv BookService) Insert(books []Book) sql.Result {
-	return ExecSql[Book](serv.Connection, NewBookSqlStr().Insert, books)
+func (serv BookService) Insert(books []Book) {
+	BulkExec[Book](serv.Connection, NewBookSqlStr().Insert, books)
 }

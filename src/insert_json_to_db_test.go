@@ -9,7 +9,7 @@ import (
 
 func convertCdToProducts() []Product {
 	var cd Cd
-	cds := cd.ConvertRaws(LoadData[[]RawCd]("../json/iknowbook.cd.json"))
+	cds := cd.ConvertRaws(LoadData[[]RawCd]("./json/iknowbook.cd.json"))
 	products := func() []Product {
 		var ps []Product
 		for _, v := range cds {
@@ -30,7 +30,7 @@ func TestPrintConvertedProduct(t *testing.T) {
 
 func convertDvdToProducts() []Product {
 	var dvd Dvd
-	dvds := dvd.ConvertRaws(LoadData[[]RawDvd]("../json/iknowbook.dvd.json"))
+	dvds := dvd.ConvertRaws(LoadData[[]RawDvd]("./json/iknowbook.dvd.json"))
 	ps := func() []Product {
 		var temp []Product
 		for _, v := range dvds {
@@ -52,7 +52,7 @@ func TestConvertDvdToProducts(t *testing.T) {
 
 func convertBookToProduct() []Product {
 	var book Book
-	books := book.ConvertRaws(LoadData[[]RawBook]("../json/iknowbook.book.json"))
+	books := book.ConvertRaws(LoadData[[]RawBook]("./json/iknowbook.book.json"))
 	ps := func() []Product {
 		var temp []Product
 		for _, v := range books {
@@ -87,6 +87,19 @@ func TestConvertAndInsertProducts(t *testing.T) {
 		var p ProductService
 		res := p.Insert(db, ps)
 		t.Log(res)
+	} else {
+		t.Fatal(err)
+	}
+}
+
+func TestConvertAddBookToDB(t *testing.T) {
+	var book Book
+	books := book.ConvertRaws(LoadData[[]RawBook]("./json/iknowbook.book.json"))
+	db, err := ConnectDB()
+
+	if err == nil {
+		serv := NewBookService(db)
+		serv.Insert(books)
 	} else {
 		t.Fatal(err)
 	}

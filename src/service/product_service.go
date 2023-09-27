@@ -57,7 +57,7 @@ func (ser ProductService) QueryWithLimit(db *sqlx.DB, limit int64) []Product {
 }
 
 func (ser ProductService) Insert(db *sqlx.DB, ps []Product) sql.Result {
-	return ExecSql[Product](db, NewProductSqlStr().Insert, ps)
+	return ExecSql[[]Product](db, NewProductSqlStr().Insert, ps)
 }
 
 func (ser ProductService) QueryWithPriceRange(db *sqlx.DB, min int, max int) []Product {
@@ -69,9 +69,9 @@ func (ser ProductService) QueryByBarcode(db *sqlx.DB, code string) []Product {
 }
 
 func (ser ProductService) Update(db *sqlx.DB, ps []Product) sql.Result {
-	return ExecSql[Product](db, NewProductSqlStr().Update, ps)
+	return ExecSql[[]Product](db, NewProductSqlStr().Update, ps)
 }
 
 func (ser ProductService) Delete(db *sqlx.DB, ps []Product) sql.Result {
-	return ExecSql[Product](db, NewProductSqlStr().Delete, ps)
+	return ExecSql[[]Product](db, NewProductSqlStr().Delete, ps)
 }
