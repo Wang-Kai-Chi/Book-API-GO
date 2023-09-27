@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	. "iknowbook.com/data"
+	. "iknowbook.com/service"
 )
 
 func convertCdToProducts() []Product {

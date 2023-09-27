@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	. "iknowbook.com/data"
+	. "iknowbook.com/service"
 )
 
 type ProductController struct {
@@ -87,7 +88,7 @@ func (ctr ProductController) QueryWithPriceRange(w http.ResponseWriter, r *http.
 	}
 }
 
-func (ctr ProductController) QueryById(w http.ResponseWriter, r *http.Request) {
+func (ctr ProductController) QueryByBarcode(w http.ResponseWriter, r *http.Request) {
 	db, err := ConnectDB()
 	setHeader(w)
 	if err == nil {
