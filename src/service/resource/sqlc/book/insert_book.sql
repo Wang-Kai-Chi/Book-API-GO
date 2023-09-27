@@ -5,11 +5,8 @@ insert into book (
 values(
 	(
 		select product_id from product 
-		where barcode =? and
-		product_title=?
-	),
-	?,
-	?,
-	?,
-	?
+		where barcode =:barcode and
+		product_title=:product_title
+	)
+	,:author,:translator,:language,:category
 )

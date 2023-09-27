@@ -13,7 +13,7 @@ func convertCdToProducts() []Product {
 	products := func() []Product {
 		var ps []Product
 		for _, v := range cds {
-			ps = append(ps, v.Product_)
+			ps = append(ps, v.Product)
 		}
 		return ps
 	}
@@ -34,7 +34,7 @@ func convertDvdToProducts() []Product {
 	ps := func() []Product {
 		var temp []Product
 		for _, v := range dvds {
-			temp = append(temp, v.Product_)
+			temp = append(temp, v.Product)
 		}
 		return temp
 	}
@@ -56,7 +56,7 @@ func convertBookToProduct() []Product {
 	ps := func() []Product {
 		var temp []Product
 		for _, v := range books {
-			temp = append(temp, v.Product_)
+			temp = append(temp, v.Product)
 		}
 		return temp
 	}

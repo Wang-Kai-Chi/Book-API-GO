@@ -1,8 +1,12 @@
 package service
 
 import (
+	"database/sql"
 	"embed"
 	"encoding/json"
+
+	"github.com/jmoiron/sqlx"
+	. "iknowbook.com/data"
 )
 
 type BookSqlStr struct {
@@ -17,7 +21,7 @@ var bookSqlC embed.FS
 func NewBookSqlStr() BookSqlStr {
 	initBookSql := func(sqlS *BookSqlStr) {
 		getSqlFromEmbededFolder := func(path string) string {
-			data, _ := productSqlC.ReadFile(path)
+			data, _ := bookSqlC.ReadFile(path)
 			return string(data)
 		}
 		sqlS.QueryByLimit = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryByLimit)
@@ -35,4 +39,22 @@ func NewBookSqlStr() BookSqlStr {
 		initBookSql(&sqlS)
 	}
 	return sqlS
+}
+
+type BookService struct {
+	Connection *sqlx.DB
+}
+
+func NewBookService(conn *sqlx.DB) BookService {
+	return BookService{
+		Connection: conn,
+	}
+}
+
+func (serv BookService) QueryByLimit(limit int) []Book {
+	return QueryEntity[Book](serv.Connection, NewBookSqlStr().QueryByLimit, limit)
+}
+
+func (serv BookService) Insert(books []Book) sql.Result {
+	return ExecSql[Book](serv.Connection, NewBookSqlStr().Insert, books)
 }

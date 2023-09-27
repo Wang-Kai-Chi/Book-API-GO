@@ -11,7 +11,7 @@ type RawDataConvertor[T Data] interface {
 
 func (book Book) ConvertRaw(raw RawBook) Book {
 	return Book{
-		Product_: Product{
+		Product: Product{
 			Barcode:          raw.Isbn,
 			Price:            raw.Price,
 			Product_title:    raw.Title,
@@ -23,6 +23,7 @@ func (book Book) ConvertRaw(raw RawBook) Book {
 		Author:     raw.Author,
 		Translator: raw.Translator,
 		Language:   raw.Language,
+		Category:   "",
 	}
 }
 func (book Book) ConvertRaws(raws []RawBook) []Book {
@@ -35,7 +36,7 @@ func (book Book) ConvertRaws(raws []RawBook) []Book {
 
 func (dvd Dvd) ConvertRaw(raw RawDvd) Dvd {
 	return Dvd{
-		Product_: Product{
+		Product: Product{
 			Barcode:          raw.Barcode,
 			Price:            raw.Price,
 			Product_title:    raw.Title,
@@ -59,7 +60,7 @@ func (dvd Dvd) ConvertRaws(raws []RawDvd) []Dvd {
 
 func (cd Cd) ConvertRaw(raw RawCd) Cd {
 	return Cd{
-		Product_: Product{
+		Product: Product{
 			Barcode:          raw.Barcode,
 			Price:            raw.Price,
 			Description:      raw.Description,

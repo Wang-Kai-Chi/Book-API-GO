@@ -18,19 +18,20 @@ type Data interface {
 	Product | []Product | Book | []Book | Dvd | []Dvd | Cd | []Cd
 }
 type Book struct {
-	Product_   Product
+	Product
 	Author     string
 	Translator string
 	Language   string
+	Category   string
 }
 
 type Dvd struct {
-	Product_ Product
+	Product
 	Category string
 	Director string
 }
 type Cd struct {
-	Product_  Product
+	Product
 	Performer string
 	Genre     string
 }
