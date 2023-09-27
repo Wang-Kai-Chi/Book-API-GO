@@ -1,0 +1,5 @@
+{
+    "relatedPath":"resource/sqlc/book/",
+    "insert":"insert_book.sql",
+    "queryByLimit":"query_book_by_limit.sql"
+}
