@@ -104,3 +104,16 @@ func TestConvertAddBookToDB(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAddConvertedDvdToDB(t *testing.T) {
+	var dvd Dvd
+	dvds := dvd.ConvertRaws(LoadData[[]RawDvd]("./json/iknowbook.dvd.json"))
+	db, err := ConnectDB()
+
+	if err == nil {
+		serv := NewDvdService(db)
+		serv.Insert(dvds)
+	} else {
+		t.Fatal(err)
+	}
+}
