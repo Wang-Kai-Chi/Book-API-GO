@@ -6,7 +6,7 @@ import (
 )
 
 type SqlS interface {
-	*ProductSqlStr | *BookSqlStr | *DvdSqlStr
+	*ProductSqlStr | *BookSqlStr | *DvdSqlStr | *CdSqlStr
 	init()
 }
 

@@ -117,3 +117,16 @@ func TestAddConvertedDvdToDB(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAddConvertedCdToDB(t *testing.T) {
+	var cd Cd
+	cds := cd.ConvertRaws(LoadData[[]RawCd]("./json/iknowbook.cd.json"))
+	db, err := ConnectDB()
+
+	if err == nil {
+		serv := NewCdService(db)
+		serv.Insert(cds)
+	} else {
+		t.Fatal(err)
+	}
+}
