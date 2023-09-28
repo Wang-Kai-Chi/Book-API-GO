@@ -2,8 +2,6 @@ package service
 
 import (
 	"database/sql"
-	"embed"
-	"encoding/json"
 
 	. "iknowbook.com/data"
 
@@ -20,34 +18,17 @@ type ProductSqlStr struct {
 	Delete              string
 }
 
-//go:embed resource/sqlc/product/*
-var productSqlC embed.FS
+func (sqlS *ProductSqlStr) init() {
+	sqlS.QueryWithLimit = GetSqlFromPath(sqlS.RelatedPath+sqlS.QueryWithLimit, sqlC)
+	sqlS.QueryWithPriceRange = GetSqlFromPath(sqlS.RelatedPath+sqlS.QueryWithPriceRange, sqlC)
+	sqlS.QueryByBarcode = GetSqlFromPath(sqlS.RelatedPath+sqlS.QueryByBarcode, sqlC)
+	sqlS.Insert = GetSqlFromPath(sqlS.RelatedPath+sqlS.Insert, sqlC)
+	sqlS.Update = GetSqlFromPath(sqlS.RelatedPath+sqlS.Update, sqlC)
+	sqlS.Delete = GetSqlFromPath(sqlS.RelatedPath+sqlS.Delete, sqlC)
+}
 
-func NewProductSqlStr() ProductSqlStr {
-	initProductSql := func(sqlS *ProductSqlStr) {
-		getSqlFromEmbededFolder := func(path string) string {
-			data, _ := productSqlC.ReadFile(path)
-			return string(data)
-		}
-		sqlS.QueryWithLimit = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryWithLimit)
-		sqlS.QueryWithPriceRange = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryWithPriceRange)
-		sqlS.QueryByBarcode = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.QueryByBarcode)
-		sqlS.Insert = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Insert)
-		sqlS.Update = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Update)
-		sqlS.Delete = getSqlFromEmbededFolder(sqlS.RelatedPath + sqlS.Delete)
-	}
-	data, err := productSqlC.ReadFile("resource/sqlc/product/productSqlStr.json")
-	var sqlS ProductSqlStr
-	if err != nil {
-		panic(err)
-	} else {
-		err := json.Unmarshal(data, &sqlS)
-		if err != nil {
-			panic(err)
-		}
-		initProductSql(&sqlS)
-	}
-	return sqlS
+func NewProductSqlStr() *ProductSqlStr {
+	return NewSqlS[*ProductSqlStr](`resource/sqlc/product/productSqlStr.json`, sqlC)
 }
 
 type ProductService struct{}

@@ -1,0 +1,5 @@
+{
+    "relatedPath":"resource/sqlc/product/",
+    "queryWithLimit":"query_cd_by_limit.sql",
+    "insert":"insert_cd.sql"
+}

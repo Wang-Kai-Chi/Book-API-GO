@@ -1,0 +1,5 @@
+{
+    "relatedPath":"resource/sqlc/dvd/",
+    "queryWithLimit":"query_dvd_by_limit.sql",
+    "insert":"insert_dvd.sql"
+}

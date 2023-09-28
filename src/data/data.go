@@ -10,10 +10,6 @@ type Product struct {
 	Quantity         int
 	Description      string
 }
-
-type AData interface {
-	Product | Book | Dvd | Cd
-}
 type Data interface {
 	Product | []Product | Book | []Book | Dvd | []Dvd | Cd | []Cd
 }
