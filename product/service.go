@@ -1,12 +1,12 @@
 package product
 
 import (
+	"encoding/json"
 	"io"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	. "iknowbook.com/data"
-	. "iknowbook.com/db"
 )
 
 type ProductService struct {
@@ -31,7 +31,8 @@ func (ctr ProductService) QueryWithLimit(ctx *gin.Context) {
 func (ctr ProductService) Insert(ctx *gin.Context) {
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
-		ps, err := GetEntityFromBody[Product](body)
+		var ps []Product
+		err := json.Unmarshal(body, &ps)
 		if err == nil {
 			ctr.repo.Insert(ps)
 			ctx.JSON(200, ps)
@@ -68,7 +69,8 @@ func (ctr ProductService) QueryByBarcode(ctx *gin.Context) {
 func (ctr ProductService) Update(ctx *gin.Context) {
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
-		ps, err := GetEntityFromBody[Product](body)
+		var ps []Product
+		err := json.Unmarshal(body, &ps)
 		if err == nil {
 			ctr.repo.Update(ps)
 			ctx.JSON(200, map[string]string{
@@ -79,6 +81,8 @@ func (ctr ProductService) Update(ctx *gin.Context) {
 				"Response": "The body should be list of products in json format.",
 			})
 		}
+	} else {
+		panic(err)
 	}
 
 }
@@ -86,7 +90,8 @@ func (ctr ProductService) Update(ctx *gin.Context) {
 func (ctr ProductService) Delete(ctx *gin.Context) {
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
-		ps, err := GetEntityFromBody[Product](body)
+		var ps []Product
+		err := json.Unmarshal(body, &ps)
 		if err == nil {
 			ctr.repo.Delete(ps)
 			ctx.JSON(200, map[string]string{
@@ -97,6 +102,8 @@ func (ctr ProductService) Delete(ctx *gin.Context) {
 				"Response": "The body should be list of products in json format.",
 			})
 		}
+	} else {
+		panic(err)
 	}
 }
 

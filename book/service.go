@@ -1,12 +1,12 @@
 package book
 
 import (
+	"encoding/json"
 	"io"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	. "iknowbook.com/data"
-	. "iknowbook.com/db"
 	"iknowbook.com/product"
 )
 
@@ -41,19 +41,35 @@ func (ctr BookService) Insert(ctx *gin.Context) {
 		}
 		return temp
 	}
-	body, err := io.ReadAll(ctx.Request.Body)
-	bs, err := GetEntityFromBody[Book](body)
-	if err == nil {
+	insertProducts := func(bs []Book) error {
 		res := ctr.productRepo.Insert(getProductsFromBooks(bs))
 		_, err := res.RowsAffected()
+		return err
+	}
+	insertBooks := func(bs []Book) {
+		ctr.bookRepo.Insert(bs)
+		ctx.JSON(200, bs)
+	}
+	insertFromBody := func(body []byte) {
+		var bs []Book
+		err := json.Unmarshal(body, &bs)
 		if err == nil {
-			ctr.bookRepo.Insert(bs)
-			ctx.JSON(200, bs)
+			err := insertProducts(bs)
+			if err != nil {
+				panic(err)
+			}
+			insertBooks(bs)
 		} else {
 			ctx.JSON(400, map[string]string{
-				"Response": "The body should be list of products in json format.",
+				"Response": "The body should be list of books in json format.",
+				"Error":    err.Error(),
 			})
 		}
+	}
+
+	body, err := io.ReadAll(ctx.Request.Body)
+	if err != nil {
+		insertFromBody(body)
 	} else {
 		panic(err)
 	}
@@ -83,12 +99,11 @@ func (ctr BookService) QueryByConditions(ctx *gin.Context) {
 }
 
 func (ctr BookService) Update(ctx *gin.Context) {
-	body, err := io.ReadAll(ctx.Request.Body)
-
-	if err == nil {
-		book, err := GetEntityFromBody[Book](body)
+	updateFromBody := func(body []byte) {
+		var books []Book
+		err := json.Unmarshal(body, &books)
 		if err == nil {
-			ctr.bookRepo.Update(book)
+			ctr.bookRepo.Update(books)
 			ctx.JSON(200, map[string]string{
 				"Response": "Update successful",
 			})
@@ -97,6 +112,11 @@ func (ctr BookService) Update(ctx *gin.Context) {
 				"Response": "The body should be list of products in json format.",
 			})
 		}
+	}
+
+	body, err := io.ReadAll(ctx.Request.Body)
+	if err == nil {
+		updateFromBody(body)
 	} else {
 		panic(err)
 	}
