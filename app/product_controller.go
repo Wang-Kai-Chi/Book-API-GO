@@ -7,15 +7,13 @@ import (
 
 type ProductController struct {
 	service ProductService
-	prefix  string
-	router  *gin.Engine
+	group   *gin.RouterGroup
 }
 
 func NewProductController(service ProductService, router *gin.Engine) ProductController {
 	return ProductController{
 		service: service,
-		prefix:  "/product",
-		router:  router,
+		group:   router.Group("api/v1/product"),
 	}
 }
 
@@ -30,25 +28,25 @@ func (ctr ProductController) Run() {
 }
 
 func (ctr ProductController) QueryWithLimit() {
-	ctr.router.GET(ctr.prefix+"/query/:limit", ctr.service.QueryWithLimit)
+	ctr.group.GET("/query/:limit", ctr.service.QueryWithLimit)
 }
 
 func (ctr ProductController) Insert() {
-	ctr.router.POST(ctr.prefix+"/insert", ctr.service.Insert)
+	ctr.group.POST("/insert", ctr.service.Insert)
 }
 
 func (ctr ProductController) Update() {
-	ctr.router.PUT(ctr.prefix+"/update", ctr.service.Update)
+	ctr.group.PUT("/update", ctr.service.Update)
 }
 
 func (ctr ProductController) Delete() {
-	ctr.router.PUT(ctr.prefix+"/delete", ctr.service.Delete)
+	ctr.group.PUT("/delete", ctr.service.Delete)
 }
 
 func (ctr ProductController) QueryByConditions() {
-	ctr.router.GET(ctr.prefix+"/query/", ctr.service.QueryByConditions)
+	ctr.group.GET("/query/", ctr.service.QueryByConditions)
 }
 
 func (ctr ProductController) QueryByBarcode() {
-	ctr.router.GET(ctr.prefix+"/query/barcode/:barcode", ctr.service.QueryByBarcode)
+	ctr.group.GET("/query/barcode/:barcode", ctr.service.QueryByBarcode)
 }

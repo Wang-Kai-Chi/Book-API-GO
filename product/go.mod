@@ -3,10 +3,8 @@ module iknowbook.com/product
 go 1.20
 
 replace iknowbook.com/repository => ../repository
-
 replace iknowbook.com/data => ../data
-
-replace iknowbook.com/web => ../db
+replace iknowbook.com/db => ../db
 
 require (
 	github.com/gin-gonic/gin v1.9.1

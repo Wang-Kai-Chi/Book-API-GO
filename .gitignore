@@ -1,5 +1,6 @@
 output/
 json/
 .idea/
+app.exe
+
 secret.json
-iknow.exe

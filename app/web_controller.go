@@ -27,8 +27,9 @@ func mustInitRepos() {
 }
 
 func (w WebController) Init() {
-	router := gin.Default()
-	router.SetTrustedProxies([]string{"http", "https"})
+	router := gin.New()
+	router.Use(gin.Logger())
+	router.SetTrustedProxies([]string{"127.0.0.1"})
 	mustInitRepos()
 
 	NewProductController(
@@ -41,10 +42,11 @@ func (w WebController) Init() {
 		router,
 	).Run()
 
+	router.StaticFS("/static", http.Dir("static/"))
 	index(router)
 
 	addr := "localhost"
-	port := ":8080"
+	port := ":8081"
 	println("server start at " + addr + port)
 
 	router.Run(addr + port)
@@ -52,7 +54,7 @@ func (w WebController) Init() {
 }
 
 func index(r *gin.Engine) {
-	path := "./app/static/*.html"
+	path := "./static/*.html"
 	r.LoadHTMLGlob(path)
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)

@@ -5,7 +5,7 @@ go 1.20
 replace iknowbook.com/repository => ../repository
 replace iknowbook.com/data => ../data
 replace iknowbook.com/product => ../product
-replace iknowbook.com/web => ../db
+replace iknowbook.com/db => ../db
 
 require (
 	iknowbook.com/db v0.0.0

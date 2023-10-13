@@ -7,15 +7,13 @@ import (
 
 type BookController struct {
 	service BookService
-	prefix  string
-	router  *gin.Engine
+	group   *gin.RouterGroup
 }
 
 func NewBookController(service BookService, router *gin.Engine) BookController {
 	return BookController{
 		service: service,
-		prefix:  "/book",
-		router:  router,
+		group:   router.Group("api/v1/book"),
 	}
 }
 
@@ -28,17 +26,17 @@ func (ctr BookController) Run() {
 }
 
 func (ctr BookController) QueryWithLimit() {
-	ctr.router.GET(ctr.prefix+"/query/:limit", ctr.service.QueryWithLimit)
+	ctr.group.GET("/query/:limit", ctr.service.QueryWithLimit)
 }
 
 func (ctr BookController) Insert() {
-	ctr.router.POST(ctr.prefix+"/insert", ctr.service.Insert)
+	ctr.group.POST("/insert", ctr.service.Insert)
 }
 
 func (ctr BookController) QueryByCondition() {
-	ctr.router.GET(ctr.prefix+"/query", ctr.service.QueryByConditions)
+	ctr.group.GET("/query", ctr.service.QueryByConditions)
 }
 
 func (ctr BookController) Update() {
-	ctr.router.PUT(ctr.prefix+"/update", ctr.service.Update)
+	ctr.group.PUT("/update", ctr.service.Update)
 }
