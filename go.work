@@ -1,6 +1,10 @@
 go 1.20
 
-use ./src
-use ./src/data
-use ./src/handler
-use ./src/service
+use ./app
+use ./data
+use ./repository
+use ./db
+use ./product
+use ./book
+use ./dvd
+use ./cd
