@@ -12,17 +12,17 @@
 
 <body>
     <div class="container" style="overflow-y: auto;">
+        <header class="py-3 mb-3 border-bottom" hx-trigger="load" hx-get="/static/view/header.html" hx-swap="innerHTML">
+        </header>
         <div id="app">
             <div id="main">
                 <div class="page-heading">
-                    <h3 class="text-primary-emphasis">IknowBook</h3>
                 </div>
                 <div class="page-content">
                     <section class="row">
-                        <div class="col-12 col-lg-9">
-                            <div hx-trigger="load" hx-get="/static/view/card.html" hx-swap="innerHTML">
-                                click me
-                            </div>
+                        <div class="col-12 col-lg-9" hx-trigger="load" hx-get="/static/view/card.html" hx-swap="innerHTML">
+                        </div>
+                        <div class="col-12 col-lg-9" hx-trigger="load" hx-get="/static/view/card.html" hx-swap="innerHTML">
                         </div>
                     </section>
                 </div>
