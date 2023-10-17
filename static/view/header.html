@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a href="/">
-            <h3 class="text-primary-emphasis navbar-brand ">IknowBook</h3>
+            <h3 class="text-primary-emphasis navbar-brand">IknowBook</h3>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#iknowNav"
             aria-controls="iknowNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,35 +9,11 @@
         </button>
         <div id="iknowNav" class="collapse navbar-collapse">
             <div class="d-flex align-items-center ">
-                <div class="dropend">
-                    <button class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="/static/assets/search32.png" alt="blank">
-                    </button>
-                    <form class="dropdown-menu dropdown-menu-xxl-start">
-                        <div class="ms-3">
-                            <input type="text" class="form-control" id="searchItem" aria-describedby="helpId"
-                                placeholder="尋找產品">
-                            <div class="p-2 g-col-6"></div>
-                            <div class="float-end">
-                                <a id="confirmSearch" class="btn btn-primary " href="#" role="button">確定</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <div hx-trigger="load" hx-get="/static/view/search_dropdown.html" hx-swap="innerHTML">
+                    </div>
                 <div class="flex-shrink-0 dropend">
-                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                    </a>
-                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
-                    </ul>
+                    <div hx-trigger="load" hx-get="/static/view/user_avatar.html" hx-swap="innerHTML">
+                    </div>
                 </div>
             </div>
         </div>
