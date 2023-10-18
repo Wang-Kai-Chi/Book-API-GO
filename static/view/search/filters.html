@@ -1,7 +1,56 @@
-<ul class="list-group ">
-    <button type="button" class="list-group-item list-group-item-action">title:</button>
-    <button type="button" class="list-group-item list-group-item-action">publisher:</button>
-    <button type="button" class="list-group-item list-group-item-action">barcode:</button>
-    <button type="button" class="list-group-item list-group-item-action">priceMin:</button>
-    <button type="button" class="list-group-item list-group-item-action">priceMax:</button>
+<script>
+    const searchFilter = document.querySelector("#searchFilter")
+    const suffix = ":"
+    const regex = "&"
+
+    const listCheckboxItem = function (name = "name", value = "value") {
+        return /*html*/`
+            <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" value="${value}" onclick="activeFilter(event)">
+                <label class="form-check-label" for="firstCheckbox">${name}</label>
+                <input class="" type="text" id="${value}" onchange="setFilterValue(event)" onfocus="setFilterValue(event)">
+            </li>
+        `
+    }
+
+    function activeFilter(event) {
+        const searchInput = document.querySelector("#searchInput")
+        const checkbox = event.target
+        const filter = `${checkbox.value}${suffix}`
+        const valueInput = document.querySelector(`#${checkbox.value}`)
+
+        if (checkbox.checked && !searchInput.value.includes(filter)) {
+            searchInput.value += `${filter}${regex}`
+            valueInput.focus()
+        }
+        else {
+            const values = searchInput.value.split(regex)
+            for (const s of values) {
+                if (s.includes(filter)) {
+                    searchInput.value = searchInput.value.replace(s + regex, "")
+                    break
+                }
+            }
+        }
+    }
+
+    function setFilterValue(event) {
+        const searchInput = document.querySelector("#searchInput")
+        let input = searchInput.value
+        const value = event.target
+
+        const insertPosition = input.indexOf(value.id) + value.id.length + suffix.length
+        let insertString = (position = 0, str = "") => {
+            return input.slice(0, position) + str + input.slice(position)
+        }
+        if(searchInput.value.includes(value.id) && !searchInput.value.includes(value.value))
+            searchInput.value = insertString(insertPosition, value.value)
+    }
+
+    searchFilter.innerHTML = listCheckboxItem("名稱", "title") +
+        listCheckboxItem("條碼", "barcode") +
+        listCheckboxItem("最高價格", "priceMax")
+</script>
+
+<ul id="searchFilter" class="list-group ">
 </ul>
