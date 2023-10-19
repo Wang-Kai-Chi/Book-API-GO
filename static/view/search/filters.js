@@ -61,10 +61,10 @@ function FilterOperation(searchSelector = "", name = "") {
 
 /**
  *  Returning a html with list item, checkbox, label, and text input.
- *  This is use to generate parameter in another text input.
+ *  This is use to generate parameter in another search input.
  *
  * @param {string} [name="name"] name that display on FilterItem
- * @param {string} [value="value"] value that generate on text input
+ * @param {string} [value="value"] value that generate on search input
  * @param {string} [FilterOpStr=""] variable name of FilterOperation
  * @return {string}  
  */

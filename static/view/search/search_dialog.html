@@ -10,9 +10,22 @@
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
-            <div class="modal-header" hx-get="/static/view/search/search_input.html" hx-trigger="load" hx-swap="innerHTML">
+            <div class="modal-header">
+                <div class="input-group">
+                    <button id="confirmSearch" hx-get="/static/view/search/result.html" hx-trigger="click"
+                        hx-swap="innerHTML" hx-target="#resultView" class="btn btn-primary " type="button">確定</button>
+                    <input type="text" class="form-control" id="searchInput" aria-describedby="helpId"
+                        placeholder="輸入條碼或條件">
+                </div>
             </div>
-            <div class="modal-body" hx-get="/static/view/search/search_content.html" hx-trigger="load" hx-swap="innerHTML">
+            <div class="modal-body">
+                <h4>搜尋條件</h4>
+                <div hx-get="/static/view/search/filters.html" hx-trigger="load" hx-swap="innerHTML"></div>
+                <div class="p-2 g-col-6">
+                    <hr>
+                </div>
+                <h4>結果</h4>
+                <div id="resultView"></div>
             </div>
             <div class="modal-footer float-start ">
             </div>
