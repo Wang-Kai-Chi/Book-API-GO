@@ -1,20 +1,4 @@
-Result()
-
-function Result() {
-    const filters = document.querySelector("#searchInput").value
-    fetch(`/api/v1/product/query/?${filters}`)
-        .then(data => data.json())
-        .then(value => parseValue(value))
-        .catch(err => console.log(err))
-}
-function parseValue(value) {
-    renderCards(value)
-}
-
-function renderCards(value) {
-    const cardTemplate = (title = "", price = "") => {
-        return /*html*/`
-    <div class="card border-info">
+<div class="card border-info">
         <div class="card-body py-4 px-4">
             <div class="d-flex align-items-center">
                 <img id="productIcon" src="/static/assets/product32.png" alt="preview">
@@ -28,7 +12,7 @@ function renderCards(value) {
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" hx-trigger="click delay:500ms" data-bs-dismiss="modal"
+                            <a class="dropdown-item" hx-trigger="click" data-bs-dismiss="modal"
                                 hx-get="/static/view/detail.html" hx-swap="innerHTML" hx-target="#main">
                                 <img src="/static/assets/edit32.png" alt="blank">
                             </a>
@@ -45,14 +29,3 @@ function renderCards(value) {
     </div>
     </div>
     <div class="p-2 g-col-6"></div>
-    `
-    }
-    const cards = () => {
-        let temp = ""
-        for (const v of value) {
-            temp += cardTemplate(v.Product_title, v.Price)
-        }
-        return temp
-    }
-    document.querySelector("#cardResult").innerHTML = cards()
-}

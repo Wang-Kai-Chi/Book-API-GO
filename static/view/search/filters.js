@@ -1,3 +1,16 @@
+const operate = FilterOperation("#searchInput", "operate")
+Filter()
+
+function Filter() {
+    const operationName = operate.name
+    const filterItems = FilterItem("名稱", "title", operationName) +
+        FilterItem("最低價格", "mix", operationName)+
+        FilterItem("最高價格", "max", operationName)+
+        FilterItem("廠商", "publisher", operationName)
+
+    const searchFilter = document.querySelector("#searchFilter")
+    searchFilter.innerHTML = filterItems
+}
 /**
      * Handling Events for FilterItem, such as onclick, onchange, and onfocus... 
      * 
@@ -5,7 +18,7 @@
      * @returns {object} FilterOperation object
      */
 function FilterOperation(searchSelector = "", name = "") {
-    const suffix = ":"
+    const suffix = "="
     const regex = "&"
     const searchInput = document.querySelector(searchSelector)
 
@@ -46,7 +59,7 @@ function FilterOperation(searchSelector = "", name = "") {
         let insertString = (position = 0, str = "") => {
             return input.slice(0, position) + str + input.slice(position)
         }
-        if (searchInput.value.includes(param.id) && !searchInput.value.includes(param.value)) {
+        if (input.includes(param.id) && !input.includes(param.value)) {
             const insertPosition = input.indexOf(param.id) + param.id.length + suffix.length
             searchInput.value = insertString(insertPosition, param.value)
         }
@@ -77,11 +90,3 @@ function FilterItem(name = "name", value = "value", FilterOpStr = "") {
             </li>
         `
 }
-
-const operate = FilterOperation("#searchInput", "operate")
-const operationName = operate.name
-const filterItems = FilterItem("名稱", "title", operationName) +
-    FilterItem("最高價格", "priceMax", operationName)
-
-const searchFilter = document.querySelector("#searchFilter")
-searchFilter.innerHTML = filterItems 
