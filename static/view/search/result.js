@@ -28,7 +28,7 @@ function renderCards(value) {
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" hx-trigger="click delay:500ms" data-bs-dismiss="modal"
+                            <a class="dropdown-item" hx-trigger="click" data-bs-dismiss="modal"
                                 hx-get="/static/view/detail.html" hx-swap="innerHTML" hx-target="#main">
                                 <img src="/static/assets/edit32.png" alt="blank">
                             </a>
@@ -54,5 +54,7 @@ function renderCards(value) {
         }
         return temp
     }
-    document.querySelector("#cardResult").innerHTML = cards()
+    const cardResult = document.querySelector("#cardResult")
+    cardResult.innerHTML = cards()
+    htmx.process(cardResult)
 }
