@@ -1,7 +1,50 @@
 <script>
-    const searchFilter = document.querySelector("#searchFilter")
     const suffix = ":"
     const regex = "&"
+    const searchInput = document.querySelector("#searchInput")
+
+    function removeFilter(filter = "") {
+        const values = searchInput.value.split(regex)
+        for (const s of values) {
+            if (s.includes(filter)) {
+                searchInput.value = searchInput.value.replace(s + regex, "")
+                break
+            }
+        }
+    }
+
+    function addFilter(paramId = "", filter = "") {
+        const param = document.querySelector(`#${paramId}`)
+        searchInput.value += `${filter}${regex}`
+        param.focus()
+    }
+
+    function activeFilter(event) {
+        const checkbox = event.target
+        const filter = `${checkbox.value}${suffix}`
+
+        if (checkbox.checked && !searchInput.value.includes(filter))
+            addFilter(checkbox.value, filter)
+        else
+            removeFilter(filter)
+    }
+
+    function setFilterValue(event) {
+        const param = event.target
+        const filter = `${param.id}${suffix}`
+        removeFilter(filter)
+        addFilter(param.id, filter)
+
+        let input = searchInput.value
+
+        let insertString = (position = 0, str = "") => {
+            return input.slice(0, position) + str + input.slice(position)
+        }
+        if (searchInput.value.includes(param.id) && !searchInput.value.includes(param.value)) {
+            const insertPosition = input.indexOf(param.id) + param.id.length + suffix.length
+            searchInput.value = insertString(insertPosition, param.value)
+        }
+    }
 
     const listCheckboxItem = function (name = "name", value = "value") {
         return /*html*/`
@@ -12,41 +55,7 @@
             </li>
         `
     }
-
-    function activeFilter(event) {
-        const searchInput = document.querySelector("#searchInput")
-        const checkbox = event.target
-        const filter = `${checkbox.value}${suffix}`
-        const valueInput = document.querySelector(`#${checkbox.value}`)
-
-        if (checkbox.checked && !searchInput.value.includes(filter)) {
-            searchInput.value += `${filter}${regex}`
-            valueInput.focus()
-        }
-        else {
-            const values = searchInput.value.split(regex)
-            for (const s of values) {
-                if (s.includes(filter)) {
-                    searchInput.value = searchInput.value.replace(s + regex, "")
-                    break
-                }
-            }
-        }
-    }
-
-    function setFilterValue(event) {
-        const searchInput = document.querySelector("#searchInput")
-        let input = searchInput.value
-        const value = event.target
-
-        const insertPosition = input.indexOf(value.id) + value.id.length + suffix.length
-        let insertString = (position = 0, str = "") => {
-            return input.slice(0, position) + str + input.slice(position)
-        }
-        if(searchInput.value.includes(value.id) && !searchInput.value.includes(value.value))
-            searchInput.value = insertString(insertPosition, value.value)
-    }
-
+    const searchFilter = document.querySelector("#searchFilter")
     searchFilter.innerHTML = listCheckboxItem("名稱", "title") +
         listCheckboxItem("條碼", "barcode") +
         listCheckboxItem("最高價格", "priceMax")
