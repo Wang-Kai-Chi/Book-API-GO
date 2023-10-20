@@ -22,6 +22,8 @@ func (ctr ProductController) Run() {
 	ctr.QueryByConditions()
 	ctr.QueryByBarcode()
 
+	ctr.MaxPrice()
+
 	ctr.Insert()
 	ctr.Update()
 	ctr.Delete()
@@ -49,4 +51,8 @@ func (ctr ProductController) QueryByConditions() {
 
 func (ctr ProductController) QueryByBarcode() {
 	ctr.group.GET("/query/barcode/:barcode", ctr.service.QueryByBarcode)
+}
+
+func (ctr ProductController) MaxPrice() {
+	ctr.group.GET("/maxprice", ctr.service.MaxPrice)
 }

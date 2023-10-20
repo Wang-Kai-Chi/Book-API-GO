@@ -1,12 +1,23 @@
 Result()
 
 function Result() {
-    const filters = document.querySelector("#searchInput").value
-    fetch(`/api/v1/product/query/?${filters}`)
+    fetch(ProductAPI())
         .then(data => data.json())
         .then(value => parseValue(value))
         .catch(err => console.log(err))
 }
+
+function ProductAPI(){
+    let uri = (filters) => {
+        if (filters.includes("="))
+            return `/api/v1/product/query/?${filters}`
+        else
+            return `/api/v1/product/query/barcode/${filters}`
+    }
+    let filters = document.querySelector("#searchInput").value
+    return uri(filters)
+}
+
 function parseValue(value) {
     renderCards(value)
 }

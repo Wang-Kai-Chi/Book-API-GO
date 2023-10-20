@@ -63,3 +63,16 @@ func (serv ProductRepository) QueryByConditions(
 		p.Publisher,
 	)
 }
+
+func (repo ProductRepository) MaxPrice() int {
+	rows, err := repo.Connection.Query(NewProductSqlStr().MaxPrice)
+	var max int
+	for rows.Next() {
+		err = rows.Scan(&max)
+		if err != nil {
+			panic(err)
+		}
+	}
+	err = rows.Err()
+	return max
+}

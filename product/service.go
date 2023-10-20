@@ -115,3 +115,7 @@ func (ctr ProductService) QueryByConditions(ctx *gin.Context) {
 	}
 	ctx.JSON(200, ctr.repo.QueryByConditions(min, max, product))
 }
+
+func (serv ProductService) MaxPrice(ctx *gin.Context) {
+	ctx.JSON(200, map[string]int{"MaxProductPrice": serv.repo.MaxPrice()})
+}

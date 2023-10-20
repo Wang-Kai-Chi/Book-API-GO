@@ -105,3 +105,14 @@ func TestQueryByConditions(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMaxPrice(t *testing.T) {
+	db, err := ConnectDB()
+	if err == nil {
+		repo := NewProductRepository(db)
+		max := repo.MaxPrice()
+		t.Log(max)
+	} else {
+		t.Fatal(err)
+	}
+}
