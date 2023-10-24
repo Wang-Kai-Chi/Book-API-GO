@@ -42,7 +42,7 @@ function ProductService() {
  */
 function CardHTML(product = {Product_title:"",Price:0}, index=0) {
     const VALUE_ID=`pValue${index}`
-    const PRODUCT_DETAIL_TEMPLATE_URI="/static/view/detail.html" 
+    const PRODUCT_DETAIL_TEMPLATE_URI="/static/view/detail/detail.html" 
     return /*html*/`
         
         <div class="card border-info">
@@ -105,6 +105,5 @@ function CardRenderer(selector = "") {
 }
 
 function setCurrentCardValue(cardId=""){
-    console.log(JSON.parse(cardId.innerHTML))
     localStorage.setItem("currentProduct", cardId.innerHTML)
 }

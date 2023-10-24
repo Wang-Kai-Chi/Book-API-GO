@@ -1,5 +1,9 @@
 Detail()
 
+/**
+ *Showing details of json object
+ *
+ */
 function Detail() {
     const product = {
         Product_title: "名稱",
@@ -23,15 +27,28 @@ function Detail() {
     DetailRenderer("#detailDisplay").render(product)
     addDetailValues(product, "currentProduct")
 }
+/**
+ * Bootstrap input group
+ *
+ * @param {string} [name=""] name of input group
+ * @param {string} [id=""] input id
+ * @return {string} html element string 
+ */
 function DetailHTML(name = "", id = "") {
     return /*html*/`
         <div class="input-group mb-3">
             <span class="input-group-text">${name}</span>
-            <input type="text" class="form-control" id="${id}"  placeholder="none">
+            <input type="text" class="form-control" id="${id}" placeholder="none" disabled>
         </div>
     `
 }
 
+/**
+ * Render list items of detail
+ *
+ * @param {string} [selector=""] selector of detail list
+ * @return {object} 
+ */
 function DetailRenderer(selector = "") {
     const render = (details) => {
         const items = () => {
