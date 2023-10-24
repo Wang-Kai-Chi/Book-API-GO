@@ -62,7 +62,7 @@ function CardHTML(product = {Product_title:"",Price:0}, index=0) {
                             <li>
                                 <a class="dropdown-item" hx-trigger="click" data-bs-dismiss="modal"
                                     hx-get="${PRODUCT_DETAIL_TEMPLATE_URI}"  hx-swap="innerHTML" 
-                                    hx-target="#main" onclick="getSelectCardValue(${VALUE_ID})">
+                                    hx-target="#main" onclick="setCurrentCardValue(${VALUE_ID})">
                                     <img src="/static/assets/edit32.png" alt="blank">
                                 </a>
                             </li>
@@ -87,9 +87,8 @@ function CardHTML(product = {Product_title:"",Price:0}, index=0) {
  * @return {object} return CardRenderer object 
  */
 function CardRenderer(selector = "") {
-    function renderCards(value) {
+    const renderCards=(value)=> {
         const cards = () => {
-
             let temp = ""
             for (const i in value)
                 temp += CardHTML(value[i], i)
@@ -105,6 +104,7 @@ function CardRenderer(selector = "") {
     }
 }
 
-function getSelectCardValue(cardId=""){
-    console.log(cardId.innerHTML)
+function setCurrentCardValue(cardId=""){
+    console.log(JSON.parse(cardId.innerHTML))
+    localStorage.setItem("currentProduct", cardId.innerHTML)
 }
