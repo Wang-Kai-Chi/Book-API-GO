@@ -1,39 +1,48 @@
+import * as p from "../service/product_service.js"
 Result()
 
 function Result() {
+    const ProductService = p.ProductService()
     let filters = document.querySelector("#searchInput").value
     if (filters.includes("=")) {
         if (!filters.includes("max"))
-            ProductService().getByConditions(filters + "max=500")
+            ProductService.getByConditions(filters + "max=500")
+                .then(value => CardRenderer("#cardResult").render(value))
+                .catch(err => console.log(err))
         else
-            ProductService().getByConditions(filters)
+            ProductService.getByConditions(filters)
+                .then(value => CardRenderer("#cardResult").render(value))
+                .catch(err => console.log(err))
     }
     else
-        ProductService().getByBarcode(filters)
+        ProductService.getByBarcode(filters)
+            .then(value => CardRenderer("#cardResult").render(value))
+            .catch(err => console.log(err))
 }
 /**
- * Getting Product json data from api
- *
- * @return {object} return ProductService 
+ * Rendering bootstrap cards
+ * @constructor
+ * @param {string} [selector=""] css selector of html element that you want to display card
+ * @return {object} return CardRenderer object 
  */
-function ProductService() {
-    const getByBarcode = (barcode) => {
-        fetch(`/api/v1/product/query/barcode/${barcode}`)
-            .then(data => data.json())
-            .then(value => CardRenderer("#cardResult").render(value))
-            .catch(err => console.log(err))
-    }
-    const getByConditions = (conditions) => {
-        fetch(`/api/v1/product/query/?${conditions}`)
-            .then(data => data.json())
-            .then(value => CardRenderer("#cardResult").render(value))
-            .catch(err => console.log(err))
+function CardRenderer(selector = "") {
+    const renderCards=(value)=> {
+        const cards = () => {
+            let temp = ""
+            for (const i in value)
+                temp += CardHTML(value[i], i)
+
+            return temp
+        }
+        const cardResult = document.querySelector(selector)
+        cardResult.innerHTML = cards()
+        htmx.process(cardResult)
     }
     return {
-        getByBarcode: (barcode) => getByBarcode(barcode),
-        getByConditions: (conditions) => getByConditions(conditions),
+        render: (value) => renderCards(value),
     }
 }
+
 /**
  *Bootstrap Card, with dropdown option and icon
  *@param {{ Product_title: string; Price: number; }} [product={Product_title:"",Price:0}] product object
@@ -80,30 +89,4 @@ function CardHTML(product = {Product_title:"",Price:0}, index=0) {
         <div class="p-2 g-col-6"></div>
     `
 }
-/**
- * Rendering bootstrap cards
- * @constructor
- * @param {string} [selector=""] css selector of html element that you want to display card
- * @return {object} return CardRenderer object 
- */
-function CardRenderer(selector = "") {
-    const renderCards=(value)=> {
-        const cards = () => {
-            let temp = ""
-            for (const i in value)
-                temp += CardHTML(value[i], i)
 
-            return temp
-        }
-        const cardResult = document.querySelector(selector)
-        cardResult.innerHTML = cards()
-        htmx.process(cardResult)
-    }
-    return {
-        render: (value) => renderCards(value),
-    }
-}
-
-function setCurrentCardValue(cardId=""){
-    localStorage.setItem("currentProduct", cardId.innerHTML)
-}

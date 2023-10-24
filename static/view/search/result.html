@@ -1,4 +1,14 @@
-<script src="/static/view/search/result.js"></script>
+<script type="module" src="/static/view/search/result.js"></script>
+<script>
+    /**
+    *Saving current Card Value to LocalStorage
+    *
+    * @param {string} [cardId=""] id of card
+    */
+    function setCurrentCardValue(cardId = "") {
+        localStorage.setItem("currentProduct", cardId.innerHTML)
+    }
+</script>
 
 <div id="cardResult">
 </div>

@@ -14,7 +14,8 @@ function Filter() {
 /**
      * Handling Events for FilterItem, such as onclick, onchange, and onfocus... 
      * 
-     * @param {string} searchSelector - css selector of your search input
+     * @param {string} [searchSelector=""] css selector of your search input
+     * @param {string} [name=""] string name of declared FilterOperation variable  
      * @returns {object} FilterOperation object
      */
 function FilterOperation(searchSelector = "", name = "") {
