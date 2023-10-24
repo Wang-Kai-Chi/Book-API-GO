@@ -36,20 +36,23 @@ function ProductService() {
 }
 /**
  *Bootstrap Card, with dropdown option and icon
- *
- * @param {string} [title=""] title of card
- * @param {string} [sub=""] subtitle of card 
+ *@param {{ Product_title: string; Price: number; }} [product={Product_title:"",Price:0}] product object
+ *@param {number} [index=0] index in list
  * @return {string} string of html card 
  */
-function CardHTML(title = "", sub = "") {
+function CardHTML(product = {Product_title:"",Price:0}, index=0) {
+    const VALUE_ID=`pValue${index}`
+    const PRODUCT_DETAIL_TEMPLATE_URI="/static/view/detail.html" 
     return /*html*/`
+        
         <div class="card border-info">
             <div class="card-body py-4 px-4">
                 <div class="d-flex align-items-center">
                     <img id="productIcon" src="/static/assets/product32.png" alt="preview">
                     <div class="ms-3 name me-auto">
-                        <h5 id="pTitle" class="font-bold">${title}</h5>
-                        <h6 id="pPrice" class="text-muted mb-0">${sub}</h6>
+                        <div id="${VALUE_ID}" hidden>${JSON.stringify(product)}</div>
+                        <h5 id="pTitle" class="font-bold">${product.Product_title}</h5>
+                        <h6 id="pPrice" class="text-muted mb-0">${product.Price}</h6>
                     </div>
                     <div class="dropup">
                         <button class="btn" data-bs-toggle="dropdown" aria-expanded="false">
@@ -58,7 +61,8 @@ function CardHTML(title = "", sub = "") {
                         <ul class="dropdown-menu">
                             <li>
                                 <a class="dropdown-item" hx-trigger="click" data-bs-dismiss="modal"
-                                    hx-get="/static/view/detail.html" hx-swap="innerHTML" hx-target="#main">
+                                    hx-get="${PRODUCT_DETAIL_TEMPLATE_URI}"  hx-swap="innerHTML" 
+                                    hx-target="#main" onclick="getSelectCardValue(${VALUE_ID})">
                                     <img src="/static/assets/edit32.png" alt="blank">
                                 </a>
                             </li>
@@ -87,8 +91,8 @@ function CardRenderer(selector = "") {
         const cards = () => {
 
             let temp = ""
-            for (const v of value)
-                temp += CardHTML(v.Product_title, v.Price)
+            for (const i in value)
+                temp += CardHTML(value[i], i)
 
             return temp
         }
@@ -101,3 +105,6 @@ function CardRenderer(selector = "") {
     }
 }
 
+function getSelectCardValue(cardId=""){
+    console.log(cardId.innerHTML)
+}

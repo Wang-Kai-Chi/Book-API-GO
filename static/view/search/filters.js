@@ -4,7 +4,7 @@ Filter()
 function Filter() {
     const operationName = operate.name
     const filterItems = FilterItem("名稱", "title", operationName) +
-        FilterItem("最低價格", "mix", operationName)+
+        FilterItem("最低價格", "min", operationName)+
         FilterItem("最高價格", "max", operationName)+
         FilterItem("廠商", "publisher", operationName)
 
