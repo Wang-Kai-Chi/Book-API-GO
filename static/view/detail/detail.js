@@ -6,6 +6,7 @@ Detail()
  */
 function Detail() {
     const product = {
+        Product_id: "id",
         Product_title: "名稱",
         Price: "價格",
         Barcode: "條碼",
@@ -26,6 +27,7 @@ function Detail() {
 
     DetailRenderer("#detailDisplay").render(product)
     addDetailValues(product, "currentProduct")
+    document.querySelector("#Product_id").hidden = true
 }
 /**
  * Bootstrap input group

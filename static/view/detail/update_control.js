@@ -12,24 +12,32 @@ function UpdateControl() {
     const cancelBtn = CancelUpdateBtnHTML()
 
     controllArea.innerHTML = updateBtn.str + cancelBtn.str + confirmBtn.str
-    cancelBtn.q().hidden = true
-    confirmBtn.q().hidden = true
 
-    updateBtn.q().onclick = () => {
+    const viewMode = () => {
+        cancelBtn.q().hidden = true
+        confirmBtn.q().hidden = true
+    }
+
+    viewMode()
+
+    const editMode = () => {
         cancelBtn.q().hidden = false
         confirmBtn.q().hidden = false
+    }
+    updateBtn.q().onclick = () => {
+        editMode()
+        extractProduct()
         updateBtn.q().hidden = true
         updateController.enableUpdate()
     }
 
     cancelBtn.q().onclick = () => {
-        cancelBtn.q().hidden = true
-        confirmBtn.q().hidden = true
+        viewMode()
         updateBtn.q().hidden = false
         updateController.cancelUpdate()
     }
 
-    confirmBtn.q().onclick=()=>{
+    confirmBtn.q().onclick = () => {
         updateController.confirmUpdate()
     }
 }
@@ -81,18 +89,10 @@ function UpdateController() {
     }
 
     const confirmUpdate = () => {
-        productService.update([{
-            "Product_id": 1629,
-            "Barcode": "9789861052151",
-            "Product_title": "妖怪少爺 (9)",
-            "Publisher": "東立",
-            "Publication_date": "2022-03-19T00:00:00Z",
-            "Price": "85元",
-            "Quantity": 1,
-            "Description": "none"
-        }])
+        const p = () => extractProduct()
+        productService.update([p()])
             .catch(err => console.log(err))
-            .then(response=>console.log("Success",response))
+            .then(response => console.log("Success", response))
     }
 
     return {
@@ -100,4 +100,51 @@ function UpdateController() {
         cancelUpdate: () => cancelUpdate(),
         confirmUpdate: () => confirmUpdate(),
     }
+}
+
+/**
+ *Product entity
+ *@constructor
+ * @return {object} 
+ */
+const Product = () => {
+    let product = {
+        Product_id: 0,
+        Product_title: "名稱",
+        Price: "價格",
+        Barcode: "條碼",
+        Publisher: "出版商",
+        Publication_date: "發行日",
+        Quantity: 0,
+        Description: "說明",
+    }
+
+    return {
+        this: () => { return product },
+        keys: () => { return Object.keys(product) },
+    }
+}
+
+/**
+ *Extracting Product() from detail list
+ *
+ * @return {Product().this()} 
+ */
+function extractProduct() {
+    const product = Product()
+    const setValueMatchDataType = (data, value) => {
+        if (data == Number.isInteger())
+            data = parseInt(value)
+        else
+            data = value
+        return data
+    }
+    for (const i in product.keys()) {
+        const current = product.keys()[i]
+        const value = document.querySelector(`#${current}`).value
+
+        let data = setValueMatchDataType(product.this()[current], value)
+        product.this()[current] = data
+    }
+    return product.this()
 }
