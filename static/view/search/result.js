@@ -1,23 +1,33 @@
-import * as p from "../service/product_service.js"
 Result()
 
 function Result() {
-    const ProductService = p.ProductService()
     let filters = document.querySelector("#searchInput").value
+
+    const getByConditions = async (conditions) => {
+        return fetch(`/api/v1/product/query/?${conditions}`)
+            .then(data => data.json())
+    }
+
+    const getByBarcode = async (barcode) => {
+        return fetch(`/api/v1/product/query/barcode/${barcode}`)
+            .then(data => data.json())
+    }
+
     if (filters.includes("=")) {
         if (!filters.includes("max"))
-            ProductService.getByConditions(filters + "max=500")
+            getByConditions(filters + "max=500")
                 .then(value => CardRenderer("#cardResult").render(value))
                 .catch(err => console.log(err))
         else
-            ProductService.getByConditions(filters)
+            getByConditions(filters)
                 .then(value => CardRenderer("#cardResult").render(value))
                 .catch(err => console.log(err))
     }
     else
-        ProductService.getByBarcode(filters)
+        getByBarcode(filters)
             .then(value => CardRenderer("#cardResult").render(value))
             .catch(err => console.log(err))
+    htmx.process(document.querySelector("#cardResult"))
 }
 /**
  * Rendering bootstrap cards
@@ -26,7 +36,7 @@ function Result() {
  * @return {object} return CardRenderer object 
  */
 function CardRenderer(selector = "") {
-    const renderCards=(value)=> {
+    const renderCards = (value) => {
         const cards = () => {
             let temp = ""
             for (const i in value)
@@ -49,9 +59,9 @@ function CardRenderer(selector = "") {
  *@param {number} [index=0] index in list
  * @return {string} string of html card 
  */
-function CardHTML(product = {Product_title:"",Price:0}, index=0) {
-    const VALUE_ID=`pValue${index}`
-    const PRODUCT_DETAIL_TEMPLATE_URI="/static/view/detail/detail.html" 
+function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
+    const VALUE_ID = `pValue${index}`
+    const PRODUCT_DETAIL_TEMPLATE_URI = "/static/view/detail/detail.html"
     return /*html*/`
         
         <div class="card border-info">
@@ -90,3 +100,11 @@ function CardHTML(product = {Product_title:"",Price:0}, index=0) {
     `
 }
 
+/**
+*Saving current Card Value to LocalStorage
+*
+* @param {string} [cardId=""] id of card
+*/
+function setCurrentCardValue(cardId = "") {
+    localStorage.setItem("currentProduct", cardId.innerHTML)
+}

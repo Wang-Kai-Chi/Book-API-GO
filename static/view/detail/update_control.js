@@ -1,77 +1,36 @@
-import * as p from "../service/product_service.js"
-const productService = p.ProductService()
-const controllArea = document.querySelector("#updateControl")
-
 UpdateControl()
 
 function UpdateControl() {
+    const updateBtn = document.querySelector(`#updateBtn`)
+    const confirmBtn = document.querySelector(`#confirmUpdateBtn`)
+    const cancelBtn = document.querySelector(`#cancelUpdateBtn`)
+
     const updateController = UpdateController()
-
-    const updateBtn = UpdateBtnHTML()
-    const confirmBtn = ConfirmUpdateBtnHTML()
-    const cancelBtn = CancelUpdateBtnHTML()
-
-    controllArea.innerHTML = updateBtn.str + cancelBtn.str + confirmBtn.str
-
     const viewMode = () => {
-        cancelBtn.q().hidden = true
-        confirmBtn.q().hidden = true
+        cancelBtn.hidden = true
+        confirmBtn.hidden = true
     }
 
     viewMode()
 
     const editMode = () => {
-        cancelBtn.q().hidden = false
-        confirmBtn.q().hidden = false
+        cancelBtn.hidden = false
+        confirmBtn.hidden = false
     }
-    updateBtn.q().onclick = () => {
+    updateBtn.onclick = () => {
         editMode()
-        extractProduct()
-        updateBtn.q().hidden = true
+        updateBtn.hidden = true
         updateController.enableUpdate()
     }
 
-    cancelBtn.q().onclick = () => {
+    cancelBtn.onclick = () => {
         viewMode()
-        updateBtn.q().hidden = false
+        updateBtn.hidden = false
         updateController.cancelUpdate()
     }
 
-    confirmBtn.q().onclick = () => {
+    confirmBtn.onclick = () => {
         updateController.confirmUpdate()
-    }
-}
-
-function CancelUpdateBtnHTML() {
-    const cancelUpdateId = "cancelUpdateBtn"
-    return {
-        str:/*html*/`
-            <button type="button" class="btn btn-danger" 
-            id="${cancelUpdateId}">Cancel</button>
-        `,
-        q: () => { return document.querySelector(`#${cancelUpdateId}`) },
-    }
-}
-
-function ConfirmUpdateBtnHTML() {
-    const confirmUpdateId = "confirmUpdateBtn"
-    return {
-        str:/*html*/`
-            <button type="button" class="btn btn-primary" 
-            id="${confirmUpdateId}">Confirm</button>
-        `,
-        q: () => { return document.querySelector(`#${confirmUpdateId}`) },
-    }
-}
-
-function UpdateBtnHTML() {
-    const updateId = "updateBtn"
-    return {
-        str:/*html*/`
-            <button type="button" class="btn btn-primary" 
-            id="${updateId}">Update</button>
-        `,
-        q: () => { return document.querySelector(`#${updateId}`) },
     }
 }
 
@@ -89,8 +48,64 @@ function UpdateController() {
     }
 
     const confirmUpdate = () => {
-        const p = () => extractProduct()
-        productService.update([p()])
+        /**
+         *Product entity
+        *@constructor
+        * @return {object} 
+        */
+        const Product = () => {
+            let product = {
+                Product_id: 0,
+                Product_title: "名稱",
+                Price: "價格",
+                Barcode: "條碼",
+                Publisher: "出版商",
+                Publication_date: "發行日",
+                Quantity: 0,
+                Description: "說明",
+            }
+
+            return {
+                this: () => { return product },
+                keys: () => { return Object.keys(product) },
+            }
+        }
+
+        /**
+         *Extracting Product() from detail list
+         *
+         * @return {Product().this()} 
+         */
+        const extractProduct = () => {
+            const product = Product()
+            const setValueMatchDataType = (data, value) => {
+                if (data == Number.isInteger())
+                    data = parseInt(value)
+                else
+                    data = value
+                return data
+            }
+            for (const i in product.keys()) {
+                const current = product.keys()[i]
+                const value = document.querySelector(`#${current}`).value
+
+                let data = setValueMatchDataType(product.this()[current], value)
+                product.this()[current] = data
+            }
+            return product.this()
+        }
+
+        const update = async (body) => {
+            return fetch(`/api/v1/product/update`, {
+                method: "PUT",
+                body: JSON.stringify(body),
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                }),
+            }).then(res => res.json())
+        }
+
+        update([extractProduct()])
             .catch(err => console.log(err))
             .then(response => console.log("Success", response))
     }
@@ -102,49 +117,3 @@ function UpdateController() {
     }
 }
 
-/**
- *Product entity
- *@constructor
- * @return {object} 
- */
-const Product = () => {
-    let product = {
-        Product_id: 0,
-        Product_title: "名稱",
-        Price: "價格",
-        Barcode: "條碼",
-        Publisher: "出版商",
-        Publication_date: "發行日",
-        Quantity: 0,
-        Description: "說明",
-    }
-
-    return {
-        this: () => { return product },
-        keys: () => { return Object.keys(product) },
-    }
-}
-
-/**
- *Extracting Product() from detail list
- *
- * @return {Product().this()} 
- */
-function extractProduct() {
-    const product = Product()
-    const setValueMatchDataType = (data, value) => {
-        if (data == Number.isInteger())
-            data = parseInt(value)
-        else
-            data = value
-        return data
-    }
-    for (const i in product.keys()) {
-        const current = product.keys()[i]
-        const value = document.querySelector(`#${current}`).value
-
-        let data = setValueMatchDataType(product.this()[current], value)
-        product.this()[current] = data
-    }
-    return product.this()
-}
