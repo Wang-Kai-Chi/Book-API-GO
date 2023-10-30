@@ -43,7 +43,7 @@ func (ctr ProductController) Update() {
 }
 
 func (ctr ProductController) Delete() {
-	ctr.group.PUT("/delete", ctr.service.Delete)
+	ctr.group.DELETE("/delete", ctr.service.Delete)
 }
 
 func (ctr ProductController) QueryByConditions() {

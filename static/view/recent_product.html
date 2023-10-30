@@ -1,6 +1,7 @@
 <script type="module">
     import * as card from "/static/view/card_renderer.js"
-    fetch("/api/v1/product/query/new/10")
+    const RECENT_PRODUCT_COUNT = 8
+    fetch(`/api/v1/product/query/new/${RECENT_PRODUCT_COUNT}`)
         .then(data => data.json())
         .then(value => card.CardRenderer("#recentProduct").render(value))
         .catch(err => console.log(err))

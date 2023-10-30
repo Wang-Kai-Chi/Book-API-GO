@@ -84,7 +84,9 @@ func TestDelete(t *testing.T) {
 	db, err := ConnectDB()
 	if err == nil {
 		p := NewProductRepository(db)
-		res := p.Delete(getProductForTest())
+		res := p.Delete([]Product{{
+			Product_id: 2066,
+		}})
 		t.Log(res)
 	} else {
 		t.Fatal(err)
