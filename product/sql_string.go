@@ -10,6 +10,7 @@ type ProductSqlStr struct {
 	QueryWithPriceRange string
 	QueryByBarcode      string
 	QueryByConditions   string
+	QueryNewest         string
 
 	MaxPrice string
 
@@ -37,6 +38,7 @@ func NewProductSqlStr() ProductSqlStr {
 		QueryWithPriceRange: MustReadFromPath(prefix+"query_with_price_range.sql", sqlC),
 		QueryByBarcode:      MustReadFromPath(prefix+"query_by_barcode.sql", sqlC),
 		QueryByConditions:   MustReadFromPath(prefix+"query_by_conditions.sql", sqlC),
+		QueryNewest:         MustReadFromPath(prefix+"query_newest.sql", sqlC),
 
 		MaxPrice: MustReadFromPath(prefix+"max_price.sql", sqlC),
 

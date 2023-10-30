@@ -119,3 +119,14 @@ func (ctr ProductService) QueryByConditions(ctx *gin.Context) {
 func (serv ProductService) MaxPrice(ctx *gin.Context) {
 	ctx.JSON(200, map[string]int{"MaxProductPrice": serv.repo.MaxPrice()})
 }
+
+func (serv ProductService) QueryNewest(ctx *gin.Context) {
+	ran, err := strconv.Atoi(ctx.Param("range"))
+	if err == nil {
+		ctx.JSON(200, serv.repo.QueryNewest(ran))
+	} else {
+		ctx.JSON(400, map[string]string{
+			"Response": "range must be integer",
+		})
+	}
+}

@@ -8,6 +8,7 @@ func TestNewProductSqlStr(t *testing.T) {
 	t.Log(sqlS.QueryWithPriceRange)
 	t.Log(sqlS.QueryByBarcode)
 	t.Log(sqlS.QueryByConditions)
+	t.Log(sqlS.QueryNewest)
 
 	t.Log(sqlS.Insert)
 	t.Log(sqlS.Delete)

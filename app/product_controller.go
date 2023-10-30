@@ -21,6 +21,7 @@ func (ctr ProductController) Run() {
 	ctr.QueryWithLimit()
 	ctr.QueryByConditions()
 	ctr.QueryByBarcode()
+	ctr.QueryNewest()
 
 	ctr.MaxPrice()
 
@@ -55,4 +56,8 @@ func (ctr ProductController) QueryByBarcode() {
 
 func (ctr ProductController) MaxPrice() {
 	ctr.group.GET("/maxprice", ctr.service.MaxPrice)
+}
+
+func (ctr ProductController) QueryNewest() {
+	ctr.group.GET("/query/new/:range", ctr.service.QueryNewest)
 }

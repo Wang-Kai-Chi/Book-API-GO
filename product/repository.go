@@ -9,6 +9,11 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type ProductDao interface {
+	ProductRepository
+	QueryEntity() []Product
+}
+
 type ProductRepository struct {
 	Connection *sqlx.DB
 }
@@ -75,4 +80,8 @@ func (repo ProductRepository) MaxPrice() int {
 	}
 	err = rows.Err()
 	return max
+}
+
+func (repo ProductRepository) QueryNewest(ran int) []Product {
+	return QueryEntity[Product](repo.Connection, NewProductSqlStr().QueryNewest, ran)
 }

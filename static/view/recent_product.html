@@ -1,0 +1,19 @@
+<script type="module">
+    import * as card from "/static/view/card_renderer.js"
+    fetch("/api/v1/product/query/new/10")
+        .then(data => data.json())
+        .then(value => card.CardRenderer("#recentProduct").render(value))
+        .catch(err => console.log(err))
+</script>
+<script>
+    /**
+    *Saving current Card Value to LocalStorage
+    *
+    * @param {string} [cardId=""] id of card
+    */
+    function setCurrentCardValue(cardId = "") {
+        localStorage.setItem("currentProduct", cardId.innerHTML)
+    }
+</script>
+<div id="recentProduct">
+</div>
