@@ -1,3 +1,34 @@
+<script src="/static/view/detail/detail_renderer.js"></script>
+<script>
+    /**
+     *Showing details of json object
+     *
+     */
+    function Detail() {
+        const product = {
+            Product_id: "id",
+            Product_title: "名稱",
+            Price: "價格",
+            Barcode: "條碼",
+            Publisher: "出版商",
+            Publication_date: "發行日",
+            Quantity: "數量",
+            Description: "說明",
+        }
+
+        DetailRenderer("#addDetail").render(product)
+        document.querySelector("#formProduct_id").hidden = true
+        const form = document.querySelectorAll('.form-control')
+
+        for (const f of form)
+            f.disabled = false
+    }
+
+    setTimeout(() => {
+        Detail()
+    }, 300);
+</script>
+<h2>新增物件</h2>
 <ul id="addDetail" class="list-group">
 </ul>
 <div class="float-end" id="addControl">
