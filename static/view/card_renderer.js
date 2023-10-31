@@ -4,7 +4,7 @@
  * @param {string} [selector=""] css selector of html element that you want to display card
  * @return {object} return CardRenderer object 
  */
-export function CardRenderer(selector = "") {
+function CardRenderer(selector = "") {
     const renderCards = (value) => {
         const cards = () => {
             let temp = ""
@@ -32,8 +32,7 @@ function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
     const VALUE_ID = `pValue${index}`
     const PRODUCT_DETAIL_TEMPLATE_URI = "/static/view/detail/detail.html"
     return /*html*/`
-        
-        <div class="card border-info">
+        <div class="card border-info" id="card${VALUE_ID}">
             <div class="card-body py-4 px-4">
                 <div class="d-flex align-items-center">
                     <img id="productIcon" src="/static/assets/product32.png" alt="preview">
@@ -55,7 +54,7 @@ function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
                                 </a>
                             </li>
                             <li>
-                                <button id="deleteBtn" type="button" class="dropdown-item" onclick="confirm('Confirm delete?')">
+                                <button id="deleteBtn" type="button" class="dropdown-item" onclick="handleDeleteProduct(${VALUE_ID})">
                                     <img src="/static/assets/garbage32.png" alt="blank">
                                 </button>
                             </li>

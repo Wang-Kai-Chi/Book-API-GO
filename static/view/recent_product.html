@@ -1,20 +1,13 @@
-<script type="module">
-    import * as card from "/static/view/card_renderer.js"
-    const RECENT_PRODUCT_COUNT = 8
-    fetch(`/api/v1/product/query/new/${RECENT_PRODUCT_COUNT}`)
-        .then(data => data.json())
-        .then(value => card.CardRenderer("#recentProduct").render(value))
-        .catch(err => console.log(err))
-</script>
+<script src="/static/view/card_renderer.js"></script>
 <script>
-    /**
-    *Saving current Card Value to LocalStorage
-    *
-    * @param {string} [cardId=""] id of card
-    */
-    function setCurrentCardValue(cardId = "") {
-        localStorage.setItem("currentProduct", cardId.innerHTML)
-    }
+    const RECENT_PRODUCT_COUNT = 8
+    setTimeout(() => {
+        fetch(`/api/v1/product/query/new/${RECENT_PRODUCT_COUNT}`)
+            .then(data => data.json())
+            .then(value => CardRenderer("#recentProduct").render(value))
+            .catch(err => console.log(err))
+    }, 300);
 </script>
+<script src="/static/view/card_more.js"></script>
 <div id="recentProduct">
 </div>
