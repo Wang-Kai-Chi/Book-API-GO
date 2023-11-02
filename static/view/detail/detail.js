@@ -1,5 +1,3 @@
-Detail()
-
 /**
  *Showing details of json object
  *

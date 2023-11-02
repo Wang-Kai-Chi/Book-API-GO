@@ -1,5 +1,3 @@
-UpdateControl()
-
 function UpdateControl() {
     const updateBtn = document.querySelector(`#updateBtn`)
     const confirmBtn = document.querySelector(`#confirmUpdateBtn`)
