@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	. "iknowbook.com/data"
-	"iknowbook.com/product"
+	. "iknowbook.com/app/data"
+	"iknowbook.com/app/product"
 )
 
 type BookService struct {

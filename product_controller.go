@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	. "iknowbook.com/product"
+	. "iknowbook.com/app/product"
 )
 
 type ProductController struct {

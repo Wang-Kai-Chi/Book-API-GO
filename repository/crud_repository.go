@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/jmoiron/sqlx"
-	. "iknowbook.com/data"
+	. "iknowbook.com/app/data"
 )
 
 func MustGetRowsFromQuery(db *sqlx.DB, sqlStr string, params ...interface{}) *sqlx.Rows {

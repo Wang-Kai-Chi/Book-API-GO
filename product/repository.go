@@ -3,8 +3,8 @@ package product
 import (
 	"database/sql"
 
-	. "iknowbook.com/data"
-	. "iknowbook.com/repository"
+	. "iknowbook.com/app/data"
+	. "iknowbook.com/app/repository"
 
 	"github.com/jmoiron/sqlx"
 )

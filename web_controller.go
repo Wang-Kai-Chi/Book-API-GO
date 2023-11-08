@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"iknowbook.com/book"
-	. "iknowbook.com/db"
-	"iknowbook.com/product"
+	"iknowbook.com/app/book"
+	. "iknowbook.com/app/db"
+	"iknowbook.com/app/product"
 )
 
 type WebController struct{}

@@ -4,8 +4,8 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
-	. "iknowbook.com/data"
-	. "iknowbook.com/repository"
+	. "iknowbook.com/app/data"
+	. "iknowbook.com/app/repository"
 )
 
 type BookRepository struct {

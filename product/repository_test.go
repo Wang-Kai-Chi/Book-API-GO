@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	. "iknowbook.com/data"
-	. "iknowbook.com/db"
+	. "iknowbook.com/app/data"
+	. "iknowbook.com/app/db"
 )
 
 func getProductForTest() []Product {

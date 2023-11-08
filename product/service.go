@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	. "iknowbook.com/data"
+	. "iknowbook.com/app/data"
 )
 
 type ProductService struct {
