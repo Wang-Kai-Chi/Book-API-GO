@@ -58,7 +58,7 @@ function UpdateController() {
 
         update([ProductFormExtractor().extractProduct()])
             .catch(err => console.log(err))
-            .then(response => console.log("Success", response))
+            .then(response => document.querySelector(".alert").hidden = false)
     }
 
     return {
