@@ -44,6 +44,5 @@ function Detail() {
     DetailRenderer("#detailDisplay").render(product)
     addDetailValues(product, "currentProduct")
 
-
     document.querySelector("#formProduct_id").hidden = true
 }
