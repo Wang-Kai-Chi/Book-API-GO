@@ -55,10 +55,18 @@ function UpdateController() {
                 }),
             }).then(res => res.json())
         }
+        const alert=document.querySelector(".alert")
+        const alertText = document.querySelector("#alertText")
 
         update([ProductFormExtractor().extractProduct()])
-            .catch(err => console.log(err))
-            .then(response => document.querySelector(".alert").hidden = false)
+            .catch(err => {
+                alert.hidden = false
+                alertText.innerHTML = err
+            })
+            .then(response => {
+                alert.hidden = false
+                alertText.innerHTML = "更新成功" 
+            })
     }
 
     return {

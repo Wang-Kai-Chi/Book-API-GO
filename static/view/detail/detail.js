@@ -14,16 +14,36 @@ function Detail() {
         Description: "說明",
     }
 
+    const setDatePicker = (id)=>{
+        const currentDate = new Date().toJSON().slice(0, 10)
+        const publicationDate = document.querySelector(`#${id}`)
+       
+        publicationDate.type = "date"
+        publicationDate.min="1900-01-01"
+        publicationDate.max=`${currentDate}`
+    }
+
     const addDetailValues = (obj = {}, storageKey = "") => {
         const keys = Object.keys(obj)
         const current = JSON.parse(localStorage.getItem(storageKey))
+   
+        const dateId = "Publication_date"
+        setDatePicker(dateId)
+
         for (const i in keys) {
             const k = keys[i]
-            document.querySelector(`#${k}`).value = current[k]
+            const el = document.querySelector(`#${k}`)
+
+            if(k === dateId){
+                el.value = current[k].substring(0,10)
+            }else
+                el.value = current[k]
         }
     }
 
     DetailRenderer("#detailDisplay").render(product)
     addDetailValues(product, "currentProduct")
+
+
     document.querySelector("#formProduct_id").hidden = true
 }

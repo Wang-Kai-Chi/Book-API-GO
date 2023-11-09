@@ -18,8 +18,6 @@ function handleDeleteProduct(cardId) {
         }).then(res => res.json())
             .catch(err => console.log(err))
             .then(response => console.log("Success", response))
-    } else {
-        console.log("cancel delete", body)
     }
 }
 /**
@@ -30,5 +28,4 @@ function handleDeleteProduct(cardId) {
 function setCurrentCardValue(cardId = "") {
     const key = "currentProduct"
     localStorage.setItem(key, cardId.innerHTML)
-    console.log(localStorage.getItem(key))
 }

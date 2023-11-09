@@ -8,7 +8,7 @@
 function DetailHTML(name = "", id = "") {
     return /*html*/`
         <div class="form-floating mb-3" id="form${id}">
-            <input type="text" class="form-control" id="${id}" placeholder="none" disabled>
+            <input type="text" class="form-control" id="${id}" disabled>
             <label for="${id}">${name}</label>
         </div>
     `
