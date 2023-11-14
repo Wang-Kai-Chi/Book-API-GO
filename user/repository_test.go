@@ -24,16 +24,18 @@ func TestInsert(t *testing.T) {
 
 	if err == nil {
 		u := NewUserRepository(db)
-		users := []User{
-			{
-				Name:     "testuser2",
-				Email:    "test2@mail.com",
-				Phone:    "12345",
-				Password: "testPassword2",
-			},
+		users := User{
+			Id:       "",
+			Name:     "testuser",
+			Email:    "test@mail.com",
+			Phone:    "12345",
+			Password: "testPassword",
 		}
 		rs := u.Insert(users)
-		t.Log(rs)
+		rowCount, err := rs.RowsAffected()
+		if err == nil {
+			t.Log("effected rows:", rowCount)
+		}
 	} else {
 		t.Fatal(err)
 	}

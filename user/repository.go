@@ -36,6 +36,7 @@ func (repo UserRepository) ExecSql(str string, us []User) sql.Result {
 	return ExecSql[[]User](repo.Connection, str, us)
 }
 
-func (repo UserRepository) Insert(us []User) sql.Result {
-	return repo.ExecSql(NewUserSqlStr().Insert, us)
+func (repo UserRepository) Insert(us User) sql.Result {
+	return repo.Connection.MustExec(NewUserSqlStr().Insert,
+		us.Name, us.Email, us.Phone, us.Password)
 }
