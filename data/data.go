@@ -10,9 +10,15 @@ type Product struct {
 	Quantity         int    `uri:"quantity" binding:"required"`
 	Description      string `uri:"description" binding:"required"`
 }
+
 type Data interface {
-	Product | []Product | Book | []Book | Dvd | []Dvd | Cd | []Cd
+	Product | []Product |
+		Book | []Book |
+		Dvd | []Dvd |
+		Cd | []Cd |
+		User | []User
 }
+
 type Book struct {
 	Product    `json:"Product"`
 	Author     string
@@ -26,8 +32,17 @@ type Dvd struct {
 	Category string
 	Director string
 }
+
 type Cd struct {
 	Product   `json:"Product"`
 	Performer string
 	Genre     string
+}
+
+type User struct {
+	Id       string
+	Name     string
+	Email    string
+	Phone    string
+	Password string
 }

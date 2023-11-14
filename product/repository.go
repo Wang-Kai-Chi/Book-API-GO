@@ -12,6 +12,7 @@ import (
 type ProductDao interface {
 	ProductRepository
 	QueryEntity() []Product
+	ExecSql() sql.Result
 }
 
 type ProductRepository struct {
