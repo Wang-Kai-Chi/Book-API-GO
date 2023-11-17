@@ -1,8 +1,10 @@
 package product
 
 import (
+	"database/sql"
 	"encoding/json"
 	"io"
+	"log"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -23,27 +25,31 @@ func (ctr ProductService) QueryWithLimit(ctx *gin.Context) {
 		ctx.JSON(200, ctr.repo.QueryWithLimit(limit))
 	} else {
 		ctx.JSON(400, map[string]string{
-			"Response": "Please type number for limit.",
+			"Response": "unexpecting input",
 		})
 	}
 }
 
-func (ctr ProductService) Insert(ctx *gin.Context) {
+func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Context) {
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
 		var ps []Product
 		err := json.Unmarshal(body, &ps)
 		if err == nil {
-			ctr.repo.Insert(ps)
+			operation(ps)
 			ctx.JSON(200, ps)
 		} else {
 			ctx.JSON(400, map[string]string{
-				"Response": "The body should be list of products in json format.",
+				"Response": "not products",
 			})
 		}
 	} else {
-		panic(err)
+		log.Fatal("Reading request body failed. ", err)
 	}
+}
+
+func (ctr ProductService) Insert(ctx *gin.Context) {
+	handleProductsFromContext(ctr.repo.Insert, ctx)
 }
 
 func getPriceRange(ctx *gin.Context) (int, int) {
@@ -67,44 +73,11 @@ func (ctr ProductService) QueryByBarcode(ctx *gin.Context) {
 }
 
 func (ctr ProductService) Update(ctx *gin.Context) {
-	body, err := io.ReadAll(ctx.Request.Body)
-	if err == nil {
-		var ps []Product
-		err := json.Unmarshal(body, &ps)
-		if err == nil {
-			ctr.repo.Update(ps)
-			ctx.JSON(200, map[string]string{
-				"Response": "Update successful",
-			})
-		} else {
-			ctx.JSON(400, map[string]string{
-				"Response": "The body should be list of products in json format.",
-			})
-		}
-	} else {
-		panic(err)
-	}
-
+	handleProductsFromContext(ctr.repo.Update, ctx)
 }
 
 func (ctr ProductService) Delete(ctx *gin.Context) {
-	body, err := io.ReadAll(ctx.Request.Body)
-	if err == nil {
-		var ps []Product
-		err := json.Unmarshal(body, &ps)
-		if err == nil {
-			ctr.repo.Delete(ps)
-			ctx.JSON(200, map[string]string{
-				"Response": "Delete successful",
-			})
-		} else {
-			ctx.JSON(400, map[string]string{
-				"Response": "The body should be list of products in json format.",
-			})
-		}
-	} else {
-		panic(err)
-	}
+	handleProductsFromContext(ctr.repo.Delete, ctx)
 }
 
 func (ctr ProductService) QueryByConditions(ctx *gin.Context) {
@@ -126,7 +99,7 @@ func (serv ProductService) QueryNewest(ctx *gin.Context) {
 		ctx.JSON(200, serv.repo.QueryNewest(ran))
 	} else {
 		ctx.JSON(400, map[string]string{
-			"Response": "range must be integer",
+			"Response": "uninspected input",
 		})
 	}
 }

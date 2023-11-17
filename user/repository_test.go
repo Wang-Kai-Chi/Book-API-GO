@@ -3,6 +3,7 @@ package user
 import (
 	"testing"
 
+	"golang.org/x/crypto/bcrypt"
 	. "iknowbook.com/app/data"
 	. "iknowbook.com/app/db"
 )
@@ -26,11 +27,15 @@ func TestInsert(t *testing.T) {
 		u := NewUserRepository(db)
 		users := User{
 			Id:       "",
-			Name:     "testuser",
-			Email:    "test@mail.com",
+			Name:     "testuser2",
+			Email:    "test2@mail.com",
 			Phone:    "12345",
 			Password: "testPassword",
 		}
+
+		bytes, err := bcrypt.GenerateFromPassword([]byte(users.Password), 14)
+		users.Password = string(bytes)
+
 		rs := u.Insert(users)
 		rowCount, err := rs.RowsAffected()
 		if err == nil {

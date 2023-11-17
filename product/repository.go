@@ -9,59 +9,54 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type ProductDao interface {
-	ProductRepository
-	QueryEntity() []Product
-	ExecSql() sql.Result
-}
-
 type ProductRepository struct {
 	Connection *sqlx.DB
 }
 
 func NewProductRepository(conn *sqlx.DB) ProductRepository {
-	return ProductRepository{Connection: conn}
+	return ProductRepository{
+		Connection: conn,
+	}
 }
 
-func (serv ProductRepository) QueryEntity(sqlStr string, params ...interface{}) []Product {
-	return QueryEntity[Product](serv.Connection, sqlStr, params...)
+func (repo ProductRepository) queryEntity(sqlStr string, params ...interface{}) []Product {
+	return QueryEntity[Product](repo.Connection, sqlStr, params...)
 }
 
 func (serv ProductRepository) QueryWithLimit(limit int) []Product {
-	return serv.QueryEntity(NewProductSqlStr().QueryWithLimit, limit)
+	return serv.queryEntity(NewProductSqlStr().QueryWithLimit, limit)
 }
 
 func (serv ProductRepository) QueryWithPriceRange(min int, max int) []Product {
-	return serv.QueryEntity(NewProductSqlStr().QueryWithPriceRange, min, max)
+	return serv.queryEntity(NewProductSqlStr().QueryWithPriceRange, min, max)
 }
 
 func (serv ProductRepository) QueryByBarcode(code string) []Product {
-	return serv.QueryEntity(NewProductSqlStr().QueryByBarcode, code)
+	return serv.queryEntity(NewProductSqlStr().QueryByBarcode, code)
 }
 
-func (serv ProductRepository) ExecSql(str string, ps []Product) sql.Result {
+func (serv ProductRepository) execSql(str string, ps []Product) sql.Result {
 	return ExecSql[[]Product](serv.Connection, str, ps)
 }
 
 func (serv ProductRepository) Insert(ps []Product) sql.Result {
-	return serv.ExecSql(NewProductSqlStr().Insert, ps)
+	return serv.execSql(NewProductSqlStr().Insert, ps)
 }
 
 func (serv ProductRepository) Update(ps []Product) sql.Result {
-	return serv.ExecSql(NewProductSqlStr().Update, ps)
+	return serv.execSql(NewProductSqlStr().Update, ps)
 }
 
 func (serv ProductRepository) Delete(ps []Product) sql.Result {
-	return serv.ExecSql(NewProductSqlStr().Delete, ps)
+	return serv.execSql(NewProductSqlStr().Delete, ps)
 }
 
-func (serv ProductRepository) QueryByConditions(
+func (repo ProductRepository) QueryByConditions(
 	pmin int,
 	pmax int,
 	p Product,
 ) []Product {
-	return QueryEntity[Product](
-		serv.Connection,
+	return repo.queryEntity(
 		NewProductSqlStr().QueryByConditions,
 		pmin,
 		pmax,
@@ -84,5 +79,5 @@ func (repo ProductRepository) MaxPrice() int {
 }
 
 func (repo ProductRepository) QueryNewest(ran int) []Product {
-	return QueryEntity[Product](repo.Connection, NewProductSqlStr().QueryNewest, ran)
+	return repo.queryEntity(NewProductSqlStr().QueryNewest, ran)
 }
