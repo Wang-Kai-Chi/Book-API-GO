@@ -19,6 +19,8 @@ func NewUserController(service UserService, router *gin.Engine) UserController {
 
 func (ctr UserController) Run() {
 	ctr.QueryWithLimit()
+
+	ctr.FindUserInfo()
 	ctr.Insert()
 }
 
@@ -28,4 +30,8 @@ func (ctr UserController) QueryWithLimit() {
 
 func (ctr UserController) Insert() {
 	ctr.group.POST("/insert", ctr.service.Insert)
+}
+
+func (ctr UserController) FindUserInfo() {
+	ctr.group.POST("/login", ctr.service.FindUserInfo)
 }

@@ -37,6 +37,15 @@ func (repo UserRepository) ExecSql(str string, us []User) sql.Result {
 }
 
 func (repo UserRepository) Insert(us User) sql.Result {
-	return repo.Connection.MustExec(NewUserSqlStr().Insert,
-		us.Name, us.Email, us.Phone, us.Password)
+	return repo.Connection.MustExec(
+		NewUserSqlStr().Insert,
+		us.Name, us.Email, us.Phone, us.Password,
+	)
+}
+
+func (repo UserRepository) FindUserInfo(us User) []User {
+	return repo.QueryEntity(
+		NewUserSqlStr().QueryByUserInfo,
+		us.Name, us.Email, us.Phone,
+	)
 }

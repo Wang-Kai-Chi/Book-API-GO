@@ -45,3 +45,21 @@ func TestInsert(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestFindUserInfo(t *testing.T) {
+	db, err := ConnectDB()
+
+	if err == nil {
+		u := NewUserRepository(db)
+		user := User{
+			Id:       "",
+			Name:     "testuser2",
+			Email:    "test2@mail.com",
+			Phone:    "12345",
+			Password: "testPassword",
+		}
+		t.Log(u.FindUserInfo(user))
+	} else {
+		t.Fatal(err)
+	}
+}
