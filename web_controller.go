@@ -7,6 +7,7 @@ import (
 	"iknowbook.com/app/book"
 	. "iknowbook.com/app/db"
 	"iknowbook.com/app/product"
+	"iknowbook.com/app/user"
 )
 
 type WebController struct{}
@@ -14,6 +15,7 @@ type WebController struct{}
 var (
 	bookRepo    book.BookRepository
 	productRepo product.ProductRepository
+	userRepo    user.UserRepository
 )
 
 func mustInitRepos() {
@@ -21,6 +23,7 @@ func mustInitRepos() {
 	if err == nil {
 		bookRepo = book.NewBookRepository(db)
 		productRepo = product.NewProductRepository(db)
+		userRepo = user.NewUserRepository(db)
 	} else {
 		panic(err)
 	}
@@ -39,6 +42,11 @@ func (w WebController) Init() {
 
 	NewBookController(
 		book.NewBookService(bookRepo, productRepo),
+		router,
+	).Run()
+
+	NewUserController(
+		user.NewUserService(userRepo),
 		router,
 	).Run()
 
