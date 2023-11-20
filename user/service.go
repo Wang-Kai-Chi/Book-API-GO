@@ -72,7 +72,7 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 			ctx.JSON(200, users)
 		} else {
 			ctx.JSON(401, map[string]string{
-				"Response": "Password incorrect or User not exists.",
+				"Response": "Password incorrect",
 			})
 		}
 	}
@@ -82,7 +82,13 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 		err := json.Unmarshal(body, &us)
 		if err == nil {
 			users := ser.repo.FindUserInfo(us)
-			comparePassword(users, us.Password, ctx)
+			if len(users) > 0 {
+				comparePassword(users, us.Password, ctx)
+			} else {
+				ctx.JSON(400, map[string]string{
+					"Response": "user not found",
+				})
+			}
 		} else {
 			ctx.JSON(400, map[string]string{
 				"Response": "not user",
