@@ -1,7 +1,6 @@
 package user
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"log"
@@ -31,75 +30,68 @@ func (ser UserService) QueryWithLimit(ctx *gin.Context) {
 	}
 }
 
-func handleUsersFromContext(operation func(User) sql.Result, ctx *gin.Context) {
-	handleBody := func(body []byte) {
-		var us User
-		err := json.Unmarshal(body, &us)
-		if err == nil {
-			operation(us)
-			ctx.JSON(200, us)
-		} else {
-			ctx.JSON(400, map[string]string{
-				"Response": "not user",
-			})
-		}
+func handleBody(body []byte, operation func(User), ctx *gin.Context) {
+	var us User
+	err := json.Unmarshal(body, &us)
+	if err == nil {
+		operation(us)
+	} else {
+		ctx.JSON(400, map[string]string{
+			"Response": "Not a user",
+		})
 	}
+}
 
+func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
-		handleBody(body)
+		handleBody(body, operation, ctx)
 	} else {
 		log.Fatal("Reading request body failed. ", err)
 	}
 }
 
 func (ser UserService) Insert(ctx *gin.Context) {
-	hashUserPasswordAndInsert := func(us User) sql.Result {
+	hashUserPasswordAndInsert := func(us User) {
 		bytes, err := bcrypt.GenerateFromPassword([]byte(us.Password), 0)
 		us.Password = string(bytes)
+
 		if err != nil {
 			panic(err)
 		}
-		return ser.repo.Insert(us)
+
+		ser.repo.Insert(us)
+
+		ctx.JSON(200, us)
 	}
-	handleUsersFromContext(hashUserPasswordAndInsert, ctx)
+
+	readAndHandleRequestBody(ctx, hashUserPasswordAndInsert)
 }
 
 func (ser UserService) FindUserInfo(ctx *gin.Context) {
-	comparePassword := func(users []User, pw string, ctx *gin.Context) {
-		err := bcrypt.CompareHashAndPassword([]byte(users[0].Password), []byte(pw))
-		if err == nil {
-			ctx.JSON(200, users)
-		} else {
-			ctx.JSON(401, map[string]string{
-				"Response": "Password incorrect",
-			})
-		}
-	}
+	handleUser := func(us User) {
 
-	handleBody := func(body []byte) {
-		var us User
-		err := json.Unmarshal(body, &us)
-		if err == nil {
-			users := ser.repo.FindUserInfo(us)
-			if len(users) > 0 {
-				comparePassword(users, us.Password, ctx)
+		comparePassword := func(user User, pw string, ctx *gin.Context) {
+			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pw))
+			if err == nil {
+				ctx.JSON(200, user)
 			} else {
-				ctx.JSON(400, map[string]string{
-					"Response": "user not found",
+				ctx.JSON(401, map[string]string{
+					"Response": "Password incorrect",
 				})
 			}
+		}
+
+		users := ser.repo.FindUserInfo(us)
+
+		if len(users) > 0 {
+			comparePassword(users[0], us.Password, ctx)
 		} else {
 			ctx.JSON(400, map[string]string{
-				"Response": "not user",
+				"Response": "user not found",
 			})
 		}
 	}
 
-	body, err := io.ReadAll(ctx.Request.Body)
-	if err == nil {
-		handleBody(body)
-	} else {
-		log.Fatal("Reading request body failed. ", err)
-	}
+	readAndHandleRequestBody(ctx, handleUser)
 }
