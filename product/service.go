@@ -24,25 +24,29 @@ func (ctr ProductService) QueryWithLimit(ctx *gin.Context) {
 	if err == nil {
 		ctx.JSON(200, ctr.repo.QueryWithLimit(limit))
 	} else {
-		ctx.JSON(400, map[string]string{
+		ctx.JSON(400, gin.H{
 			"Response": "unexpecting input",
 		})
 	}
 }
 
 func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Context) {
-	body, err := io.ReadAll(ctx.Request.Body)
-	if err == nil {
+	handleBody := func(body []byte) {
 		var ps []Product
 		err := json.Unmarshal(body, &ps)
 		if err == nil {
 			operation(ps)
 			ctx.JSON(200, ps)
 		} else {
-			ctx.JSON(400, map[string]string{
+			ctx.JSON(400, gin.H{
 				"Response": "not products",
 			})
 		}
+	}
+
+	body, err := io.ReadAll(ctx.Request.Body)
+	if err == nil {
+		handleBody(body)
 	} else {
 		log.Fatal("Reading request body failed. ", err)
 	}
@@ -90,7 +94,7 @@ func (ctr ProductService) QueryByConditions(ctx *gin.Context) {
 }
 
 func (serv ProductService) MaxPrice(ctx *gin.Context) {
-	ctx.JSON(200, map[string]int{"MaxProductPrice": serv.repo.MaxPrice()})
+	ctx.JSON(200, gin.H{"MaxProductPrice": serv.repo.MaxPrice()})
 }
 
 func (serv ProductService) QueryNewest(ctx *gin.Context) {
@@ -98,7 +102,7 @@ func (serv ProductService) QueryNewest(ctx *gin.Context) {
 	if err == nil {
 		ctx.JSON(200, serv.repo.QueryNewest(ran))
 	} else {
-		ctx.JSON(400, map[string]string{
+		ctx.JSON(400, gin.H{
 			"Response": "uninspected input",
 		})
 	}

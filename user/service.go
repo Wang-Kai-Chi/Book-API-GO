@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -22,9 +23,9 @@ func NewUserService(repo UserRepository) UserService {
 func (ser UserService) QueryWithLimit(ctx *gin.Context) {
 	limit, err := strconv.Atoi(ctx.Param("limit"))
 	if err == nil {
-		ctx.JSON(200, ser.repo.QueryWithLimit(limit))
+		ctx.JSON(http.StatusOK, ser.repo.QueryWithLimit(limit))
 	} else {
-		ctx.JSON(400, map[string]string{
+		ctx.JSON(http.StatusBadRequest, map[string]string{
 			"Response": "unexpecting input",
 		})
 	}
@@ -36,7 +37,7 @@ func handleBody(body []byte, operation func(User), ctx *gin.Context) {
 	if err == nil {
 		operation(us)
 	} else {
-		ctx.JSON(400, map[string]string{
+		ctx.JSON(http.StatusBadRequest, map[string]string{
 			"Response": "Not a user",
 		})
 	}
@@ -59,10 +60,9 @@ func (ser UserService) Insert(ctx *gin.Context) {
 		if err != nil {
 			panic(err)
 		}
-
 		ser.repo.Insert(us)
 
-		ctx.JSON(200, us)
+		ctx.JSON(http.StatusOK, us)
 	}
 
 	readAndHandleRequestBody(ctx, hashUserPasswordAndInsert)
@@ -70,24 +70,22 @@ func (ser UserService) Insert(ctx *gin.Context) {
 
 func (ser UserService) FindUserInfo(ctx *gin.Context) {
 	handleUser := func(us User) {
-
 		comparePassword := func(user User, pw string, ctx *gin.Context) {
 			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pw))
 			if err == nil {
-				ctx.JSON(200, user)
+				ctx.JSON(http.StatusOK, user)
 			} else {
-				ctx.JSON(401, map[string]string{
+				ctx.JSON(http.StatusUnauthorized, map[string]string{
 					"Response": "Password incorrect",
 				})
 			}
 		}
-
 		users := ser.repo.FindUserInfo(us)
 
 		if len(users) > 0 {
 			comparePassword(users[0], us.Password, ctx)
 		} else {
-			ctx.JSON(400, map[string]string{
+			ctx.JSON(http.StatusBadRequest, map[string]string{
 				"Response": "user not found",
 			})
 		}
