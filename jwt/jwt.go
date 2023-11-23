@@ -7,18 +7,34 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func MustGetBearerToken() string {
-	hmacSampleSecret := []byte("111")
-	token := jwt.New(jwt.SigningMethodHS256)
-	token.Claims = jwt.MapClaims{
-		"foo": "bar",
-		"nbf": time.Date(2015, 10, 10, 12, 0, 0, 0, time.UTC).Unix(),
-	}
-	tokenString, err := token.SignedString(hmacSampleSecret)
+const hmacSecret = "aaa"
 
+func GetJWTToken(key []byte) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+
+	claims["exp"] = time.Now().Add(time.Hour).Unix()
+	claims["authorized"] = true
+	claims["user"] = "username"
+
+	tokenString, err := token.SignedString(key)
+
+	return tokenString, err
+}
+
+func VerifyJWTToken(key []byte, token string) {
+	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			log.Fatal("Unauthorized")
+		}
+		return key, nil
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	return tokenString
+	if t.Valid {
+		return
+	} else {
+		log.Fatal("Invalid token")
+	}
 }
