@@ -1,11 +1,19 @@
 package jwt
 
-import "testing"
+import (
+	"testing"
+
+	. "iknowbook.com/app/data"
+)
 
 var key = "aaa"
 
 func TestMustGetBearerToken(t *testing.T) {
-	token, err := GetJWTToken([]byte(key))
+	user := User{
+		Name: "testuser",
+	}
+
+	token, err := GetJWTToken([]byte(key), user.Name)
 	if err == nil {
 		t.Log(token)
 	} else {
@@ -14,6 +22,9 @@ func TestMustGetBearerToken(t *testing.T) {
 }
 
 func TestVerifyJWTToken(t *testing.T) {
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MDA3MzA0NDcsInVzZXIiOiJ1c2VybmFtZSJ9.hVgL842CnAMfXs7T_3w411P5f8gqPRF5-hX2QTkvJQY"
-	VerifyJWTToken([]byte(key), token)
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MDEyMjk4MTQsInVzZXIiOiJ0ZXN0dXNlciJ9.rs9rV7z1so6fbR8gNFibc04-duwbwpStPzpAP_lT2GM"
+	res := VerifyJWTToken([]byte(key), token)
+	if !res {
+		t.Fail()
+	}
 }
