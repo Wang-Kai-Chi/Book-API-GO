@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"embed"
 	"encoding/json"
 	"io"
 	"log"
@@ -18,6 +19,17 @@ type UnverifiedInfo struct {
 
 type JwtService struct {
 	userRepo UserRepository
+}
+
+//go:embed key.txt
+var embedKey embed.FS
+
+func mustGetKey() []byte {
+	key, err := embedKey.ReadFile("key.txt")
+	if err != nil {
+		panic(err)
+	}
+	return key
 }
 
 func NewJwtService(userRepo UserRepository) JwtService {
@@ -52,7 +64,7 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 		users := serv.userRepo.FindUserInfo(us.User)
 		if len(users) > 0 {
 			user := users[0]
-			token, err := GetJWTToken([]byte(user.Email), user.Name)
+			token, err := GetJWTToken(mustGetKey(), user.Name)
 			if err != nil {
 				panic(err)
 			}
@@ -70,7 +82,7 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 
 func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
 	verifyToken := func(us UnverifiedInfo) {
-		res := VerifyJWTToken([]byte(us.Email), us.Token)
+		res := VerifyJWTToken(mustGetKey(), us.Token)
 		if res {
 			ctx.JSON(http.StatusOK, gin.H{
 				"Result": "Authorized",
