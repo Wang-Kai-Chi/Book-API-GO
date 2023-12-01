@@ -6,8 +6,9 @@ import (
 )
 
 type UserSqlStr struct {
-	QueryWithLimit  string
-	QueryByUserInfo string
+	QueryWithLimit       string
+	QueryByUserInfo      string
+	QueryByExactUserInfo string
 
 	Insert string
 }
@@ -26,8 +27,9 @@ func mustReadFromPath(path string, fs embed.FS) string {
 func NewUserSqlStr() UserSqlStr {
 	prefix := "sql/"
 	return UserSqlStr{
-		QueryWithLimit:  mustReadFromPath(prefix+"query_with_limit.sql", sqlC),
-		QueryByUserInfo: mustReadFromPath(prefix+"query_by_userinfo.sql", sqlC),
+		QueryWithLimit:       mustReadFromPath(prefix+"query_with_limit.sql", sqlC),
+		QueryByUserInfo:      mustReadFromPath(prefix+"query_by_userinfo.sql", sqlC),
+		QueryByExactUserInfo: mustReadFromPath(prefix+"query_by_exact_userinfo.sql", sqlC),
 
 		Insert: mustReadFromPath(prefix+"insert.sql", sqlC),
 	}

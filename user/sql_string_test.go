@@ -7,5 +7,6 @@ func TestNewUserSqlStr(t *testing.T) {
 
 	t.Log(sql.QueryWithLimit)
 	t.Log(sql.QueryByUserInfo)
+	t.Log(sql.QueryByExactUserInfo)
 	t.Log(sql.Insert)
 }

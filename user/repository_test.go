@@ -63,3 +63,21 @@ func TestFindUserInfo(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestFindExactUserInfo(t *testing.T) {
+	db, err := ConnectDB()
+
+	if err == nil {
+		u := NewUserRepository(db)
+		user := User{
+			Id:       "",
+			Name:     "testuserA",
+			Email:    "testA@mail.com",
+			Phone:    "a123456",
+			Password: "testpassword",
+		}
+		t.Log(u.FindExactUserInfo(user))
+	} else {
+		t.Fatal(err)
+	}
+}

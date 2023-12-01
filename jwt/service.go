@@ -62,7 +62,7 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(UnverifiedInfo)) 
 
 func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 	getToken := func(us UnverifiedInfo) {
-		users := serv.userRepo.FindUserInfo(us.User)
+		users := serv.userRepo.FindExactUserInfo(us.User)
 		if len(users) > 0 {
 			user := users[0]
 			token, err := GetJWTToken(mustGetKey(), user.Name)
@@ -81,20 +81,21 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 	readAndHandleRequestBody(ctx, getToken)
 }
 
+func VerifyBearerToken(ctx *gin.Context) bool {
+	raw := ctx.Request.Header["Authorization"][0]
+	token := strings.ReplaceAll(raw, "Bearer ", "")
+	res := VerifyJWTToken(mustGetKey(), token)
+	return res
+}
+
 func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
-	verifyToken := func(raw string) {
-		token := strings.ReplaceAll(raw, "Bearer ", "")
-		res := VerifyJWTToken(mustGetKey(), token)
-		if res {
-			ctx.JSON(http.StatusOK, gin.H{
-				"Result": "Authorized",
-			})
-		} else {
-			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"Result": "Unauthorized",
-			})
-		}
+	if VerifyBearerToken(ctx) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"Result": "Authorized",
+		})
+	} else {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"Result": "Unauthorized",
+		})
 	}
-	token := ctx.Request.Header["Authorization"]
-	verifyToken(token[0])
 }

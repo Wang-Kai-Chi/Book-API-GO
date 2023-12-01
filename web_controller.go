@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,7 @@ func mustInitRepos() {
 		productRepo = product.NewProductRepository(db)
 		userRepo = user.NewUserRepository(db)
 	} else {
-		panic(err)
+		log.Fatal("No Database connection")
 	}
 }
 
