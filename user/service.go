@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -18,17 +17,6 @@ type UserService struct {
 
 func NewUserService(repo UserRepository) UserService {
 	return UserService{repo: repo}
-}
-
-func (ser UserService) QueryWithLimit(ctx *gin.Context) {
-	limit, err := strconv.Atoi(ctx.Param("limit"))
-	if err == nil {
-		ctx.JSON(http.StatusOK, ser.repo.QueryWithLimit(limit))
-	} else {
-		ctx.JSON(http.StatusBadRequest, map[string]string{
-			"Response": "unexpecting input",
-		})
-	}
 }
 
 func handleBody(body []byte, operation func(User), ctx *gin.Context) {

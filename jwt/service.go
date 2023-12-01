@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	. "iknowbook.com/app/data"
@@ -81,8 +82,9 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 }
 
 func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
-	verifyToken := func(us UnverifiedInfo) {
-		res := VerifyJWTToken(mustGetKey(), us.Token)
+	verifyToken := func(raw string) {
+		token := strings.ReplaceAll(raw, "Bearer ", "")
+		res := VerifyJWTToken(mustGetKey(), token)
 		if res {
 			ctx.JSON(http.StatusOK, gin.H{
 				"Result": "Authorized",
@@ -93,5 +95,6 @@ func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
 			})
 		}
 	}
-	readAndHandleRequestBody(ctx, verifyToken)
+	token := ctx.Request.Header["Authorization"]
+	verifyToken(token[0])
 }

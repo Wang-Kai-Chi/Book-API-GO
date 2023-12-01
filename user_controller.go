@@ -18,14 +18,8 @@ func NewUserController(service UserService, router *gin.Engine) UserController {
 }
 
 func (ctr UserController) Run() {
-	ctr.QueryWithLimit()
-
 	ctr.FindUserInfo()
 	ctr.Insert()
-}
-
-func (ctr UserController) QueryWithLimit() {
-	ctr.group.GET("/query/:limit", ctr.service.QueryWithLimit)
 }
 
 func (ctr UserController) Insert() {
