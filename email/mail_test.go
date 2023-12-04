@@ -17,3 +17,10 @@ func TestSendMail(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestVerifyEmail(t *testing.T) {
+	err := VerifyEmail("palefever98@gmail.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+}

@@ -3,6 +3,7 @@ package email
 import (
 	"embed"
 
+	emailverifier "github.com/AfterShip/email-verifier"
 	mail "gopkg.in/gomail.v2"
 )
 
@@ -39,5 +40,15 @@ func SendMail(em EMail) error {
 	d := mail.NewDialer("smtp.gmail.com", 587, em.Sender, password)
 
 	err := d.DialAndSend(m)
+	return err
+}
+
+func VerifyEmail(email string) error {
+	verifier := emailverifier.NewVerifier()
+
+	ret, err := verifier.Verify(email)
+	if !ret.Syntax.Valid {
+		panic("email address syntax is invalid")
+	}
 	return err
 }

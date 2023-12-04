@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	. "iknowbook.com/app/data"
 	. "iknowbook.com/app/user"
 )
@@ -61,16 +62,29 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(UnverifiedInfo)) 
 }
 
 func (serv JwtService) GetJwtToken(ctx *gin.Context) {
-	getToken := func(us UnverifiedInfo) {
-		users := serv.userRepo.FindExactUserInfo(us.User)
-		if len(users) > 0 {
-			user := users[0]
+	verifyUser := func(user User, us UnverifiedInfo) {
+		printVerifiedInfo := func() {
 			token, err := GetJWTToken(mustGetKey(), user.Name)
 			if err != nil {
 				panic(err)
 			}
 			us.Token = token
 			ctx.JSON(http.StatusOK, us)
+		}
+		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(us.Password))
+
+		if err == nil {
+			printVerifiedInfo()
+		} else {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"Response": "Unauthorized User",
+			})
+		}
+	}
+	getToken := func(us UnverifiedInfo) {
+		users := serv.userRepo.FindUserInfo(us.User)
+		if len(users) > 0 {
+			verifyUser(users[0], us)
 		} else {
 			ctx.JSON(http.StatusBadRequest, gin.H{
 				"Response": "Unauthorized User",
