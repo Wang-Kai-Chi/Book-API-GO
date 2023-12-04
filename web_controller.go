@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"iknowbook.com/app/book"
 	. "iknowbook.com/app/db"
+	"iknowbook.com/app/email"
 	"iknowbook.com/app/jwt"
 	"iknowbook.com/app/product"
 	"iknowbook.com/app/user"
@@ -54,6 +55,11 @@ func (w WebController) Init() {
 
 	NewJwtController(
 		jwt.NewJwtService(userRepo),
+		router,
+	).Run()
+
+	NewEmailController(
+		email.NewEmailService(),
 		router,
 	).Run()
 

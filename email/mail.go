@@ -32,7 +32,6 @@ func SendMail(em EMail) error {
 	m.SetHeader("From", em.Sender)
 
 	m.SetHeader("To", em.Receiver)
-
 	m.SetHeader("Subject", em.Subject)
 
 	m.SetBody("text/html", em.HTMLBody)
