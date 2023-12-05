@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	jwt "iknowbook.com/app/jwt"
 	. "iknowbook.com/app/product"
 )
 
@@ -18,7 +19,6 @@ func NewProductController(service ProductService, router *gin.Engine) ProductCon
 }
 
 func (ctr ProductController) Run() {
-	ctr.QueryWithLimit()
 	ctr.QueryByConditions()
 	ctr.QueryByBarcode()
 	ctr.QueryNewest()
@@ -30,16 +30,14 @@ func (ctr ProductController) Run() {
 	ctr.Delete()
 }
 
-func (ctr ProductController) QueryWithLimit() {
-	ctr.group.GET("/query/:limit", ctr.service.QueryWithLimit)
-}
-
 func (ctr ProductController) Insert() {
 	ctr.group.POST("/insert", ctr.service.Insert)
 }
 
 func (ctr ProductController) Update() {
-	ctr.group.PUT("/update", ctr.service.Update)
+	ctr.group.PUT("/update", func(ctx *gin.Context) {
+		jwt.VerifyBearerToken(ctx, ctr.service.Update)
+	})
 }
 
 func (ctr ProductController) Delete() {

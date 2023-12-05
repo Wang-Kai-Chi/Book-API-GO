@@ -19,17 +19,6 @@ func NewProductService(repo ProductRepository) ProductService {
 	return ProductService{repo: repo}
 }
 
-func (ctr ProductService) QueryWithLimit(ctx *gin.Context) {
-	limit, err := strconv.Atoi(ctx.Param("limit"))
-	if err == nil {
-		ctx.JSON(200, ctr.repo.QueryWithLimit(limit))
-	} else {
-		ctx.JSON(400, gin.H{
-			"Response": "unexpecting input",
-		})
-	}
-}
-
 func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Context) {
 	handleBody := func(body []byte) {
 		var ps []Product
@@ -67,6 +56,7 @@ func getPriceRange(ctx *gin.Context) (int, int) {
 	}
 	return min, max
 }
+
 func (ctr ProductService) QueryWithPriceRange(ctx *gin.Context) {
 	min, max := getPriceRange(ctx)
 	ctx.JSON(200, ctr.repo.QueryWithPriceRange(min, max))

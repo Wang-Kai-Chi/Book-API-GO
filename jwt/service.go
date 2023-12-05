@@ -40,19 +40,18 @@ func NewJwtService(userRepo UserRepository) JwtService {
 	}
 }
 
-func handleBody(body []byte, operation func(UnverifiedInfo), ctx *gin.Context) {
-	var us UnverifiedInfo
-	err := json.Unmarshal(body, &us)
-	if err == nil {
-		operation(us)
-	} else {
-		ctx.JSON(http.StatusBadRequest, map[string]string{
-			"Response": "Not a user",
-		})
-	}
-}
-
 func readAndHandleRequestBody(ctx *gin.Context, operation func(UnverifiedInfo)) {
+	handleBody := func(body []byte, operation func(UnverifiedInfo), ctx *gin.Context) {
+		var us UnverifiedInfo
+		err := json.Unmarshal(body, &us)
+		if err == nil {
+			operation(us)
+		} else {
+			ctx.JSON(http.StatusBadRequest, map[string]string{
+				"Response": "Not a user",
+			})
+		}
+	}
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
 		handleBody(body, operation, ctx)
@@ -95,21 +94,34 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 	readAndHandleRequestBody(ctx, getToken)
 }
 
-func VerifyBearerToken(ctx *gin.Context) bool {
-	raw := ctx.Request.Header["Authorization"][0]
-	token := strings.ReplaceAll(raw, "Bearer ", "")
-	res := VerifyJWTToken(mustGetKey(), token)
-	return res
+func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
+	isVerified := func(bearer string) bool {
+		token := strings.ReplaceAll(bearer, "Bearer ", "")
+		res := VerifyJWTToken(mustGetKey(), token)
+		return res
+	}
+	bearers := ctx.Request.Header["Authorization"]
+	if len(bearers) > 0 {
+		if isVerified(bearers[0]) {
+			authOp(ctx)
+		} else {
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"Result": "Unauthorized",
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"Response": "No bearer token found in header.",
+		})
+	}
 }
 
 func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
-	if VerifyBearerToken(ctx) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"Result": "Authorized",
-		})
-	} else {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Result": "Unauthorized",
-		})
-	}
+	VerifyBearerToken(ctx,
+		func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"Result": "Authorized",
+			})
+		},
+	)
 }
