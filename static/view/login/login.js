@@ -1,5 +1,4 @@
-
-function Login() {
+function Login(userInfo=UserInfo()) {
     const User = () => {
         let user = {
             Id: "",
@@ -33,12 +32,12 @@ function Login() {
             if (res.status === 200) {
                 return d
             } else {
+                alert("電子郵件或密碼錯誤")
                 return d.then(Promise.reject.bind(Promise));
             }
         }).then(data => {
-            let user = data[0]
-            user.Password = ""
-            localStorage.setItem("userinfo", JSON.stringify(user))
+            data.Password = ""
+            userInfo.set(JSON.stringify(data))
             window.location.href = '/'
         }).catch(err => console.log(err))
 

@@ -18,13 +18,13 @@ function AddNewProduct() {
     document.querySelector("#formProduct_id").hidden = true
     const form = document.querySelectorAll('.form-control')
 
-    const setDatePicker = (id)=>{
+    const setDatePicker = (id) => {
         const currentDate = new Date().toJSON().slice(0, 10)
         const publicationDate = document.querySelector(`#${id}`)
-       
+
         publicationDate.type = "date"
-        publicationDate.min="1900-01-01"
-        publicationDate.max=`${currentDate}`
+        publicationDate.min = "1900-01-01"
+        publicationDate.max = `${currentDate}`
     }
 
     setDatePicker("Publication_date")

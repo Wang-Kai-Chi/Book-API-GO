@@ -14,19 +14,19 @@ function Detail() {
         Description: "說明",
     }
 
-    const setDatePicker = (id)=>{
+    const setDatePicker = (id) => {
         const currentDate = new Date().toJSON().slice(0, 10)
         const publicationDate = document.querySelector(`#${id}`)
-       
+
         publicationDate.type = "date"
-        publicationDate.min="1900-01-01"
-        publicationDate.max=`${currentDate}`
+        publicationDate.min = "1900-01-01"
+        publicationDate.max = `${currentDate}`
     }
 
     const addDetailValues = (obj = {}, storageKey = "") => {
         const keys = Object.keys(obj)
         const current = JSON.parse(localStorage.getItem(storageKey))
-   
+
         const dateId = "Publication_date"
         setDatePicker(dateId)
 
@@ -34,9 +34,9 @@ function Detail() {
             const k = keys[i]
             const el = document.querySelector(`#${k}`)
 
-            if(k === dateId){
-                el.value = current[k].substring(0,10)
-            }else
+            if (k === dateId) {
+                el.value = current[k].substring(0, 10)
+            } else
                 el.value = current[k]
         }
     }

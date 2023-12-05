@@ -1,14 +1,11 @@
-
-function UserAvatar() {
+function UserAvatar(userInfo = UserInfo()) {
+    const user = userInfo.json()
+    
     const logout = () => {
-        localStorage.removeItem(USER_INFO_ID)
+        userInfo.remove()
         location.reload()
     }
-
-    const USER_INFO_ID = "userinfo"
     const userDropList = document.querySelector("#userDroplist")
-    const user = JSON.parse(localStorage.getItem(USER_INFO_ID))
-
     if (user !== null) {
         userDropList.innerHTML = LoggedinListHTML(user.Name)
         document.querySelector("#logout").onclick = () => logout()

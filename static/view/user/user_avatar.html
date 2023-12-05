@@ -1,11 +1,12 @@
-<script src="/static/view/user/user_avatar.js"></script>
-<script>
-    setTimeout(()=>UserAvatar(), 50)
-</script>
-
 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown"
     aria-expanded="false">
     <img src="/static/assets/avatar32.png" alt="mdo" width="32" height="32" class="rounded-circle">
 </a>
 <div id="userDroplist">
 </div>
+
+<script src="/static/view/user/user_avatar.js"></script>
+<script src="/static/view/user_info.js"></script>
+<script>
+    setTimeout(()=>UserAvatar(UserInfo()), 150)
+</script>
