@@ -1,10 +1,10 @@
 /**
- *
+ * Interacting with userinfo in localStorage
  * @constructor
  * @return {UserInfo}
  * json(): json of UserInfo
- * remove(): remove UserInfo from localstorage
- * set(): set string of UserInfo to localstorage 
+ * remove(): remove UserInfo from localStorage
+ * set(): set string of UserInfo to localStorage 
  */
 function UserInfo() {
     const USER_INFO_ID = "userinfo"

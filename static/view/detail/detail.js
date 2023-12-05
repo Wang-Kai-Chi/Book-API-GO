@@ -2,7 +2,7 @@
  *Showing details of json object
  *
  */
-function Detail() {
+function Detail(currentProduct=CurrentProduct()) {
     const product = {
         Product_id: "id",
         Product_title: "名稱",
@@ -23,10 +23,9 @@ function Detail() {
         publicationDate.max = `${currentDate}`
     }
 
-    const addDetailValues = (obj = {}, storageKey = "") => {
+    const addDetailValues = (obj = {}) => {
         const keys = Object.keys(obj)
-        const current = JSON.parse(localStorage.getItem(storageKey))
-
+        const current = currentProduct.json() 
         const dateId = "Publication_date"
         setDatePicker(dateId)
 
@@ -42,7 +41,7 @@ function Detail() {
     }
 
     DetailRenderer("#detailDisplay").render(product)
-    addDetailValues(product, "currentProduct")
+    addDetailValues(product)
 
     document.querySelector("#formProduct_id").hidden = true
 }

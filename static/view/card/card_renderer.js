@@ -49,7 +49,7 @@ function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
                             <li>
                                 <a class="dropdown-item" hx-trigger="click" data-bs-dismiss="modal"
                                     hx-get="${PRODUCT_DETAIL_TEMPLATE_URI}"  hx-swap="innerHTML" 
-                                    hx-target="#main" onclick="setCurrentCardValue(${VALUE_ID})">
+                                    hx-target="#main" onclick="CurrentProduct().set(${VALUE_ID})">
                                     <img src="/static/assets/edit32.png" alt="blank">
                                 </a>
                             </li>
@@ -90,12 +90,4 @@ function handleDeleteProduct(cardId) {
             .then(response => console.log("Success", response))
     }
 }
-/**
- *Saving current Card Value to LocalStorage
- *
- * @param {string} [cardId=""] id of card
- */
-function setCurrentCardValue(cardId = "") {
-    const key = "currentProduct"
-    localStorage.setItem(key, cardId.innerHTML)
-}
+
