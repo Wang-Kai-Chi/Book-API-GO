@@ -14,11 +14,6 @@ import (
 	. "iknowbook.com/app/user"
 )
 
-type UnverifiedInfo struct {
-	User
-	Token string
-}
-
 type JwtService struct {
 	userRepo UserRepository
 }
@@ -40,9 +35,9 @@ func NewJwtService(userRepo UserRepository) JwtService {
 	}
 }
 
-func readAndHandleRequestBody(ctx *gin.Context, operation func(UnverifiedInfo)) {
-	handleBody := func(body []byte, operation func(UnverifiedInfo), ctx *gin.Context) {
-		var us UnverifiedInfo
+func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
+	handleBody := func(body []byte, operation func(User), ctx *gin.Context) {
+		var us User
 		err := json.Unmarshal(body, &us)
 		if err == nil {
 			operation(us)
@@ -61,17 +56,16 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(UnverifiedInfo)) 
 }
 
 func (serv JwtService) GetJwtToken(ctx *gin.Context) {
-	verifyUser := func(user User, us UnverifiedInfo) {
+	verifyUser := func(user User, input User) {
 		printVerifiedInfo := func() {
 			token, err := GetJWTToken(mustGetKey(), user.Name)
 			if err != nil {
 				panic(err)
 			}
-			us.Token = token
-			ctx.JSON(http.StatusOK, gin.H{"Bearer Token": us.Token})
+			ctx.JSON(http.StatusOK, gin.H{"Bearer Token": token})
 		}
 
-		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(us.Password))
+		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
 
 		if err == nil {
 			printVerifiedInfo()
@@ -81,8 +75,8 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 			})
 		}
 	}
-	getToken := func(us UnverifiedInfo) {
-		users := serv.userRepo.FindUserInfo(us.User)
+	getToken := func(us User) {
+		users := serv.userRepo.FindUserInfo(us)
 		if len(users) > 0 {
 			verifyUser(users[0], us)
 		} else {

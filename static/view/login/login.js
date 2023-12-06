@@ -1,4 +1,4 @@
-function Login(userInfo=UserInfo()) {
+function Login(userInfo = UserInfo(), iknowtoken = IknowToken()) {
     const User = () => {
         let user = {
             Id: "",
@@ -11,6 +11,27 @@ function Login(userInfo=UserInfo()) {
             this: () => { return user },
             keys: () => { return Object.keys(user) },
         }
+    }
+
+    const getToken =async (user) => {
+        fetch("/api/v1/jwt/token", {
+            method: "POST",
+            body: user,
+            headers: new Headers({
+                "Content-Type": "application/json",
+            })
+        }).then(res => {
+            let d = res.json()
+            if (res.status === 200) {
+                return d
+            } else {
+                console.log("user info incorrect")
+                return d.then(Promise.reject.bind(Promise));
+            }
+        }).then(data => {
+            iknowtoken.set(JSON.stringify(data))
+        }).catch(err => console.log(err))
+        .then(() => window.location.href = '/')
     }
 
     const submit = () => {
@@ -38,7 +59,9 @@ function Login(userInfo=UserInfo()) {
         }).then(data => {
             data.Password = ""
             userInfo.set(JSON.stringify(data))
-            window.location.href = '/'
+
+            data.Password = user.this()["Password"]
+            getToken(JSON.stringify(data))
         }).catch(err => console.log(err))
 
     }

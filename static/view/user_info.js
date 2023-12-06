@@ -12,6 +12,6 @@ function UserInfo() {
     return {
         json: () => { return JSON.parse(localStorage.getItem(USER_INFO_ID)) },
         remove: () => localStorage.removeItem(USER_INFO_ID),
-        set:(info="")=>localStorage.setItem("userinfo", info),
+        set:(info="")=>localStorage.setItem(USER_INFO_ID, info),
     }
 }

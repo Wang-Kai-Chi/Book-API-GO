@@ -45,28 +45,27 @@ function UpdateController() {
             f.disabled = true
     }
 
-    const confirmUpdate = () => {
-        const update = async (body) => {
-            return fetch(`/api/v1/product/update`, {
-                method: "PUT",
-                body: JSON.stringify(body),
-                headers: new Headers({
-                    "Content-Type": "application/json",
-                }),
-            }).then(res => res.json())
-        }
-        const alert=document.querySelector(".alert")
+    const confirmUpdate = async () => {
+        const banner = document.querySelector(".alert")
         const alertText = document.querySelector("#alertText")
 
-        update([ProductFormExtractor().extractProduct()])
-            .catch(err => {
-                alert.hidden = false
-                alertText.innerHTML = err
-            })
-            .then(response => {
-                alert.hidden = false
-                alertText.innerHTML = "更新成功" 
-            })
+        fetch(`/api/v1/product/update`, {
+            method: "PUT",
+            body: JSON.stringify([ProductFormExtractor().extractProduct()]),
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+        }).then(res => {
+            let d = res.json()
+            if (res.status === 200) {
+                banner.hidden = false
+                alertText.innerHTML = "更新成功"
+                return d
+            } else {
+                alert("驗證失敗, 請登入或重新取得驗證碼")
+                return d.then(Promise.reject.bind(Promise));
+            }
+        }).catch(err => console.log(err))
     }
 
     return {
