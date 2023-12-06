@@ -1,9 +1,9 @@
-function UpdateControl() {
+function UpdateControl(iknowToken = IknowToken()) {
     const updateBtn = document.querySelector(`#updateBtn`)
     const confirmBtn = document.querySelector(`#confirmUpdateBtn`)
     const cancelBtn = document.querySelector(`#cancelUpdateBtn`)
 
-    const updateController = UpdateController()
+    const updateController = UpdateController(iknowToken)
     const viewMode = () => {
         cancelBtn.hidden = true
         confirmBtn.hidden = true
@@ -32,7 +32,7 @@ function UpdateControl() {
     }
 }
 
-function UpdateController() {
+function UpdateController(iknowToken = IknowToken()) {
     const form = document.querySelectorAll('.form-control')
 
     const enableUpdate = () => {
@@ -46,18 +46,19 @@ function UpdateController() {
     }
 
     const confirmUpdate = async () => {
-        const banner = document.querySelector(".alert")
         const alertText = document.querySelector("#alertText")
-
+        const token = "Bearer " + iknowToken.json()["Token"]
         fetch(`/api/v1/product/update`, {
             method: "PUT",
             body: JSON.stringify([ProductFormExtractor().extractProduct()]),
             headers: new Headers({
                 "Content-Type": "application/json",
+                "Authorization": token,
             }),
         }).then(res => {
             let d = res.json()
             if (res.status === 200) {
+                const banner = document.querySelector(".alert")
                 banner.hidden = false
                 alertText.innerHTML = "更新成功"
                 return d

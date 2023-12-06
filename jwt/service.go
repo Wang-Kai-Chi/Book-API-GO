@@ -62,7 +62,7 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 			if err != nil {
 				panic(err)
 			}
-			ctx.JSON(http.StatusOK, gin.H{"Bearer Token": token})
+			ctx.JSON(http.StatusOK, gin.H{"Token": token})
 		}
 
 		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))

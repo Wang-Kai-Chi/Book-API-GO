@@ -1,8 +1,9 @@
-function UserAvatar(userInfo = UserInfo()) {
+function UserAvatar(userInfo = UserInfo(), iknowToken = IknowToken()) {
     const user = userInfo.json()
-    
+
     const logout = () => {
         userInfo.remove()
+        iknowToken.remove()
         location.reload()
     }
     const userDropList = document.querySelector("#userDroplist")
