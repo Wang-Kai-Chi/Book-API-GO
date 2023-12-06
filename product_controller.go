@@ -31,31 +31,62 @@ func (ctr ProductController) Run() {
 }
 
 func (ctr ProductController) Insert() {
-	ctr.group.POST("/insert", ctr.service.Insert)
+	ctr.group.POST(
+		"/insert",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.Insert)
+		},
+	)
 }
 
 func (ctr ProductController) Update() {
-	ctr.group.PUT("/update", func(ctx *gin.Context) {
-		jwt.VerifyBearerToken(ctx, ctr.service.Update)
-	})
+	ctr.group.PUT(
+		"/update",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.Update)
+		},
+	)
 }
 
 func (ctr ProductController) Delete() {
-	ctr.group.DELETE("/delete", ctr.service.Delete)
+	ctr.group.DELETE(
+		"/delete",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.Delete)
+		},
+	)
 }
 
 func (ctr ProductController) QueryByConditions() {
-	ctr.group.GET("/query/", ctr.service.QueryByConditions)
+	ctr.group.GET(
+		"/query/",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.QueryByConditions)
+		},
+	)
 }
 
 func (ctr ProductController) QueryByBarcode() {
-	ctr.group.GET("/query/barcode/:barcode", ctr.service.QueryByBarcode)
+	ctr.group.GET(
+		"/query/barcode/:barcode",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.QueryByBarcode)
+		},
+	)
 }
 
 func (ctr ProductController) MaxPrice() {
-	ctr.group.GET("/maxprice", ctr.service.MaxPrice)
+	ctr.group.GET(
+		"/maxprice",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.MaxPrice)
+		},
+	)
 }
 
 func (ctr ProductController) QueryNewest() {
-	ctr.group.GET("/query/new/:range", ctr.service.QueryNewest)
+	ctr.group.GET(
+		"/query/new/:range",
+		ctr.service.QueryNewest,
+	)
 }

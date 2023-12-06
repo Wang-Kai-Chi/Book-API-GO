@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	. "iknowbook.com/app/email"
+	jwt "iknowbook.com/app/jwt"
 )
 
 type EmailController struct {
@@ -22,5 +23,10 @@ func (ctr EmailController) Run() {
 }
 
 func (ctr EmailController) SendVerificationEmail() {
-	ctr.group.POST("/send", ctr.service.SendVerificationEmail)
+	ctr.group.POST(
+		"/send",
+		func(ctx *gin.Context) {
+			jwt.VerifyBearerToken(ctx, ctr.service.SendVerificationEmail)
+		},
+	)
 }

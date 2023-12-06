@@ -19,19 +19,19 @@ func NewUserService(repo UserRepository) UserService {
 	return UserService{repo: repo}
 }
 
-func handleBody(body []byte, operation func(User), ctx *gin.Context) {
-	var us User
-	err := json.Unmarshal(body, &us)
-	if err == nil {
-		operation(us)
-	} else {
-		ctx.JSON(http.StatusBadRequest, map[string]string{
-			"Response": "Not a user",
-		})
-	}
-}
-
 func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
+	handleBody := func(body []byte, operation func(User), ctx *gin.Context) {
+		var us User
+		err := json.Unmarshal(body, &us)
+		if err == nil {
+			operation(us)
+		} else {
+			ctx.JSON(http.StatusBadRequest, map[string]string{
+				"Response": "Not a user",
+			})
+		}
+	}
+
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
 		handleBody(body, operation, ctx)
@@ -68,6 +68,7 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 				})
 			}
 		}
+
 		users := ser.repo.FindUserInfo(us)
 
 		if len(users) > 0 {
