@@ -20,21 +20,22 @@ func GetJWTToken(key []byte, username string) (string, error) {
 	return tokenString, err
 }
 
-func VerifyJWTToken(key []byte, token string) bool {
+func MustVerifyJWTToken(key []byte, token string) bool {
 	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			log.Fatal("Unauthorized")
+		_, ok := t.Method.(*jwt.SigningMethodHMAC)
+		if !ok {
+			return nil, jwt.ErrInvalidKeyType
 		}
 		return key, nil
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return false
 	}
 	if t.Valid {
 		return true
 	} else {
-		log.Fatal("Invalid token")
+		log.Println("Invalid token")
 		return false
 	}
 }

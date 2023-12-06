@@ -92,7 +92,7 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 	isVerified := func(bearer string) bool {
 		token := strings.ReplaceAll(bearer, "Bearer ", "")
-		res := VerifyJWTToken(mustGetKey(), token)
+		res := MustVerifyJWTToken(mustGetKey(), token)
 		return res
 	}
 	bearers := ctx.Request.Header["Authorization"]

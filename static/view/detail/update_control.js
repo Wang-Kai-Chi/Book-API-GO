@@ -47,7 +47,9 @@ function UpdateController(iknowToken = IknowToken()) {
 
     const confirmUpdate = async () => {
         const alertText = document.querySelector("#alertText")
-        const token = "Bearer " + iknowToken.json()["Token"]
+        const token = (iknowToken.json() === null) ?
+            "" :
+            "Bearer " + iknowToken.json()["Token"]
         fetch(`/api/v1/product/update`, {
             method: "PUT",
             body: JSON.stringify([ProductFormExtractor().extractProduct()]),

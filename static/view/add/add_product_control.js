@@ -1,5 +1,8 @@
 function AddProductControl(iknowToken = IknowToken()) {
-    const token = "Bearer " + iknowToken.json()["Token"]
+    const token = (iknowToken.json() === null) ?
+        "" :
+        "Bearer " + iknowToken.json()["Token"]
+
     const confirmAddProduct = () => {
         const add = async (body) => {
             return fetch("/api/v1/product/insert", {

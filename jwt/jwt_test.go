@@ -22,9 +22,9 @@ func TestMustGetBearerToken(t *testing.T) {
 }
 
 func TestVerifyJWTToken(t *testing.T) {
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MDEyMjk4MTQsInVzZXIiOiJ0ZXN0dXNlciJ9.rs9rV7z1so6fbR8gNFibc04-duwbwpStPzpAP_lT2GM"
-	res := VerifyJWTToken([]byte(key), token)
-	if !res {
-		t.Fail()
+	token := "noene"
+	res := MustVerifyJWTToken([]byte(key), token)
+	if res == false {
+		t.Fatal()
 	}
 }

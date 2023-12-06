@@ -1,6 +1,9 @@
 function Result(iknowToken = IknowToken()) {
     let filters = document.querySelector("#searchInput").value
-    const token = "Bearer "+iknowToken.json()["Token"]
+    const token = (iknowToken.json() === null) ?
+        "" :
+        "Bearer " + iknowToken.json()["Token"]
+
     const handleResponse = (res) => {
         let d = res.json()
         if (res.status === 200) {

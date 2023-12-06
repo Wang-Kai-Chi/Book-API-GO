@@ -74,7 +74,7 @@ function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
  * @param {*} cardId
  */
 function handleDeleteProduct(cardId) {
-    setCurrentCardValue(cardId)
+    CurrentProduct().set(cardId)
 
     let body = `[${localStorage.getItem("currentProduct")}]`
     if (confirm('Confirm delete?')) {
