@@ -1,0 +1,24 @@
+<script src="/static/view/current_product.js"></script>
+<script src="/static/view/detail_renderer.js"></script>
+<script src="/static/view/detail/detail.js"></script>
+<script>
+    setTimeout(() => Detail(CurrentProduct()), 100)
+</script>
+<script src="/static/view/detail/update_control.js"></script>
+<script src="/static/view/iknow_token.js"></script>
+<script src="/static/view/product_form_extractor.js"></script>
+<script>
+    setTimeout(() => UpdateControl(IknowToken()), 100)
+</script>
+
+<ul id="detailDisplay" class="list-group">
+</ul>
+<div class="float-end" id="updateControl">
+    <button type="button" class="btn btn-danger" id="cancelUpdateBtn">取消</button>
+    <button type="button" class="btn btn-primary" id="confirmUpdateBtn">確定</button>
+    <button type="button" class="btn btn-primary" id="updateBtn">更新</button>
+</div>
+<div class="alert alert-warning alert-dismissible fade show" role="alert" hidden>
+    <div id="alertText">Message</div>
+    <button type="button" class="btn-close" onclick="document.querySelector('.alert').hidden=true"></button>
+</div>

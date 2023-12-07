@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a href="/">
+            <h3 class="text-primary-emphasis navbar-brand">IknowBook</h3>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#iknowNav"
+            aria-controls="iknowNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="iknowNav" class="collapse navbar-collapse">
+            <div class="d-flex align-items-center ">
+                <div hx-trigger="load" hx-get="/static/view/search/search_dialog.html" hx-swap="innerHTML">
+                </div>
+                <div class="flex-shrink-0 dropend">
+                    <div hx-trigger="load" hx-get="/static/view/user/user_avatar.html" hx-swap="innerHTML">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
