@@ -19,7 +19,7 @@ func NewAutoBrowser(url string, isHideBrowser bool) AutoBrowser {
 		IsHideBrowser: isHideBrowser,
 	}
 	pw, err := playwright.Run()
-	fatal(err)
+	au.Assert(err)
 	au.Playwright = pw
 
 	browser, err := pw.Chromium.Launch(
@@ -27,13 +27,13 @@ func NewAutoBrowser(url string, isHideBrowser bool) AutoBrowser {
 			Headless: playwright.Bool(au.IsHideBrowser),
 		},
 	)
-	fatal(err)
+	au.Assert(err)
 	au.Browser = browser
 
 	return au
 }
 
-func fatal(err error) {
+func (au AutoBrowser) Assert(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,14 +41,14 @@ func fatal(err error) {
 
 func (au AutoBrowser) Start() playwright.Page {
 	page, err := au.Browser.NewPage()
-	fatal(err)
+	au.Assert(err)
 
 	_, err = page.Goto(au.Url)
-	fatal(err)
+	au.Assert(err)
 	return page
 }
 
 func (au AutoBrowser) End() {
-	fatal(au.Browser.Close())
-	fatal(au.Playwright.Stop())
+	au.Assert(au.Browser.Close())
+	au.Assert(au.Playwright.Stop())
 }

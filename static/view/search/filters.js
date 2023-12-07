@@ -1,5 +1,4 @@
 const operate = FilterOperation("#searchInput", "operate")
-Filter()
 
 function Filter() {
     const operationName = operate.name

@@ -6,12 +6,6 @@ import (
 	"testing"
 )
 
-func panicError(err error, t *testing.T) {
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
 func TestStart(t *testing.T) {
 	var auto AutoBrowser
 	auto = NewAutoBrowser("http://localhost:8081", false)
@@ -24,7 +18,7 @@ func TestPlayWright(t *testing.T) {
 	auto = NewAutoBrowser("https://news.ycombinator.com", false)
 	page := auto.Start()
 	entries, err := page.Locator(".athing").All()
-	panicError(err, t)
+	auto.Assert(err)
 
 	for i, entry := range entries {
 		title, err := entry.Locator("td.title > span > a").TextContent()
