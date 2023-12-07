@@ -63,7 +63,7 @@ func (w WebController) Init() {
 		router,
 	).Run()
 
-	router.StaticFS("/static", http.Dir("static/"))
+	router.StaticFS("./static", http.Dir("static/"))
 	index(router)
 
 	addr := "localhost"
