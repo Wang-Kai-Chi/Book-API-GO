@@ -2,36 +2,35 @@
  * Rendering bootstrap cards
  * @constructor
  * @param {string} [selector=""] css selector of html element that you want to display card
- * @return {object} return CardRenderer object 
+ * @return {object} return CardRenderer object
  */
-function CardRenderer(selector = "") {
-    const renderCards = (value) => {
-        const cards = () => {
-            let temp = ""
-            for (const i in value)
-                temp += CardHTML(value[i], i)
+function CardRenderer (selector = '') {
+  const renderCards = (value) => {
+    const cards = () => {
+      let temp = ''
+      for (const i in value) { temp += CardHTML(value[i], i) }
 
-            return temp
-        }
-        const cardResult = document.querySelector(selector)
-        cardResult.innerHTML = cards()
-        htmx.process(cardResult)
+      return temp
     }
-    return {
-        render: (value) => renderCards(value),
-    }
+    const cardResult = document.querySelector(selector)
+    cardResult.innerHTML = cards()
+    htmx.process(cardResult)
+  }
+  return {
+    render: (value) => renderCards(value)
+  }
 }
 
 /**
  *Bootstrap Card, with dropdown option and icon
  *@param {{ Product_title: string; Price: number; }} [product={Product_title:"",Price:0}] product object
  *@param {number} [index=0] index in list
- * @return {string} string of html card 
+ * @return {string} string of html card
  */
-function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
-    const VALUE_ID = `pValue${index}`
-    const PRODUCT_DETAIL_TEMPLATE_URI = "/static/view/detail/detail.html"
-    return /*html*/`
+function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
+  const VALUE_ID = `pValue${index}`
+  const PRODUCT_DETAIL_TEMPLATE_URI = '/static/view/detail/detail.html'
+  return /* html */`
         <div class="card border-info" id="card${VALUE_ID}">
             <div class="card-body py-4 px-4">
                 <div class="d-flex align-items-center">
@@ -73,21 +72,20 @@ function CardHTML(product = { Product_title: "", Price: 0 }, index = 0) {
  *
  * @param {*} cardId
  */
-function handleDeleteProduct(cardId) {
-    CurrentProduct().set(cardId)
+function handleDeleteProduct (cardId) {
+  CurrentProduct().set(cardId)
 
-    let body = `[${localStorage.getItem("currentProduct")}]`
-    if (confirm('Confirm delete?')) {
-        document.querySelector(`#card${cardId.id}`).hidden = true
-        fetch(`/api/v1/product/delete`, {
-            method: "DELETE",
-            body: body,
-            headers: new Headers({
-                "Content-Type": "application/json",
-            }),
-        }).then(res => res.json())
-            .catch(err => console.log(err))
-            .then(response => console.log("Success", response))
-    }
+  const body = `[${localStorage.getItem('currentProduct')}]`
+  if (confirm('Confirm delete?')) {
+    document.querySelector(`#card${cardId.id}`).hidden = true
+    fetch('/api/v1/product/delete', {
+      method: 'DELETE',
+      body,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(res => res.json())
+      .catch(err => console.log(err))
+      .then(response => console.log('Success', response))
+  }
 }
-

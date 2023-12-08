@@ -1,24 +1,24 @@
-function UserAvatar(userInfo = UserInfo(), iknowToken = IknowToken()) {
-    const user = userInfo.json()
+function UserAvatar (userInfo = UserInfo(), iknowToken = IknowToken()) {
+  const user = userInfo.json()
 
-    const logout = () => {
-        userInfo.remove()
-        iknowToken.remove()
-        location.reload()
-    }
-    const userDropList = document.querySelector("#userDroplist")
-    if (user !== null) {
-        userDropList.innerHTML = LoggedinListHTML(user.Name)
-        document.querySelector("#logout").onclick = () => logout()
-    } else {
-        userDropList.innerHTML = DefaultListHTML()
-    }
+  const logout = () => {
+    userInfo.remove()
+    iknowToken.remove()
+    location.reload()
+  }
+  const userDropList = document.querySelector('#userDroplist')
+  if (user !== null) {
+    userDropList.innerHTML = LoggedinListHTML(user.Name)
+    document.querySelector('#logout').onclick = () => logout()
+  } else {
+    userDropList.innerHTML = DefaultListHTML()
+  }
 
-    htmx.process(userDropList)
+  htmx.process(userDropList)
 }
 
-function LoggedinListHTML(name = "") {
-    return /*html*/`
+function LoggedinListHTML (name = '') {
+  return /* html */`
     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
         <li><button class="dropdown-item">${name}</button></li>
         <li><button class="dropdown-item">設定</button></li>
@@ -30,9 +30,8 @@ function LoggedinListHTML(name = "") {
     `
 }
 
-function DefaultListHTML() {
-    return /*html*/`
-    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+function DefaultListHTML () {
+  return /* html */`<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
         <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/login/login.html"
                 hx-target="body">登入</button></li>
         <li>
@@ -40,6 +39,5 @@ function DefaultListHTML() {
         </li>
         <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/register/register.html"
                 hx-target="body">註冊</button></li>
-    </ul>
-    `
+    </ul>`
 }
