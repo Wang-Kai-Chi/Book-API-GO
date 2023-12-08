@@ -38,7 +38,8 @@ function DefaultListHTML() {
         <li>
             <hr class="dropdown-divider">
         </li>
-        <li><a class="dropdown-item" href="#">註冊</a></li>
+        <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/register/register.html"
+                hx-target="body">註冊</button></li>
     </ul>
     `
 }
