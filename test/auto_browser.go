@@ -1,8 +1,6 @@
 package test
 
 import (
-	"log"
-
 	"github.com/playwright-community/playwright-go"
 )
 
@@ -19,7 +17,7 @@ func NewAutoBrowser(url string, isHideBrowser bool) AutoBrowser {
 		IsHideBrowser: isHideBrowser,
 	}
 	pw, err := playwright.Run()
-	au.Assert(err)
+	Assert(err)
 	au.Playwright = pw
 
 	browser, err := pw.Chromium.Launch(
@@ -27,28 +25,22 @@ func NewAutoBrowser(url string, isHideBrowser bool) AutoBrowser {
 			Headless: playwright.Bool(au.IsHideBrowser),
 		},
 	)
-	au.Assert(err)
+	Assert(err)
 	au.Browser = browser
 
 	return au
 }
 
-func (au AutoBrowser) Assert(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func (au AutoBrowser) Start() playwright.Page {
 	page, err := au.Browser.NewPage()
-	au.Assert(err)
+	Assert(err)
 
 	_, err = page.Goto(au.Url)
-	au.Assert(err)
+	Assert(err)
 	return page
 }
 
 func (au AutoBrowser) End() {
-	au.Assert(au.Browser.Close())
-	au.Assert(au.Playwright.Stop())
+	Assert(au.Browser.Close())
+	Assert(au.Playwright.Stop())
 }

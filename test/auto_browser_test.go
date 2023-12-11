@@ -18,7 +18,7 @@ func TestPlayWright(t *testing.T) {
 	auto = NewAutoBrowser("https://news.ycombinator.com", false)
 	page := auto.Start()
 	entries, err := page.Locator(".athing").All()
-	auto.Assert(err)
+	Assert(err)
 
 	for i, entry := range entries {
 		title, err := entry.Locator("td.title > span > a").TextContent()

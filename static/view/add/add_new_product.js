@@ -1,3 +1,4 @@
+setTimeout(() => AddNewProduct(), 80)
 /**
  *Showing details of json object
  *

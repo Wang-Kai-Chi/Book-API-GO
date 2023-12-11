@@ -1,11 +1,13 @@
 const operate = FilterOperation('#searchInput', 'operate')
 
+setTimeout(() => Filter(), 70)
+
 function Filter () {
   const operationName = operate.name
   const filterItems = FilterItem('名稱', 'title', operationName) +
-        FilterItem('最低價格', 'min', operationName) +
-        FilterItem('最高價格', 'max', operationName) +
-        FilterItem('廠商', 'publisher', operationName)
+    FilterItem('最低價格', 'min', operationName) +
+    FilterItem('最高價格', 'max', operationName) +
+    FilterItem('廠商', 'publisher', operationName)
 
   const searchFilter = document.querySelector('#searchFilter')
   searchFilter.innerHTML = filterItems

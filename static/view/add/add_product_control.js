@@ -1,3 +1,4 @@
+setTimeout(() => AddProductControl(IknowToken()), 150)
 function AddProductControl (iknowToken = IknowToken()) {
   const token = (iknowToken.json() === null)
     ? ''

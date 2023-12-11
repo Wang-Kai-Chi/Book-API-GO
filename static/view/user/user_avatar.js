@@ -1,3 +1,5 @@
+setTimeout(() => UserAvatar(UserInfo(), IknowToken()), 30)
+
 function UserAvatar (userInfo = UserInfo(), iknowToken = IknowToken()) {
   const user = userInfo.json()
 

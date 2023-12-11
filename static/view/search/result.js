@@ -1,3 +1,5 @@
+setTimeout(() => Result(IknowToken()), 50)
+
 function Result (iknowToken = IknowToken()) {
   const filters = document.querySelector('#searchInput').value
   const token = (iknowToken.json() === null)
