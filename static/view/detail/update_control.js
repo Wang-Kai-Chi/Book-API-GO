@@ -1,6 +1,6 @@
 UpdateControl(IknowToken())
 
-function UpdateControl(iknowToken = IknowToken()) {
+function UpdateControl (iknowToken = IknowToken()) {
   const updateBtn = document.querySelector('#updateBtn')
   const confirmBtn = document.querySelector('#confirmUpdateBtn')
   const cancelBtn = document.querySelector('#cancelUpdateBtn')
@@ -34,7 +34,7 @@ function UpdateControl(iknowToken = IknowToken()) {
   }
 }
 
-function UpdateController(iknowToken = IknowToken()) {
+function UpdateController (iknowToken = IknowToken()) {
   const form = document.querySelectorAll('.form-control')
 
   const enableUpdate = () => {
@@ -72,9 +72,10 @@ function UpdateController(iknowToken = IknowToken()) {
         return d.then(Promise.reject.bind(Promise))
       }
     }
-    
+
     fetch('/api/v1/product/update', {
       method: 'PUT',
+      // eslint-disable-next-line no-undef
       body: JSON.stringify([ProductFormExtractor().extractProduct()]),
       headers: new Headers({
         'Content-Type': 'application/json',
@@ -93,31 +94,4 @@ function UpdateController(iknowToken = IknowToken()) {
     cancelUpdate: () => cancelUpdate(),
     confirmUpdate: () => confirmUpdate()
   }
-}
-
-function nodeScriptReplace(node) {
-  if (nodeScriptIs(node) === true) {
-    node.parentNode.replaceChild(nodeScriptClone(node), node)
-  } else {
-    let i = -1; const children = node.childNodes
-    while (++i < children.length) {
-      nodeScriptReplace(children[i])
-    }
-  }
-
-  return node
-}
-function nodeScriptClone(node) {
-  const script = document.createElement('script')
-  script.text = node.innerHTML
-
-  let i = -1; const attrs = node.attributes; let attr
-  while (++i < attrs.length) {
-    script.setAttribute((attr = attrs[i]).name, attr.value)
-  }
-  return script
-}
-
-function nodeScriptIs(node) {
-  return node.tagName === 'SCRIPT'
 }
