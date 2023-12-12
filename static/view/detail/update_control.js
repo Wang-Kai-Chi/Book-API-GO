@@ -1,4 +1,6 @@
-function UpdateControl (iknowToken = IknowToken()) {
+UpdateControl(IknowToken())
+
+function UpdateControl(iknowToken = IknowToken()) {
   const updateBtn = document.querySelector('#updateBtn')
   const confirmBtn = document.querySelector('#confirmUpdateBtn')
   const cancelBtn = document.querySelector('#cancelUpdateBtn')
@@ -32,7 +34,7 @@ function UpdateControl (iknowToken = IknowToken()) {
   }
 }
 
-function UpdateController (iknowToken = IknowToken()) {
+function UpdateController(iknowToken = IknowToken()) {
   const form = document.querySelectorAll('.form-control')
 
   const enableUpdate = () => {
@@ -44,10 +46,33 @@ function UpdateController (iknowToken = IknowToken()) {
   }
 
   const confirmUpdate = async () => {
-    const alertText = document.querySelector('#alertText')
     const token = (iknowToken.json() === null)
       ? ''
       : 'Bearer ' + iknowToken.json().Token
+
+    const handleResponse = (res, success = () => { }) => {
+      const d = res.json()
+      if (res.status === 200) {
+        success()
+        return d
+      } else if (res.status === 401) {
+        const reverify = confirm('驗證已過期，將重新驗證')
+
+        if (reverify) {
+          fetch('/static/view/auth/auth.html').then(res => res.text())
+            .then(data => {
+              document.body.innerHTML = data
+              nodeScriptReplace(document.body)
+            })
+            .catch(err => console.log(err))
+        }
+        return d.then(Promise.reject.bind(Promise))
+      } else {
+        alert('驗證失敗, 請登入')
+        return d.then(Promise.reject.bind(Promise))
+      }
+    }
+    
     fetch('/api/v1/product/update', {
       method: 'PUT',
       body: JSON.stringify([ProductFormExtractor().extractProduct()]),
@@ -55,18 +80,12 @@ function UpdateController (iknowToken = IknowToken()) {
         'Content-Type': 'application/json',
         Authorization: token
       })
-    }).then(res => {
-      const d = res.json()
-      if (res.status === 200) {
-        const banner = document.querySelector('.alert')
-        banner.hidden = false
-        alertText.innerHTML = '更新成功'
-        return d
-      } else {
-        alert('驗證失敗, 請登入或重新取得驗證碼')
-        return d.then(Promise.reject.bind(Promise))
-      }
-    }).catch(err => console.log(err))
+    }).then(res => handleResponse(res, () => {
+      const banner = document.querySelector('.alert')
+      banner.hidden = false
+      const alertText = document.querySelector('#alertText')
+      alertText.innerHTML = '更新成功'
+    })).catch(err => console.log(err))
   }
 
   return {
@@ -74,4 +93,31 @@ function UpdateController (iknowToken = IknowToken()) {
     cancelUpdate: () => cancelUpdate(),
     confirmUpdate: () => confirmUpdate()
   }
+}
+
+function nodeScriptReplace(node) {
+  if (nodeScriptIs(node) === true) {
+    node.parentNode.replaceChild(nodeScriptClone(node), node)
+  } else {
+    let i = -1; const children = node.childNodes
+    while (++i < children.length) {
+      nodeScriptReplace(children[i])
+    }
+  }
+
+  return node
+}
+function nodeScriptClone(node) {
+  const script = document.createElement('script')
+  script.text = node.innerHTML
+
+  let i = -1; const attrs = node.attributes; let attr
+  while (++i < attrs.length) {
+    script.setAttribute((attr = attrs[i]).name, attr.value)
+  }
+  return script
+}
+
+function nodeScriptIs(node) {
+  return node.tagName === 'SCRIPT'
 }

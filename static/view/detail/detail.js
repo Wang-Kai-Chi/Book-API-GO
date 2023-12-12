@@ -1,3 +1,4 @@
+Detail(CurrentProduct())
 /**
  *Showing details of json object
  *

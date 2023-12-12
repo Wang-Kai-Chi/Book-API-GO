@@ -3,12 +3,4 @@
 
 <script src="/static/view/current_product.js"></script>
 <script src="/static/view/card/card_renderer.js"></script>
-<script>
-    const RECENT_PRODUCT_COUNT = 8
-    setTimeout(() => {
-        fetch(`/api/v1/product/query/new/${RECENT_PRODUCT_COUNT}`)
-            .then(data => data.json())
-            .then(value => CardRenderer("#recentProduct").render(value))
-            .catch(err => console.log(err))
-    }, 300);
-</script>
+<script src="/static/view/recent_product.js"></script>

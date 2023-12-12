@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function ProductFormExtractor () {
   /**
      *Product entity
@@ -28,19 +29,22 @@ function ProductFormExtractor () {
      * @return {Product().this()}
      */
   const extractProduct = () => {
-    const product = Product()
+    const product = Product().this()
+    const keys = Product().keys()
+
     const setValueMatchDataType = (data, value) => {
-      if (data === Number.isInteger()) { data = parseInt(value) } else { data = value }
+      if (Number.isInteger(data)) data = parseInt(value)
+      else data = value
       return data
     }
-    for (const i in product.keys()) {
-      const current = product.keys()[i]
+    for (const i in keys) {
+      const current = keys[i]
       const value = document.querySelector(`#${current}`).value
 
-      const data = setValueMatchDataType(product.this()[current], value)
-      product.this()[current] = data
+      const data = setValueMatchDataType(product[current], value)
+      product[current] = data
     }
-    return product.this()
+    return product
   }
 
   return {

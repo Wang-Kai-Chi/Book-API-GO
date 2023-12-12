@@ -97,16 +97,23 @@ func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 	}
 	bearers := ctx.Request.Header["Authorization"]
 	if len(bearers) > 0 {
-		if isVerified(bearers[0]) {
+		bearer := bearers[0]
+		if isVerified(bearer) {
 			authOp(ctx)
 		} else {
-			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"Result": "Unauthorized",
-			})
+			if len(bearer) <= 0 {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"Result": "No bearer token found in header.",
+				})
+			} else {
+				ctx.JSON(http.StatusUnauthorized, gin.H{
+					"Result": "Token expired or not jwt.",
+				})
+			}
 		}
 	} else {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"Response": "No bearer token found in header.",
+			"Response": "No Authrization",
 		})
 	}
 }
