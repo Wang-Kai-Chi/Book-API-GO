@@ -77,7 +77,7 @@ func TestUpdataUserAuth(t *testing.T) {
 	startDBOperateTest(func(u UserRepository) {
 		user := User{
 			Id:   "752cf2c5-4562-40af-945d-0ae899e063ca",
-			Auth: "666",
+			Auth: string(MustGetAuth()),
 		}
 		t.Log(u.UpdataUserAuth(user).RowsAffected())
 	}, t)

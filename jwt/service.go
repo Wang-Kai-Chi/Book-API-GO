@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"embed"
 	"encoding/json"
 	"io"
 	"log"
@@ -16,17 +15,6 @@ import (
 
 type JwtService struct {
 	userRepo UserRepository
-}
-
-//go:embed key.txt
-var embedKey embed.FS
-
-func mustGetKey() []byte {
-	key, err := embedKey.ReadFile("key.txt")
-	if err != nil {
-		panic(err)
-	}
-	return key
 }
 
 func NewJwtService(userRepo UserRepository) JwtService {
@@ -58,7 +46,7 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 	verifyUser := func(user User, input User) {
 		printVerifiedInfo := func() {
-			token, err := GetJWTToken(mustGetKey(), user.Name)
+			token, err := GetJWTToken([]byte(user.Auth), user.Name)
 			if err != nil {
 				panic(err)
 			}
@@ -90,32 +78,37 @@ func (serv JwtService) GetJwtToken(ctx *gin.Context) {
 }
 
 func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
-	isVerified := func(bearer string) bool {
+	isVerified := func(bearer string, userAuth string) bool {
 		token := strings.ReplaceAll(bearer, "Bearer ", "")
-		res := MustVerifyJWTToken(mustGetKey(), token)
+		res := MustVerifyJWTToken([]byte(userAuth), token)
 		return res
 	}
-	bearers := ctx.Request.Header["Authorization"]
-	if len(bearers) > 0 {
-		bearer := bearers[0]
-		if isVerified(bearer) {
-			authOp(ctx)
-		} else {
-			if len(bearer) <= 0 {
-				ctx.JSON(http.StatusBadRequest, gin.H{
-					"Result": "No bearer token found in header.",
-				})
+	handleVerification := func(user User) {
+		bearers := ctx.Request.Header["Authorization"]
+
+		if len(bearers) > 0 {
+			bearer := bearers[0]
+			if isVerified(bearer, user.Auth) {
+				authOp(ctx)
 			} else {
-				ctx.JSON(http.StatusUnauthorized, gin.H{
-					"Result": "Token expired or not jwt.",
-				})
+				if len(bearer) <= 0 {
+					ctx.JSON(http.StatusBadRequest, gin.H{
+						"Result": "No bearer token found in header.",
+					})
+				} else {
+					ctx.JSON(http.StatusUnauthorized, gin.H{
+						"Result": "Token expired or not jwt.",
+					})
+				}
 			}
+		} else {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"Response": "No Authrization",
+			})
 		}
-	} else {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"Response": "No Authrization",
-		})
 	}
+
+	readAndHandleRequestBody(ctx, handleVerification)
 }
 
 func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
