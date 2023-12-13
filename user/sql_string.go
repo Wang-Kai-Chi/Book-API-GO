@@ -10,7 +10,8 @@ type UserSqlStr struct {
 	QueryByUserInfo      string
 	QueryByExactUserInfo string
 
-	Insert string
+	UpdateUserAuth string
+	Insert         string
 }
 
 //go:embed sql
@@ -24,13 +25,18 @@ func mustReadFromPath(path string, fs embed.FS) string {
 	return string(data)
 }
 
-func NewUserSqlStr() UserSqlStr {
+func getSql(fileName string) string {
 	prefix := "sql/"
-	return UserSqlStr{
-		QueryWithLimit:       mustReadFromPath(prefix+"query_with_limit.sql", sqlC),
-		QueryByUserInfo:      mustReadFromPath(prefix+"query_by_userinfo.sql", sqlC),
-		QueryByExactUserInfo: mustReadFromPath(prefix+"query_by_exact_userinfo.sql", sqlC),
+	return mustReadFromPath(prefix+fileName, sqlC)
+}
 
-		Insert: mustReadFromPath(prefix+"insert.sql", sqlC),
+func NewUserSqlStr() UserSqlStr {
+	return UserSqlStr{
+		QueryWithLimit:       getSql("query_with_limit.sql"),
+		QueryByUserInfo:      getSql("query_by_userinfo.sql"),
+		QueryByExactUserInfo: getSql("query_by_exact_userinfo.sql"),
+
+		UpdateUserAuth: getSql("update_user_auth.sql"),
+		Insert:         getSql("insert.sql"),
 	}
 }

@@ -20,7 +20,7 @@ func NewProductService(repo ProductRepository) ProductService {
 }
 
 func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Context) {
-	handleBody := func(body []byte) {
+	handleBody := func(body []byte, operation func([]Product) sql.Result, ctx *gin.Context) {
 		var ps []Product
 		err := json.Unmarshal(body, &ps)
 		if err == nil {
@@ -35,7 +35,7 @@ func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Co
 
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err == nil {
-		handleBody(body)
+		handleBody(body, operation, ctx)
 	} else {
 		log.Fatal("Reading request body failed. ", err)
 	}

@@ -8,23 +8,26 @@ import (
 	. "iknowbook.com/app/db"
 )
 
-func TestQueryWithLimit(t *testing.T) {
+func startDBOperateTest(operate func(UserRepository), t *testing.T) {
 	db, err := ConnectDB()
 
 	if err == nil {
 		u := NewUserRepository(db)
-		users := u.QueryWithLimit(10)
-		t.Log(users)
+		operate(u)
 	} else {
 		t.Fatal(err)
 	}
 }
 
-func TestInsert(t *testing.T) {
-	db, err := ConnectDB()
+func TestQueryWithLimit(t *testing.T) {
+	startDBOperateTest(func(u UserRepository) {
+		users := u.QueryWithLimit(10)
+		t.Log(users)
+	}, t)
+}
 
-	if err == nil {
-		u := NewUserRepository(db)
+func TestInsert(t *testing.T) {
+	startDBOperateTest(func(u UserRepository) {
 		users := User{
 			Id:       "",
 			Name:     "testuser2",
@@ -41,16 +44,11 @@ func TestInsert(t *testing.T) {
 		if err == nil {
 			t.Log("effected rows:", rowCount)
 		}
-	} else {
-		t.Fatal(err)
-	}
+	}, t)
 }
 
 func TestFindUserInfo(t *testing.T) {
-	db, err := ConnectDB()
-
-	if err == nil {
-		u := NewUserRepository(db)
+	startDBOperateTest(func(u UserRepository) {
 		user := User{
 			Id:       "",
 			Name:     "testuser2",
@@ -59,16 +57,11 @@ func TestFindUserInfo(t *testing.T) {
 			Password: "testPassword",
 		}
 		t.Log(u.FindUserInfo(user))
-	} else {
-		t.Fatal(err)
-	}
+	}, t)
 }
 
 func TestFindExactUserInfo(t *testing.T) {
-	db, err := ConnectDB()
-
-	if err == nil {
-		u := NewUserRepository(db)
+	startDBOperateTest(func(u UserRepository) {
 		user := User{
 			Id:       "",
 			Name:     "testuserA",
@@ -77,7 +70,15 @@ func TestFindExactUserInfo(t *testing.T) {
 			Password: "testpassword",
 		}
 		t.Log(u.FindExactUserInfo(user))
-	} else {
-		t.Fatal(err)
-	}
+	}, t)
+}
+
+func TestUpdataUserAuth(t *testing.T) {
+	startDBOperateTest(func(u UserRepository) {
+		user := User{
+			Id:   "752cf2c5-4562-40af-945d-0ae899e063ca",
+			Auth: "666",
+		}
+		t.Log(u.UpdataUserAuth(user).RowsAffected())
+	}, t)
 }
