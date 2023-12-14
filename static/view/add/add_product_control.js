@@ -1,5 +1,7 @@
-setTimeout(() => AddProductControl(IknowToken()), 150)
-function AddProductControl (iknowToken = IknowToken()) {
+import IknowToken from '../iknow_token.js'
+import ProductFormExtractor from '../product_form_extractor.js'
+
+export default function AddProductControl (iknowToken = IknowToken()) {
   const token = (iknowToken.json() === null)
     ? ''
     : 'Bearer ' + iknowToken.json().Token

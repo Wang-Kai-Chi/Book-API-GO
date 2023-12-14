@@ -6,7 +6,7 @@
  * remove(): remove UserInfo from localStorage
  * set(): set string of UserInfo to localStorage
  */
-function UserInfo () {
+export default function UserInfo () {
   const USER_INFO_ID = 'userinfo'
 
   return {

@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-function ProductFormExtractor () {
+export default function ProductFormExtractor () {
   /**
      *Product entity
     *@constructor

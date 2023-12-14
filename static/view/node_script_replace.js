@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
-function nodeScriptReplace (node) {
+export default function NodeScriptReplace (node) {
   if (nodeScriptIs(node) === true) {
     node.parentNode.replaceChild(nodeScriptClone(node), node)
   } else {
     let i = -1; const children = node.childNodes
     while (++i < children.length) {
-      nodeScriptReplace(children[i])
+      NodeScriptReplace(children[i])
     }
   }
 

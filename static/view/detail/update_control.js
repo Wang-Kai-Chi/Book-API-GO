@@ -1,6 +1,8 @@
-UpdateControl(IknowToken())
+import IknowToken from '../iknow_token.js'
+import NodeScriptReplace from '../node_script_replace.js'
+import ProductFormExtractor from '../product_form_extractor.js'
 
-function UpdateControl (iknowToken = IknowToken()) {
+export default function UpdateControl (iknowToken = IknowToken()) {
   const updateBtn = document.querySelector('#updateBtn')
   const confirmBtn = document.querySelector('#confirmUpdateBtn')
   const cancelBtn = document.querySelector('#cancelUpdateBtn')
@@ -62,7 +64,7 @@ function UpdateController (iknowToken = IknowToken()) {
           fetch('/static/view/auth/auth.html').then(res => res.text())
             .then(data => {
               document.body.innerHTML = data
-              nodeScriptReplace(document.body)
+              NodeScriptReplace(document.body)
             })
             .catch(err => console.log(err))
         }
@@ -75,7 +77,6 @@ function UpdateController (iknowToken = IknowToken()) {
 
     fetch('/api/v1/product/update', {
       method: 'PUT',
-      // eslint-disable-next-line no-undef
       body: JSON.stringify([ProductFormExtractor().extractProduct()]),
       headers: new Headers({
         'Content-Type': 'application/json',

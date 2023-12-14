@@ -1,10 +1,13 @@
+import CurrentProduct from './current_product.js'
+
+const VALUE_ID = (index) => `v${index}`
 /**
  * Rendering bootstrap cards
  * @constructor
  * @param {string} [selector=""] css selector of html element that you want to display card
  * @return {object} return CardRenderer object
  */
-function CardRenderer (selector = '') {
+export default function CardRenderer (selector = '') {
   const renderCards = (value) => {
     const cards = () => {
       let temp = ''
@@ -14,6 +17,10 @@ function CardRenderer (selector = '') {
     }
     const cardResult = document.querySelector(selector)
     cardResult.innerHTML = cards()
+    for (const i in value) {
+      document.querySelector(`#editBtn${VALUE_ID(i)}`).onclick = () => CurrentProduct().set(document.querySelector(`#${VALUE_ID(i)}`))
+      document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => handleDeleteProduct(`#${VALUE_ID(i)}`)
+    }
     htmx.process(cardResult)
   }
   return {
@@ -28,15 +35,15 @@ function CardRenderer (selector = '') {
  * @return {string} string of html card
  */
 function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
-  const VALUE_ID = `pValue${index}`
   const PRODUCT_DETAIL_TEMPLATE_URI = '/static/view/detail/detail.html'
+  const valueId = VALUE_ID(index)
   return /* html */`
-        <div class="card border-info" id="card${VALUE_ID}">
+        <div class="card border-info" id="card${valueId}">
             <div class="card-body py-4 px-4">
                 <div class="d-flex align-items-center">
                     <img id="productIcon" src="/static/assets/product32.png" alt="preview">
                     <div class="ms-3 name me-auto">
-                        <div id="${VALUE_ID}" hidden>${JSON.stringify(product)}</div>
+                        <div id="${valueId}" hidden>${JSON.stringify(product)}</div>
                         <h5 id="pTitle" class="font-bold">${product.Product_title}</h5>
                         <h6 id="pPrice" class="text-muted mb-0">${product.Price}</h6>
                     </div>
@@ -46,14 +53,14 @@ function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" hx-trigger="click" data-bs-dismiss="modal"
+                                <a class="dropdown-item" id="editBtn${valueId}" hx-trigger="click" data-bs-dismiss="modal"
                                     hx-get="${PRODUCT_DETAIL_TEMPLATE_URI}"  hx-swap="innerHTML" 
-                                    hx-target="#main" onclick="CurrentProduct().set(${VALUE_ID})">
+                                    hx-target="#main">
                                     <img src="/static/assets/edit32.png" alt="blank">
                                 </a>
                             </li>
                             <li>
-                                <button id="deleteBtn" type="button" class="dropdown-item" onclick="handleDeleteProduct(${VALUE_ID})">
+                                <button id="deleteBtn${valueId}" type="button" class="dropdown-item">
                                     <img src="/static/assets/garbage32.png" alt="blank">
                                 </button>
                             </li>

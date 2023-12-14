@@ -1,4 +1,10 @@
+import CurrentProduct from '../current_product.js'
+import DetailRenderer from '../detail_renderer.js'
+import UpdateControl from './update_control.js'
+import IknowToken from '../iknow_token.js'
+
 Detail(CurrentProduct())
+UpdateControl(IknowToken())
 /**
  *Showing details of json object
  *

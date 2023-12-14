@@ -6,7 +6,7 @@
  * remove(): remove IknowToken from localStorage
  * set(): set string of IknowToken to localStorage
  */
-function IknowToken () {
+export default function IknowToken () {
   const id = 'iknowtoken'
 
   return {

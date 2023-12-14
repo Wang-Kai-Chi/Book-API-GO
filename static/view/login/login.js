@@ -1,4 +1,7 @@
-setTimeout(() => Login(UserInfo(), IknowToken()), 50)
+import UserInfo from '../user_info.js'
+import IknowToken from '../iknow_token.js'
+
+Login(UserInfo(), IknowToken())
 
 function Login (userInfo = UserInfo(), iknowtoken = IknowToken()) {
   const User = () => {
@@ -33,7 +36,7 @@ function Login (userInfo = UserInfo(), iknowtoken = IknowToken()) {
     }).then(data => {
       iknowtoken.set(JSON.stringify(data))
     }).catch(err => console.log(err))
-      .then(() => window.location.href = '/')
+      .then(() => location.reload())
   }
 
   const submit = () => {

@@ -20,7 +20,7 @@ function DetailHTML (name = '', id = '') {
  * @param {string} [selector=""] selector of detail list
  * @return {object}
  */
-function DetailRenderer (selector = '') {
+export default function DetailRenderer (selector = '') {
   const render = (details) => {
     const items = () => {
       let temp = ''

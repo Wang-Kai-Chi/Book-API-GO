@@ -1,4 +1,7 @@
-setTimeout(() => UserAvatar(UserInfo(), IknowToken()), 30)
+import UserInfo from '../user_info.js'
+import IknowToken from '../iknow_token.js'
+
+UserAvatar(UserInfo(), IknowToken())
 
 function UserAvatar (userInfo = UserInfo(), iknowToken = IknowToken()) {
   const user = userInfo.json()

@@ -3,7 +3,7 @@
  * @constructor
  * @return {*}
  */
-function CurrentProduct () {
+export default function CurrentProduct () {
   const key = 'currentProduct'
 
   return {
