@@ -1,9 +1,9 @@
 import IknowToken from '../iknow_token.js'
 import UserInfo from '../user_info.js'
 
-Auth(IknowToken(), UserInfo())
+Auth()
 
-function Auth (iknowtoken = IknowToken(), userInfo = UserInfo()) {
+function Auth () {
   const User = () => {
     const user = {
       Id: '',
@@ -34,7 +34,7 @@ function Auth (iknowtoken = IknowToken(), userInfo = UserInfo()) {
         return d.then(Promise.reject.bind(Promise))
       }
     }).then(data => {
-      iknowtoken.set(JSON.stringify(data))
+      IknowToken().set(JSON.stringify(data))
       location.reload()
     }).catch(err => console.log(err))
   }
@@ -43,7 +43,7 @@ function Auth (iknowtoken = IknowToken(), userInfo = UserInfo()) {
     const password = document.querySelector('#password')
     let user = User().this()
 
-    user = userInfo.json()
+    user = UserInfo().json()
     user.Password = password.value
 
     getToken(JSON.stringify(user))

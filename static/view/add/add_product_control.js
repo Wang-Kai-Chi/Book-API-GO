@@ -2,12 +2,12 @@ import IknowToken from '../iknow_token.js'
 import ProductFormExtractor from '../product_form_extractor.js'
 import UserInfo from '../user_info.js'
 
-export default function AddProductControl (iknowToken = IknowToken()) {
-  const token = (iknowToken.json() === null)
+export default function AddProductControl () {
+  const token = (IknowToken().json() === null)
     ? ''
-    : 'Bearer ' + iknowToken.json().Token
+    : 'Bearer ' + IknowToken().json().Token
 
-  const auth = (IknowToken().json() === null)
+  const auth = (IknowToken()().json() === null)
     ? ''
     : UserInfo().json().Auth
 

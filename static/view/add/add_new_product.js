@@ -1,8 +1,7 @@
 import DetailRenderer from '../detail_renderer.js'
 import AddProductControl from './add_product_control.js'
-import IknowToken from '../iknow_token.js'
 
-AddProductControl(IknowToken())
+AddProductControl()
 AddNewProduct()
 /**
  *Showing details of json object

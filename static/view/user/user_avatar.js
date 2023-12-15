@@ -1,14 +1,14 @@
 import UserInfo from '../user_info.js'
 import IknowToken from '../iknow_token.js'
 
-UserAvatar(UserInfo(), IknowToken())
+UserAvatar()
 
-function UserAvatar (userInfo = UserInfo(), iknowToken = IknowToken()) {
-  const user = userInfo.json()
+function UserAvatar () {
+  const user = UserInfo().json()
 
   const logout = () => {
-    userInfo.remove()
-    iknowToken.remove()
+    UserInfo().remove()
+    IknowToken().remove()
     location.reload()
   }
   const userDropList = document.querySelector('#userDroplist')

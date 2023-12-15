@@ -3,12 +3,12 @@ import NodeScriptReplace from '../node_script_replace.js'
 import ProductFormExtractor from '../product_form_extractor.js'
 import UserInfo from '../user_info.js'
 
-export default function UpdateControl (iknowToken = IknowToken()) {
+export default function UpdateControl () {
   const updateBtn = document.querySelector('#updateBtn')
   const confirmBtn = document.querySelector('#confirmUpdateBtn')
   const cancelBtn = document.querySelector('#cancelUpdateBtn')
 
-  const updateController = UpdateController(iknowToken)
+  const updateController = UpdateController()
   const viewMode = () => {
     cancelBtn.hidden = true
     confirmBtn.hidden = true
@@ -37,7 +37,7 @@ export default function UpdateControl (iknowToken = IknowToken()) {
   }
 }
 
-function UpdateController (iknowToken = IknowToken()) {
+function UpdateController () {
   const form = document.querySelectorAll('.form-control')
 
   const enableUpdate = () => {
@@ -49,9 +49,9 @@ function UpdateController (iknowToken = IknowToken()) {
   }
 
   const confirmUpdate = async () => {
-    const token = (iknowToken.json() === null)
+    const token = (IknowToken().json() === null)
       ? ''
-      : 'Bearer ' + iknowToken.json().Token
+      : 'Bearer ' + IknowToken().json().Token
 
     const auth = (IknowToken().json() === null)
       ? ''

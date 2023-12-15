@@ -5,7 +5,7 @@ import DetailRenderer from '../detail_renderer.js'
  *Showing details of json object
  *
  */
-export default function Detail (currentProduct = CurrentProduct()) {
+export default function Detail () {
   const product = {
     Product_id: 'id',
     Product_title: '名稱',
@@ -28,7 +28,7 @@ export default function Detail (currentProduct = CurrentProduct()) {
 
   const addDetailValues = (obj = {}) => {
     const keys = Object.keys(obj)
-    const current = currentProduct.json()
+    const current = CurrentProduct().json()
     const dateId = 'Publication_date'
     setDatePicker(dateId)
 

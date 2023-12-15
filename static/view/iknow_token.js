@@ -1,4 +1,3 @@
-const iknow_token = () => IknowToken()
 /**
  * Interacting with iknow bearer token in localStorage
  * @constructor

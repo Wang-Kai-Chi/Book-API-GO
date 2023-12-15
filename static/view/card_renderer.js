@@ -1,7 +1,6 @@
 import CurrentProduct from './current_product.js'
 import Detail from './detail/detail.js'
 import UpdateControl from './detail/update_control.js'
-import IknowToken from './iknow_token.js'
 
 const VALUE_ID = (index) => `v${index}`
 /**
@@ -25,15 +24,14 @@ export default function CardRenderer (selector = '') {
       document.querySelector(`#editBtn${VALUE_ID(i)}`).onclick = () => {
         CurrentProduct().set(document.querySelector(`#${VALUE_ID(i)}`))
 
-        Detail(CurrentProduct())
-        UpdateControl(IknowToken())
+        Detail()
+        UpdateControl()
 
         document.querySelector('#recentProduct').hidden = true
         document.querySelector('#productDetail').hidden = false
       }
       document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => handleDeleteProduct(`#${VALUE_ID(i)}`)
     }
-    htmx.process(cardResult)
   }
   return {
     render: (value) => renderCards(value)
