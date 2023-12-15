@@ -1,4 +1,7 @@
 import CurrentProduct from './current_product.js'
+import Detail from './detail/detail.js'
+import UpdateControl from './detail/update_control.js'
+import IknowToken from './iknow_token.js'
 
 const VALUE_ID = (index) => `v${index}`
 /**
@@ -17,8 +20,17 @@ export default function CardRenderer (selector = '') {
     }
     const cardResult = document.querySelector(selector)
     cardResult.innerHTML = cards()
+
     for (const i in value) {
-      document.querySelector(`#editBtn${VALUE_ID(i)}`).onclick = () => CurrentProduct().set(document.querySelector(`#${VALUE_ID(i)}`))
+      document.querySelector(`#editBtn${VALUE_ID(i)}`).onclick = () => {
+        CurrentProduct().set(document.querySelector(`#${VALUE_ID(i)}`))
+
+        Detail(CurrentProduct())
+        UpdateControl(IknowToken())
+
+        document.querySelector('#recentProduct').hidden = true
+        document.querySelector('#productDetail').hidden = false
+      }
       document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => handleDeleteProduct(`#${VALUE_ID(i)}`)
     }
     htmx.process(cardResult)
@@ -35,7 +47,6 @@ export default function CardRenderer (selector = '') {
  * @return {string} string of html card
  */
 function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
-  const PRODUCT_DETAIL_TEMPLATE_URI = '/static/view/detail/detail.html'
   const valueId = VALUE_ID(index)
   return /* html */`
         <div class="card border-info" id="card${valueId}">
@@ -53,9 +64,7 @@ function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" id="editBtn${valueId}" hx-trigger="click" data-bs-dismiss="modal"
-                                    hx-get="${PRODUCT_DETAIL_TEMPLATE_URI}"  hx-swap="innerHTML" 
-                                    hx-target="#main">
+                                <a class="dropdown-item" id="editBtn${valueId}" data-bs-dismiss="modal">
                                     <img src="/static/assets/edit32.png" alt="blank">
                                 </a>
                             </li>

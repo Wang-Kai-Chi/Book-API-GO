@@ -11,12 +11,12 @@ import (
 func MustGetRowsFromQuery(db *sqlx.DB, sqlStr string, params ...interface{}) *sqlx.Rows {
 	query, args, err := sqlx.In(sqlStr, params...)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	query = db.Rebind(query)
 	rows, err := db.Queryx(query, args...)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	return rows
 }
@@ -28,7 +28,7 @@ func QueryEntity[T Data](db *sqlx.DB, sqlStr string, params ...interface{}) []T 
 			var p T
 			err := rows.StructScan(&p)
 			if err != nil {
-				panic(err)
+				log.Println(err)
 			}
 			entities = append(entities, p)
 		}
@@ -42,7 +42,7 @@ func QueryEntity[T Data](db *sqlx.DB, sqlStr string, params ...interface{}) []T 
 func ExecSql[T Data](db *sqlx.DB, str string, ps T) sql.Result {
 	res, err := db.NamedExec(str, ps)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	return res
 }

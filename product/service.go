@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"io"
-	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -25,9 +25,9 @@ func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Co
 		err := json.Unmarshal(body, &ps)
 		if err == nil {
 			operation(ps)
-			ctx.JSON(200, ps)
+			ctx.JSON(http.StatusOK, ps)
 		} else {
-			ctx.JSON(400, gin.H{
+			ctx.JSON(http.StatusBadRequest, gin.H{
 				"Response": "not products",
 			})
 		}
@@ -37,7 +37,9 @@ func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Co
 	if err == nil {
 		handleBody(body, operation, ctx)
 	} else {
-		log.Fatal("Reading request body failed. ", err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"Response": "Reading request body failed. ERROR:" + err.Error(),
+		})
 	}
 }
 
@@ -59,11 +61,11 @@ func getPriceRange(ctx *gin.Context) (int, int) {
 
 func (ctr ProductService) QueryWithPriceRange(ctx *gin.Context) {
 	min, max := getPriceRange(ctx)
-	ctx.JSON(200, ctr.repo.QueryWithPriceRange(min, max))
+	ctx.JSON(http.StatusOK, ctr.repo.QueryWithPriceRange(min, max))
 }
 
 func (ctr ProductService) QueryByBarcode(ctx *gin.Context) {
-	ctx.JSON(200, ctr.repo.QueryByBarcode(ctx.Param("barcode")))
+	ctx.JSON(http.StatusOK, ctr.repo.QueryByBarcode(ctx.Param("barcode")))
 }
 
 func (ctr ProductService) Update(ctx *gin.Context) {
@@ -80,19 +82,19 @@ func (ctr ProductService) QueryByConditions(ctx *gin.Context) {
 		Product_title: "%" + ctx.DefaultQuery("title", "%") + "%",
 		Publisher:     "%" + ctx.DefaultQuery("publisher", "%") + "%",
 	}
-	ctx.JSON(200, ctr.repo.QueryByConditions(min, max, product))
+	ctx.JSON(http.StatusOK, ctr.repo.QueryByConditions(min, max, product))
 }
 
 func (serv ProductService) MaxPrice(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{"MaxProductPrice": serv.repo.MaxPrice()})
+	ctx.JSON(http.StatusOK, gin.H{"MaxProductPrice": serv.repo.MaxPrice()})
 }
 
 func (serv ProductService) QueryNewest(ctx *gin.Context) {
 	ran, err := strconv.Atoi(ctx.Param("range"))
 	if err == nil {
-		ctx.JSON(200, serv.repo.QueryNewest(ran))
+		ctx.JSON(http.StatusOK, serv.repo.QueryNewest(ran))
 	} else {
-		ctx.JSON(400, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"Response": "uninspected input",
 		})
 	}

@@ -2,6 +2,7 @@ package product
 
 import (
 	"database/sql"
+	"log"
 
 	. "iknowbook.com/app/data"
 	. "iknowbook.com/app/repository"
@@ -71,7 +72,7 @@ func (repo ProductRepository) MaxPrice() int {
 	for rows.Next() {
 		err = rows.Scan(&max)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 	err = rows.Err()
