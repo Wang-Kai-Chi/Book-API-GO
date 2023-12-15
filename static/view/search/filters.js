@@ -34,7 +34,7 @@ function Filter () {
 
   for (const f of filters) {
     document.querySelector(`#${f.value}checkbox`).onclick = (e) => operate.activeFilter(e)
-    document.querySelector(`#${f.value}input`).onchange = (e) => operate.setFilterValue(e)
+    document.querySelector(`#${f.value}`).onchange = (e) => operate.setFilterValue(e)
   }
 }
 /**
@@ -115,7 +115,7 @@ function FilterItem (name = 'name', value = 'value') {
             <li class="list-group-item">
                 <input class="form-check-input me-1" id="${value}checkbox" type="checkbox" value="${value}">
                 <label class="form-check-label" for="firstCheckbox">${name}</label>
-                <input class="" type="text" id="${value}input">
+                <input class="" type="text" id="${value}">
             </li>
         `
 }

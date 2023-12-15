@@ -2,9 +2,7 @@ import IknowToken from '../iknow_token.js'
 import CardRenderer from '../card_renderer.js'
 import UserInfo from '../user_info.js'
 
-Result()
-
-function Result () {
+export default function Result () {
   const filters = document.querySelector('#searchInput').value
 
   const token = (IknowToken().json() === null)
@@ -59,5 +57,4 @@ function Result () {
       .then(value => CardRenderer('#cardResult').render(value))
       .catch(err => console.log(err))
   }
-  htmx.process(document.querySelector('#cardResult'))
 }

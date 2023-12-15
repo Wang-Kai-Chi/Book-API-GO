@@ -1,3 +1,5 @@
+<script type="module" src="/static/view/search/search_dialog.js"></script>
+
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#searchDialog">
     <img src="/static/assets/search32.png" alt="blank">
 </button>
@@ -12,8 +14,7 @@
             </div>
             <div class="modal-header">
                 <div class="input-group">
-                    <button id="confirmSearch" hx-get="/static/view/search/result.html" hx-trigger="click"
-                        hx-swap="innerHTML" hx-target="#resultView" class="btn btn-primary " type="button">確定</button>
+                    <button id="confirmSearch" class="btn btn-primary " type="button">確定</button>
                     <input type="text" class="form-control" id="searchInput" aria-describedby="helpId"
                         placeholder="輸入條碼或條件">
                 </div>
@@ -25,7 +26,10 @@
                     <hr>
                 </div>
                 <h4>結果</h4>
-                <div id="resultView"></div>
+                <div id="resultView">
+                    <div id="cardResult">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer float-start ">
             </div>
