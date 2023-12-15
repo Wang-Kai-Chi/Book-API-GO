@@ -1,6 +1,7 @@
 import IknowToken from '../iknow_token.js'
 import NodeScriptReplace from '../node_script_replace.js'
 import ProductFormExtractor from '../product_form_extractor.js'
+import UserInfo from '../user_info.js'
 
 export default function UpdateControl (iknowToken = IknowToken()) {
   const updateBtn = document.querySelector('#updateBtn')
@@ -52,6 +53,16 @@ function UpdateController (iknowToken = IknowToken()) {
       ? ''
       : 'Bearer ' + iknowToken.json().Token
 
+    const auth = (IknowToken().json() === null)
+      ? ''
+      : UserInfo().json().Auth
+
+    const iknowHeaders = new Headers({
+      'Content-Type': 'application/json',
+      Authorization: token,
+      'Auth-Key': auth
+    })
+
     const handleResponse = (res, success = () => { }) => {
       const d = res.json()
       if (res.status === 200) {
@@ -78,10 +89,7 @@ function UpdateController (iknowToken = IknowToken()) {
     fetch('/api/v1/product/update', {
       method: 'PUT',
       body: JSON.stringify([ProductFormExtractor().extractProduct()]),
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Authorization: token
-      })
+      headers: iknowHeaders
     }).then(res => handleResponse(res, () => {
       const banner = document.querySelector('.alert')
       banner.hidden = false

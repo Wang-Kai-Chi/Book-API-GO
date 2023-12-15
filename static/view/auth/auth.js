@@ -1,4 +1,6 @@
-/* eslint-disable no-undef */
+import IknowToken from '../iknow_token.js'
+import UserInfo from '../user_info.js'
+
 Auth(IknowToken(), UserInfo())
 
 function Auth (iknowtoken = IknowToken(), userInfo = UserInfo()) {

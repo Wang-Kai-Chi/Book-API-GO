@@ -1,20 +1,28 @@
 import IknowToken from '../iknow_token.js'
 import ProductFormExtractor from '../product_form_extractor.js'
+import UserInfo from '../user_info.js'
 
 export default function AddProductControl (iknowToken = IknowToken()) {
   const token = (iknowToken.json() === null)
     ? ''
     : 'Bearer ' + iknowToken.json().Token
 
+  const auth = (IknowToken().json() === null)
+    ? ''
+    : UserInfo().json().Auth
+
+  const iknowHeaders = new Headers({
+    'Content-Type': 'application/json',
+    Authorization: token,
+    'Auth-Key': auth
+  })
+
   const confirmAddProduct = () => {
     const add = async (body) => {
       return fetch('/api/v1/product/insert', {
         method: 'POST',
         body: JSON.stringify(body),
-        headers: new Headers({
-          'Content-Type': 'application/json',
-          Authorization: token
-        })
+        headers: iknowHeaders
       }).then(res => {
         const d = res.json()
         if (res.status === 200) {

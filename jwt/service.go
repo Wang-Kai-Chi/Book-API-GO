@@ -83,12 +83,12 @@ func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 		res := MustVerifyJWTToken([]byte(userAuth), token)
 		return res
 	}
-	handleVerification := func(user User) {
+	handleVerification := func(key string) {
 		bearers := ctx.Request.Header["Authorization"]
 
 		if len(bearers) > 0 {
 			bearer := bearers[0]
-			if isVerified(bearer, user.Auth) {
+			if isVerified(bearer, key) {
 				authOp(ctx)
 			} else {
 				if len(bearer) <= 0 {
@@ -107,8 +107,14 @@ func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 			})
 		}
 	}
-
-	readAndHandleRequestBody(ctx, handleVerification)
+	keys := ctx.Request.Header["Auth-Key"]
+	if len(keys) > 0 {
+		handleVerification(keys[0])
+	} else {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"Response": "No User auth key.",
+		})
+	}
 }
 
 func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {

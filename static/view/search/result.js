@@ -1,10 +1,25 @@
-setTimeout(() => Result(IknowToken()), 50)
+import IknowToken from '../iknow_token.js'
+import CardRenderer from '../card_renderer.js'
+import UserInfo from '../user_info.js'
 
-function Result (iknowToken = IknowToken()) {
+Result()
+
+function Result () {
   const filters = document.querySelector('#searchInput').value
-  const token = (iknowToken.json() === null)
+
+  const token = (IknowToken().json() === null)
     ? ''
-    : 'Bearer ' + iknowToken.json().Token
+    : 'Bearer ' + IknowToken().json().Token
+
+  const auth = (IknowToken().json() === null)
+    ? ''
+    : UserInfo().json().Auth
+
+  const iknowHeaders = new Headers({
+    'Content-Type': 'application/json',
+    Authorization: token,
+    'Auth-Key': auth
+  })
 
   const handleResponse = (res) => {
     const d = res.json()
@@ -18,20 +33,14 @@ function Result (iknowToken = IknowToken()) {
   const getByConditions = async (conditions) => {
     return fetch(`/api/v1/product/query/?${conditions}`, {
       method: 'GET',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Authorization: token
-      })
+      headers: iknowHeaders
     }).then(res => handleResponse(res))
   }
 
   const getByBarcode = async (barcode) => {
     return fetch(`/api/v1/product/query/barcode/${barcode}`, {
       method: 'GET',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Authorization: token
-      })
+      headers: iknowHeaders
     }).then(res => handleResponse(res))
   }
 

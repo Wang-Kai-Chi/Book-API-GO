@@ -1,16 +1,41 @@
-const operate = FilterOperation('#searchInput', 'operate')
-
-setTimeout(() => Filter(), 70)
+Filter()
 
 function Filter () {
-  const operationName = operate.name
-  const filterItems = FilterItem('名稱', 'title', operationName) +
-    FilterItem('最低價格', 'min', operationName) +
-    FilterItem('最高價格', 'max', operationName) +
-    FilterItem('廠商', 'publisher', operationName)
+  const operate = FilterOperation('#searchInput')
+  const filters = [
+    {
+      name: '名稱',
+      value: 'title'
+    },
+    {
+      name: '最低價格',
+      value: 'min'
+    },
+    {
+      name: '最高價格',
+      value: 'max'
+    },
+    {
+      name: '廠商',
+      value: 'publisher'
+    }
+  ]
+  const filterItems = () => {
+    let temp = ''
+    for (const f of filters) {
+      temp += FilterItem(f.name, f.value)
+    }
+    return temp
+  }
 
   const searchFilter = document.querySelector('#searchFilter')
-  searchFilter.innerHTML = filterItems
+
+  searchFilter.innerHTML = filterItems()
+
+  for (const f of filters) {
+    document.querySelector(`#${f.value}checkbox`).onclick = (e) => operate.activeFilter(e)
+    document.querySelector(`#${f.value}input`).onchange = (e) => operate.setFilterValue(e)
+  }
 }
 /**
      * Handling Events for FilterItem, such as onclick, onchange, and onfocus...
@@ -19,7 +44,7 @@ function Filter () {
      * @param {string} [name=""] string name of declared FilterOperation variable
      * @returns {object} FilterOperation object
      */
-function FilterOperation (searchSelector = '', name = '') {
+function FilterOperation (searchSelector = '') {
   const suffix = '='
   const regex = '&'
   const searchInput = document.querySelector(searchSelector)
@@ -44,13 +69,19 @@ function FilterOperation (searchSelector = '', name = '') {
     const checkbox = event.target
     const filter = `${checkbox.value}${suffix}`
 
-    if (checkbox.checked && !searchInput.value.includes(filter)) { addFilter(checkbox.value, filter) } else { removeFilter(filter) }
+    if (checkbox.checked && !searchInput.value.includes(filter)) {
+      addFilter(checkbox.value, filter)
+    } else {
+      removeFilter(filter)
+    }
   }
 
   const setFilterValue = (event) => {
     const param = event.target
     const filter = `${param.id}${suffix}`
+
     removeFilter(filter)
+
     addFilter(param.id, filter)
 
     const input = searchInput.value
@@ -66,8 +97,7 @@ function FilterOperation (searchSelector = '', name = '') {
 
   return {
     activeFilter: (event) => activeFilter(event),
-    setFilterValue: (event) => setFilterValue(event),
-    name
+    setFilterValue: (event) => setFilterValue(event)
   }
 }
 
@@ -80,12 +110,12 @@ function FilterOperation (searchSelector = '', name = '') {
  * @param {string} [FilterOpStr=""] variable name of FilterOperation
  * @return {string}
  */
-function FilterItem (name = 'name', value = 'value', FilterOpStr = '') {
+function FilterItem (name = 'name', value = 'value') {
   return /* html */`
             <li class="list-group-item">
-                <input class="form-check-input me-1" type="checkbox" value="${value}" onclick="${FilterOpStr}.activeFilter(event)">
+                <input class="form-check-input me-1" id="${value}checkbox" type="checkbox" value="${value}">
                 <label class="form-check-label" for="firstCheckbox">${name}</label>
-                <input class="" type="text" id="${value}" onchange="${FilterOpStr}.setFilterValue(event)" onfocus="${FilterOpStr}.setFilterValue(event)">
+                <input class="" type="text" id="${value}input">
             </li>
         `
 }
