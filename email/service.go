@@ -3,36 +3,36 @@ package email
 import (
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	. "iknowbook.com/app/data"
-	. "iknowbook.com/app/user"
 )
 
 type EmailService struct {
-	userRepo UserRepository
 }
 
-func NewEmailService(userRepo UserRepository) EmailService {
-	return EmailService{
-		userRepo: userRepo,
+func NewEmailService() EmailService {
+	return EmailService{}
+}
+
+func handleInternalError(err error, ctx *gin.Context) {
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"Response": "ERROR: " + err.Error(),
+		})
 	}
 }
 
 func mustGetUserFromBody(ctx *gin.Context) User {
 	body, err := io.ReadAll(ctx.Request.Body)
-	if err != nil {
-		log.Println(err)
-	}
+	handleInternalError(err, ctx)
 
 	var us User
 	err = json.Unmarshal(body, &us)
-	if err != nil {
-		log.Println(err)
-	}
+	handleInternalError(err, ctx)
+
 	return us
 }
 
@@ -65,31 +65,33 @@ func (serv EmailService) SendVerificationEmail(ctx *gin.Context) {
 		}
 	}
 
-	us := mustGetUserFromBody(ctx)
-
-	users := serv.userRepo.FindUserInfo(us)
-
-	if len(users) > 0 {
-		user := users[0]
-		sendVerificationMail(user.Email)
-	} else {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"Response": "User unregister.",
-		})
-	}
+	VerifyUserEmail(ctx,
+		func(ctx *gin.Context, user User) {
+			sendVerificationMail(user.Email)
+		},
+	)
 }
 
-func (serv EmailService) VerifyEmail(ctx *gin.Context) {
+func VerifyUserEmail(ctx *gin.Context, authOp func(*gin.Context, User)) {
 	us := mustGetUserFromBody(ctx)
 
 	err := VerifyEmail(us.Email)
 	if err == nil {
-		ctx.JSON(http.StatusOK, gin.H{
-			"Response": "Email verified.",
-		})
+		authOp(ctx, us)
 	} else {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"Response": "Email verify failed. ERROR: " + err.Error(),
 		})
 	}
+}
+
+func (serv EmailService) VerifyEmail(ctx *gin.Context) {
+	VerifyUserEmail(ctx,
+		func(ctx *gin.Context, user User) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"Response": "Email verified.",
+				"Body":     user,
+			})
+		},
+	)
 }

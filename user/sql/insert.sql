@@ -10,8 +10,8 @@ not exists (
 	select name,email,phone
 	from admin_user
 	where 
-	name=$1 and
-	email=$2 and
+	name=$1 or 
+	email=$2 or
 	phone=$3
 )
 on conflict do nothing;

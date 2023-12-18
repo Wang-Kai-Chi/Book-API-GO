@@ -30,7 +30,7 @@ func TestInsert(t *testing.T) {
 	startDBOperateTest(func(u UserRepository) {
 		users := User{
 			Id:       "",
-			Name:     "testuser2",
+			Name:     "testuser3",
 			Email:    "test2@mail.com",
 			Phone:    "12345",
 			Password: "testPassword",

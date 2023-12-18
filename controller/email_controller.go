@@ -30,8 +30,5 @@ func (ctr EmailController) SendVerificationEmail() {
 }
 
 func (ctr EmailController) VerifyEmail() {
-	ctr.group.POST(
-		"/verify",
-		ctr.service.VerifyEmail,
-	)
+	ctr.group.POST("/verify", ctr.service.VerifyEmail)
 }

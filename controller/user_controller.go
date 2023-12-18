@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	. "iknowbook.com/app/email"
 	. "iknowbook.com/app/user"
 )
 
@@ -23,7 +24,11 @@ func (ctr UserController) Run() {
 }
 
 func (ctr UserController) Insert() {
-	ctr.group.POST("/insert", ctr.service.Insert)
+	ctr.group.POST("/insert",
+		func(ctx *gin.Context) {
+			VerifyUserEmail(ctx, ctr.service.InsertUser)
+		},
+	)
 }
 
 func (ctr UserController) FindUserInfo() {

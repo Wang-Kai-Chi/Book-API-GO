@@ -60,7 +60,7 @@ func (w Iknowbook) Init() {
 	).Run()
 
 	NewEmailController(
-		email.NewEmailService(userRepo),
+		email.NewEmailService(),
 		router,
 	).Run()
 

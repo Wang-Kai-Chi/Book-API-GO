@@ -1,9 +1,9 @@
 package user
 
 import (
+	"database/sql"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,8 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 			operation(us)
 		} else {
 			ctx.JSON(http.StatusBadRequest, map[string]string{
-				"Response": "Not a user",
+				"Response": "Not a user Error:" + err.Error(),
+				"Body":     string(body),
 			})
 		}
 	}
@@ -36,24 +37,52 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 	if err == nil {
 		handleBody(body, operation, ctx)
 	} else {
-		log.Fatal("Reading request body failed. ", err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"Response": "Reading request body failed. ERROR: " + err.Error(),
+		})
 	}
 }
 
-func (ser UserService) Insert(ctx *gin.Context) {
+func (ser UserService) InsertUser(ctx *gin.Context, user User) {
+	checkUserExist := func(result sql.Result, us User) {
+		affectedRows, err := result.RowsAffected()
+		if err == nil {
+			if affectedRows > 0 {
+				ctx.JSON(http.StatusOK, us)
+			} else {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"Response": "User exist",
+				})
+			}
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"Response": "ERROR: " + err.Error(),
+			})
+		}
+	}
+
 	hashUserPasswordAndInsert := func(us User) {
 		bytes, err := bcrypt.GenerateFromPassword([]byte(us.Password), 0)
 		us.Password = string(bytes)
 
-		if err != nil {
-			panic(err)
+		if err == nil {
+			result := ser.repo.Insert(us)
+			checkUserExist(result, us)
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"Response": "Fail to hash password. ERROR: " + err.Error(),
+			})
 		}
-		ser.repo.Insert(us)
-
-		ctx.JSON(http.StatusOK, us)
 	}
 
-	readAndHandleRequestBody(ctx, hashUserPasswordAndInsert)
+	hashUserPasswordAndInsert(user)
+}
+
+func (ser UserService) Insert(ctx *gin.Context) {
+	insertUser := func(user User) {
+		ser.InsertUser(ctx, user)
+	}
+	readAndHandleRequestBody(ctx, insertUser)
 }
 
 func (ser UserService) FindUserInfo(ctx *gin.Context) {
