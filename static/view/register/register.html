@@ -1,3 +1,5 @@
+<script type="module" src="/static/view/register/register.js"></script>
+
 <div class="container" style="overflow-y: auto;">
     <form>
         <div class="text-center">
@@ -26,4 +28,8 @@
             <button type="button" class="btn btn-primary btn-block mb-4" id="submit">Register</button>
         </div>
     </form>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" hidden>
+        <div id="alertText">Message</div>
+        <button type="button" class="btn-close" onclick="document.querySelector('.alert').hidden=true"></button>
+    </div>
 </div>
