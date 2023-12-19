@@ -90,7 +90,6 @@ func (serv EmailService) VerifyEmail(ctx *gin.Context) {
 		func(ctx *gin.Context, user User) {
 			ctx.JSON(http.StatusOK, gin.H{
 				"Response": "Email verified.",
-				"Body":     user,
 			})
 		},
 	)

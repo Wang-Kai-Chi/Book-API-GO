@@ -57,7 +57,7 @@ func (repo UserRepository) FindExactUserInfo(us User) []User {
 	)
 }
 
-func (repo UserRepository) UpdataUserAuth(us User) sql.Result {
+func (repo UserRepository) UpdateUserAuth(us User) sql.Result {
 	return repo.Connection.MustExec(
 		NewUserSqlStr().UpdateUserAuth,
 		us.Auth, us.Id,

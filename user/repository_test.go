@@ -75,10 +75,11 @@ func TestFindExactUserInfo(t *testing.T) {
 
 func TestUpdataUserAuth(t *testing.T) {
 	startDBOperateTest(func(u UserRepository) {
+		var auth UserAuth
 		user := User{
-			Id:   "752cf2c5-4562-40af-945d-0ae899e063ca",
-			Auth: string(MustGetAuth()),
+			Id:   "27f7842f-475c-4ffd-b727-9892e0a0a6f0",
+			Auth: string(auth.MustGetAuth()),
 		}
-		t.Log(u.UpdataUserAuth(user).RowsAffected())
+		t.Log(u.UpdateUserAuth(user).RowsAffected())
 	}, t)
 }

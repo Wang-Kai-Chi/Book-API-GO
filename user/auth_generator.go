@@ -17,7 +17,9 @@ func mustGetKey() []byte {
 	return key
 }
 
-func MustGetAuth() []byte {
+type UserAuth struct{}
+
+func (ua UserAuth) MustGetAuth() []byte {
 	bytes, err := bcrypt.GenerateFromPassword(mustGetKey(), 0)
 
 	if err != nil {

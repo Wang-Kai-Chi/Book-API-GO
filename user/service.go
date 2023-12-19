@@ -26,7 +26,7 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 		if err == nil {
 			operation(us)
 		} else {
-			ctx.JSON(http.StatusBadRequest, map[string]string{
+			ctx.JSON(http.StatusBadRequest, gin.H{
 				"Response": "Not a user Error:" + err.Error(),
 				"Body":     string(body),
 			})
@@ -92,7 +92,7 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 			if err == nil {
 				ctx.JSON(http.StatusOK, user)
 			} else {
-				ctx.JSON(http.StatusUnauthorized, map[string]string{
+				ctx.JSON(http.StatusUnauthorized, gin.H{
 					"Response": "Password incorrect",
 				})
 			}
@@ -103,11 +103,34 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 		if len(users) > 0 {
 			comparePassword(users[0], us.Password, ctx)
 		} else {
-			ctx.JSON(http.StatusBadRequest, map[string]string{
+			ctx.JSON(http.StatusBadRequest, gin.H{
 				"Response": "user not found",
 			})
 		}
 	}
 
+	readAndHandleRequestBody(ctx, handleUser)
+}
+
+func (ser UserService) UpdateUserAuth(ctx *gin.Context) {
+	handleUser := func(usr User) {
+		result := ser.repo.UpdateUserAuth(usr)
+		affectedRows, err := result.RowsAffected()
+		if err == nil {
+			if affectedRows > 0 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"Response": "User Authorized",
+				})
+			} else {
+				ctx.JSON(http.StatusOK, gin.H{
+					"Response": "User Authorization failed",
+				})
+			}
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"Response": "ERROR: " + err.Error(),
+			})
+		}
+	}
 	readAndHandleRequestBody(ctx, handleUser)
 }
