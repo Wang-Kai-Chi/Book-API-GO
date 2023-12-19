@@ -1,7 +1,7 @@
 import UserInfo from '../user_info.js'
 import IknowToken from '../iknow_token.js'
 
-Login(UserInfo(), IknowToken()())
+Login()
 
 function Login () {
   const User = () => {

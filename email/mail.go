@@ -2,6 +2,7 @@ package email
 
 import (
 	"embed"
+	"log"
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	mail "gopkg.in/gomail.v2"
@@ -42,12 +43,12 @@ func SendMail(em EMail) error {
 	return err
 }
 
-func VerifyEmail(email string) error {
+func VerifyEmail(email string) *emailverifier.Result {
 	verifier := emailverifier.NewVerifier()
 
 	ret, err := verifier.Verify(email)
-	if !ret.Syntax.Valid {
-		panic("email address syntax is invalid")
+	if err != nil {
+		log.Println("ERROR: " + err.Error())
 	}
-	return err
+	return ret
 }

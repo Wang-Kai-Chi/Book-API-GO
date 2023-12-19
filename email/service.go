@@ -3,6 +3,7 @@ package email
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"os"
 
@@ -75,12 +76,14 @@ func (serv EmailService) SendVerificationEmail(ctx *gin.Context) {
 func VerifyUserEmail(ctx *gin.Context, authOp func(*gin.Context, User)) {
 	us := mustGetUserFromBody(ctx)
 
-	err := VerifyEmail(us.Email)
-	if err == nil {
+	res := VerifyEmail(us.Email)
+	if res != nil && res.Syntax.Valid {
+		resStr, _ := json.Marshal(res)
+		log.Println(string(resStr))
 		authOp(ctx, us)
 	} else {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Response": "Email verify failed. ERROR: " + err.Error(),
+			"Response": "Email verify failed.",
 		})
 	}
 }
