@@ -64,10 +64,11 @@ func TestFindExactUserInfo(t *testing.T) {
 	startDBOperateTest(func(u UserRepository) {
 		user := User{
 			Id:       "",
-			Name:     "testuserA",
-			Email:    "testA@mail.com",
-			Phone:    "a123456",
-			Password: "testpassword",
+			Name:     "testa",
+			Email:    "testa@mail.com",
+			Phone:    "",
+			Password: "123",
+			Auth:     "$2a$10$lvZxVD2sQn5mlcWpRCdTROmrGZIlyjvqxLp1euMX7pwm.Y0qxSNGm",
 		}
 		t.Log(u.FindExactUserInfo(user))
 	}, t)
@@ -77,7 +78,7 @@ func TestUpdataUserAuth(t *testing.T) {
 	startDBOperateTest(func(u UserRepository) {
 		var auth UserAuth
 		user := User{
-			Id:   "27f7842f-475c-4ffd-b727-9892e0a0a6f0",
+			Id:   "d8f34f29-2f6b-4725-ba78-bbc871e6f5e6",
 			Auth: string(auth.MustGetAuth()),
 		}
 		t.Log(u.UpdateUserAuth(user).RowsAffected())

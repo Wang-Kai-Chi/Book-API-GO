@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	. "iknowbook.com/app/data"
 	. "iknowbook.com/app/user"
 )
@@ -44,35 +43,25 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 }
 
 func (serv JwtService) GetJwtToken(ctx *gin.Context) {
-	verifyUser := func(user User, input User) {
-		printVerifiedInfo := func() {
-			token, err := GetJWTToken([]byte(user.Auth), user.Name)
-			if err != nil {
-				panic(err)
-			}
-			ctx.JSON(http.StatusOK, gin.H{"Token": token})
-		}
-
-		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
-
+	verifyUser := func(user User) {
+		token, err := GetJWTToken([]byte(user.Auth), user.Name)
 		if err == nil {
-			printVerifiedInfo()
+			ctx.JSON(http.StatusOK, gin.H{"Token": token})
 		} else {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"Response": "Unauthorized User",
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"Response": "ERROR: " + err.Error(),
 			})
 		}
 	}
 	getToken := func(us User) {
-		users := serv.userRepo.FindUserInfo(us)
+		users := serv.userRepo.FindExactUserInfo(us)
 		if len(users) > 0 {
-			verifyUser(users[0], us)
+			verifyUser(us)
 		} else {
 			ctx.JSON(http.StatusBadRequest, gin.H{
 				"Response": "Unauthorized User",
 			})
 		}
-
 	}
 	readAndHandleRequestBody(ctx, getToken)
 }
@@ -83,6 +72,7 @@ func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 		res := MustVerifyJWTToken([]byte(userAuth), token)
 		return res
 	}
+
 	handleVerification := func(key string) {
 		bearers := ctx.Request.Header["Authorization"]
 
@@ -107,6 +97,7 @@ func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 			})
 		}
 	}
+
 	keys := ctx.Request.Header["Auth-Key"]
 	if len(keys) > 0 {
 		handleVerification(keys[0])

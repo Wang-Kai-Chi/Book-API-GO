@@ -52,8 +52,8 @@ func (repo UserRepository) FindUserInfo(us User) []User {
 
 func (repo UserRepository) FindExactUserInfo(us User) []User {
 	return repo.QueryEntity(
-		NewUserSqlStr().QueryByUserInfo,
-		us.Name, us.Email, us.Phone,
+		NewUserSqlStr().QueryByExactUserInfo,
+		us.Name, us.Email, us.Phone, us.Auth,
 	)
 }
 
