@@ -94,9 +94,19 @@ export default function ProductService () {
       .catch(err => console.log(err))
   }
 
+  const addProduct = (url) => {
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify([ProductFormExtractor().extractProduct()]),
+      headers: getHeaders()
+    }).then(res => handleResponse(res, alert('新增成功')))
+      .catch(err => console.log(err))
+  }
+
   return {
     getProduct: (url = '') => getProduct(url),
     updateProduct: (url = '') => updateProduct(url),
-    deleteProduct: (url = '') => deleteProduct(url)
+    deleteProduct: (url = '') => deleteProduct(url),
+    addProduct: (url = '') => addProduct(url)
   }
 }

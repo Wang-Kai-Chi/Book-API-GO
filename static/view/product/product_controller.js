@@ -25,10 +25,15 @@ export default function ProductController () {
     return service.deleteProduct('/api/v1/product/delete')
   }
 
+  const addProduct = async () => {
+    return service.addProduct('/api/v1/product/insert')
+  }
+
   return {
     getProductsByConditions: (conditions = '') => getProductsByConditions(conditions),
     getProductsByBarcode: (barcode = '') => getProductsByBarcode(barcode),
     updateProduct: () => updateProduct(),
-    deleteProduct: () => deleteProduct()
+    deleteProduct: () => deleteProduct(),
+    addProduct: () => addProduct()
   }
 }
