@@ -1,4 +1,4 @@
-<script type="module" src="/static/view/search/search_dialog.js"></script>
+<script type="module" src="/static/js/search_dialog.js"></script>
 
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#searchDialog">
     <img src="/static/assets/search32.png" alt="blank">
@@ -21,7 +21,7 @@
             </div>
             <div class="modal-body">
                 <h4>搜尋條件</h4>
-                <div hx-get="/static/view/search/filters.html" hx-trigger="load" hx-swap="innerHTML"></div>
+                <div hx-get="/static/view/filters.html" hx-trigger="load" hx-swap="innerHTML"></div>
                 <div class="p-2 g-col-6">
                     <hr>
                 </div>

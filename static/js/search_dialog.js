@@ -1,6 +1,12 @@
-import ProductController from '../product/product_controller.js'
+import ProductController from './product/product_controller.js'
 
-export default function Result () {
+SearchDialog()
+
+function SearchDialog () {
+  document.querySelector('#confirmSearch').onclick = () => Result()
+}
+
+function Result () {
   const filters = document.querySelector('#searchInput').value
   const controller = ProductController()
 

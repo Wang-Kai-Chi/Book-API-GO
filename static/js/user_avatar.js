@@ -1,5 +1,5 @@
-import UserInfo from '../localstorage/user_info.js'
-import IknowToken from '../localstorage/iknow_token.js'
+import UserInfo from './localstorage/user_info.js'
+import IknowToken from './localstorage/iknow_token.js'
 
 UserAvatar()
 

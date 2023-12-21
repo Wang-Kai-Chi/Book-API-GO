@@ -1,4 +1,4 @@
-import DetailRenderer from '../detail_renderer.js'
+import DetailRenderer from './detail_renderer.js'
 import AddProductControl from './add_product_control.js'
 
 AddProductControl()

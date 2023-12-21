@@ -5,7 +5,7 @@ export default function ResponseHandler () {
     const reverify = confirm('驗證已過期，將重新驗證')
 
     if (reverify) {
-      fetch('/static/view/auth/auth.html').then(res => res.text())
+      fetch('/static/view/auth.html').then(res => res.text())
         .then(data => {
           document.body.innerHTML = data
           NodeScriptReplace(document.body)
