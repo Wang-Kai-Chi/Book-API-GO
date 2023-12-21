@@ -85,7 +85,7 @@ func (ser UserService) Insert(ctx *gin.Context) {
 	readAndHandleRequestBody(ctx, insertUser)
 }
 
-func (ser UserService) FindExactUserInfo(ctx *gin.Context) {
+func (ser UserService) FindUserInfo(ctx *gin.Context) {
 	handleUser := func(us User) {
 		comparePassword := func(user User, pw string, ctx *gin.Context) {
 			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pw))
@@ -98,7 +98,7 @@ func (ser UserService) FindExactUserInfo(ctx *gin.Context) {
 			}
 		}
 
-		users := ser.repo.FindExactUserInfo(us)
+		users := ser.repo.FindUserInfo(us)
 
 		if len(users) > 0 {
 			comparePassword(users[0], us.Password, ctx)

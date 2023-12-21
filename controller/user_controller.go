@@ -33,7 +33,7 @@ func (ctr UserController) Insert() {
 }
 
 func (ctr UserController) FindExactUserInfo() {
-	ctr.group.POST("/login", ctr.service.FindExactUserInfo)
+	ctr.group.POST("/login", ctr.service.FindUserInfo)
 }
 
 func (ctr UserController) UpdateUserAuth() {

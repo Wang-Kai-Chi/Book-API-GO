@@ -63,22 +63,26 @@ function UpdateController () {
       'Auth-Key': auth
     })
 
+    const handleAuthurizationExpired = () => {
+      const reverify = confirm('驗證已過期，將重新驗證')
+
+      if (reverify) {
+        fetch('/static/view/auth/auth.html').then(res => res.text())
+          .then(data => {
+            document.body.innerHTML = data
+            NodeScriptReplace(document.body)
+          })
+          .catch(err => console.log(err))
+      }
+    }
+
     const handleResponse = (res, success = () => { }) => {
       const d = res.json()
       if (res.status === 200) {
         success()
         return d
       } else if (res.status === 401) {
-        const reverify = confirm('驗證已過期，將重新驗證')
-
-        if (reverify) {
-          fetch('/static/view/auth/auth.html').then(res => res.text())
-            .then(data => {
-              document.body.innerHTML = data
-              NodeScriptReplace(document.body)
-            })
-            .catch(err => console.log(err))
-        }
+        handleAuthurizationExpired()
         return d.then(Promise.reject.bind(Promise))
       } else {
         alert('驗證失敗, 請登入')

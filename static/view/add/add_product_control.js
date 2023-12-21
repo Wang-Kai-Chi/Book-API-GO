@@ -7,7 +7,7 @@ export default function AddProductControl () {
     ? ''
     : 'Bearer ' + IknowToken().json().Token
 
-  const auth = (IknowToken()().json() === null)
+  const auth = (IknowToken().json() === null)
     ? ''
     : UserInfo().json().Auth
 
