@@ -1,22 +1,26 @@
 import ProductController from './product/product_controller.js'
+import CardRenderer from './card_renderer.js'
 
 SearchDialog()
 
 function SearchDialog () {
-  document.querySelector('#confirmSearch').onclick = () => Result()
-}
+  const showResult = () => {
+    const filters = document.querySelector('#searchInput').value
+    const controller = ProductController()
 
-function Result () {
-  const filters = document.querySelector('#searchInput').value
-  const controller = ProductController()
-
-  if (filters.includes('=')) {
-    if (!filters.includes('max')) {
-      controller.getProductsByConditions(filters + 'max=500')
+    if (filters.includes('=')) {
+      if (!filters.includes('max')) {
+        controller.getProductsByConditions(filters + 'max=500')
+          .then(data => CardRenderer('#cardResult').render(data))
+      } else {
+        controller.getProductsByConditions(filters)
+          .then(data => CardRenderer('#cardResult').render(data))
+      }
     } else {
-      controller.getProductsByConditions(filters)
+      controller.getProductsByBarcode(filters)
+        .then(data => CardRenderer('#cardResult').render(data))
     }
-  } else {
-    controller.getProductsByBarcode(filters)
   }
+
+  document.querySelector('#confirmSearch').onclick = () => showResult()
 }

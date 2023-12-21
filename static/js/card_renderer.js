@@ -90,7 +90,7 @@ function handleDeleteProduct (cardId) {
   CurrentProduct().set(document.querySelector(`#${cardId}`))
 
   if (confirm('Confirm delete?')) {
-    ProductController().deleteProduct()
+    ProductController().deleteProduct(() => alert('刪除成功'))
     document.querySelector(`#card${cardId}`).hidden = true
   }
 }
@@ -187,7 +187,13 @@ function UpdateController () {
     for (const f of form) { f.disabled = true }
   }
 
-  const confirmUpdate = async () => ProductController().updateProduct()
+  const confirmUpdate = async () => ProductController().updateProduct(() => {
+    const banner = document.querySelector('.alert')
+    banner.hidden = false
+
+    const alertText = document.querySelector('#alertText')
+    alertText.innerHTML = '更新成功'
+  })
 
   return {
     enableUpdate: () => enableUpdate(),

@@ -17,23 +17,23 @@ export default function ProductController () {
     return service.getProduct(`/api/v1/product/query/barcode/${barcode}`)
   }
 
-  const updateProduct = async () => {
-    return service.updateProduct('/api/v1/product/update')
+  const updateProduct = async (success = () => {}) => {
+    return service.updateProduct('/api/v1/product/update', success())
   }
 
-  const deleteProduct = async () => {
-    return service.deleteProduct('/api/v1/product/delete')
+  const deleteProduct = async (success = () => {}) => {
+    return service.deleteProduct('/api/v1/product/delete', success())
   }
 
-  const addProduct = async () => {
-    return service.addProduct('/api/v1/product/insert')
+  const addProduct = async (success = () => {}) => {
+    return service.addProduct('/api/v1/product/insert', success())
   }
 
   return {
     getProductsByConditions: (conditions = '') => getProductsByConditions(conditions),
     getProductsByBarcode: (barcode = '') => getProductsByBarcode(barcode),
-    updateProduct: () => updateProduct(),
-    deleteProduct: () => deleteProduct(),
-    addProduct: () => addProduct()
+    updateProduct: (success = () => {}) => updateProduct(success()),
+    deleteProduct: (success = () => {}) => deleteProduct(success()),
+    addProduct: (success = () => {}) => addProduct(success())
   }
 }

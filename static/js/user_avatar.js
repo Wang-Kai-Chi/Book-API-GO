@@ -37,12 +37,12 @@ function LoggedinListHTML (name = '') {
 
 function DefaultListHTML () {
   return /* html */`<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
-        <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/login/login.html"
+        <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/login.html"
                 hx-target="body">登入</button></li>
         <li>
             <hr class="dropdown-divider">
         </li>
-        <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/register/register.html"
+        <li><button class="dropdown-item" hx-trigger="click" hx-swap="innerHTML" hx-get="/static/view/register.html"
                 hx-target="body">註冊</button></li>
     </ul>`
 }

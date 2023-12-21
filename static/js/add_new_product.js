@@ -1,7 +1,6 @@
 import DetailRenderer from './detail_renderer.js'
-import AddProductControl from './add_product_control.js'
+import ProductController from './product/product_controller.js'
 
-AddProductControl()
 AddNewProduct()
 /**
  *Showing details of json object
@@ -35,4 +34,6 @@ function AddNewProduct () {
   setDatePicker('Publication_date')
 
   for (const f of form) { f.disabled = false }
+
+  document.querySelector('#confirmAdd').onclick = () => ProductController().addProduct(() => alert('新增成功'))
 }
