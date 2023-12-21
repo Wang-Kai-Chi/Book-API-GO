@@ -1,4 +1,4 @@
-import CurrentProduct from '../current_product.js'
+import CurrentProduct from '../localstorage/current_product.js'
 import DetailRenderer from '../detail_renderer.js'
 
 /**

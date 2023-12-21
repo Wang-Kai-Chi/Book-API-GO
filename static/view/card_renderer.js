@@ -1,4 +1,4 @@
-import CurrentProduct from './current_product.js'
+import CurrentProduct from './localstorage/current_product.js'
 import Detail from './detail/detail.js'
 import UpdateControl from './detail/update_control.js'
 import ProductController from './product/product_controller.js'
