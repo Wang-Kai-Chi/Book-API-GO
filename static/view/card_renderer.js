@@ -1,6 +1,7 @@
 import CurrentProduct from './current_product.js'
 import Detail from './detail/detail.js'
 import UpdateControl from './detail/update_control.js'
+import ProductController from './product/product_controller.js'
 
 const VALUE_ID = (index) => `v${index}`
 /**
@@ -30,7 +31,7 @@ export default function CardRenderer (selector = '') {
         document.querySelector('#recentProduct').hidden = true
         document.querySelector('#productDetail').hidden = false
       }
-      document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => handleDeleteProduct(`#${VALUE_ID(i)}`)
+      document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => handleDeleteProduct(`${VALUE_ID(i)}`)
     }
   }
   return {
@@ -87,19 +88,10 @@ function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
  * @param {*} cardId
  */
 function handleDeleteProduct (cardId) {
-  CurrentProduct().set(cardId)
+  CurrentProduct().set(document.querySelector(`#${cardId}`))
 
-  const body = `[${localStorage.getItem('currentProduct')}]`
   if (confirm('Confirm delete?')) {
-    document.querySelector(`#card${cardId.id}`).hidden = true
-    fetch('/api/v1/product/delete', {
-      method: 'DELETE',
-      body,
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    }).then(res => res.json())
-      .catch(err => console.log(err))
-      .then(response => console.log('Success', response))
+    ProductController().deleteProduct()
+    document.querySelector(`#card${cardId}`).hidden = true
   }
 }
