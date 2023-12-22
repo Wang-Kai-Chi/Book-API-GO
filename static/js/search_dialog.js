@@ -1,4 +1,4 @@
-import ProductController from './product/product_controller.js'
+import ProductController from './controller/product_controller.js'
 import CardRenderer from './card_renderer.js'
 
 SearchDialog()

@@ -1,5 +1,5 @@
 import DetailRenderer from './detail_renderer.js'
-import ProductController from './product/product_controller.js'
+import ProductController from './controller/product_controller.js'
 
 AddNewProduct()
 /**

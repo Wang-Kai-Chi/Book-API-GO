@@ -1,6 +1,5 @@
 import CurrentProduct from './localstorage/current_product.js'
-import ProductController from './product/product_controller.js'
-import DetailRenderer from './detail_renderer.js'
+import ProductController from './controller/product_controller.js'
 
 const VALUE_ID = (index) => `v${index}`
 /**
@@ -19,18 +18,15 @@ export default function CardRenderer (selector = '') {
     }
     const cardResult = document.querySelector(selector)
     cardResult.innerHTML = cards()
+    htmx.process(cardResult)
 
     for (const i in value) {
       document.querySelector(`#editBtn${VALUE_ID(i)}`).onclick = () => {
-        CurrentProduct().set(document.querySelector(`#${VALUE_ID(i)}`))
-
-        Detail()
-        UpdateControl()
-
-        document.querySelector('#recentProduct').hidden = true
-        document.querySelector('#productDetail').hidden = false
+        handleEditProduct(`${VALUE_ID(i)}`)
       }
-      document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => handleDeleteProduct(`${VALUE_ID(i)}`)
+      document.querySelector(`#deleteBtn${VALUE_ID(i)}`).onclick = () => {
+        handleDeleteProduct(`${VALUE_ID(i)}`)
+      }
     }
   }
   return {
@@ -62,7 +58,9 @@ function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" id="editBtn${valueId}" data-bs-dismiss="modal">
+                                <a class="dropdown-item" id="editBtn${valueId}" data-bs-dismiss="modal"
+                                hx-get="/static/view/detail.html" hx-trigger="click" hx-swap="innerHTML"
+                                hx-target="#main">
                                     <img src="/static/assets/edit32.png" alt="blank">
                                 </a>
                             </li>
@@ -95,109 +93,6 @@ function handleDeleteProduct (cardId) {
   }
 }
 
-/**
- *Showing details of json object
- *
- */
-function Detail () {
-  const product = {
-    Product_id: 'id',
-    Product_title: '名稱',
-    Price: '價格',
-    Barcode: '條碼',
-    Publisher: '出版商',
-    Publication_date: '發行日',
-    Quantity: '數量',
-    Description: '說明'
-  }
-
-  const setDatePicker = (id) => {
-    const currentDate = new Date().toJSON().slice(0, 10)
-    const publicationDate = document.querySelector(`#${id}`)
-
-    publicationDate.type = 'date'
-    publicationDate.min = '1900-01-01'
-    publicationDate.max = `${currentDate}`
-  }
-
-  const addDetailValues = (obj = {}) => {
-    const keys = Object.keys(obj)
-    const current = CurrentProduct().json()
-    const dateId = 'Publication_date'
-    setDatePicker(dateId)
-
-    for (const i in keys) {
-      const k = keys[i]
-      const el = document.querySelector(`#${k}`)
-
-      if (k === dateId) {
-        el.value = current[k].substring(0, 10)
-      } else { el.value = current[k] }
-    }
-  }
-
-  DetailRenderer('#detailDisplay').render(product)
-  addDetailValues(product)
-
-  document.querySelector('#formProduct_id').hidden = true
-}
-
-function UpdateControl () {
-  const updateBtn = document.querySelector('#updateBtn')
-  const confirmBtn = document.querySelector('#confirmUpdateBtn')
-  const cancelBtn = document.querySelector('#cancelUpdateBtn')
-
-  const updateController = UpdateController()
-  const viewMode = () => {
-    cancelBtn.hidden = true
-    confirmBtn.hidden = true
-  }
-
-  viewMode()
-
-  const editMode = () => {
-    cancelBtn.hidden = false
-    confirmBtn.hidden = false
-  }
-  updateBtn.onclick = () => {
-    editMode()
-    updateBtn.hidden = true
-    updateController.enableUpdate()
-  }
-
-  cancelBtn.onclick = () => {
-    viewMode()
-    updateBtn.hidden = false
-    updateController.cancelUpdate()
-  }
-
-  confirmBtn.onclick = () => {
-    updateController.confirmUpdate()
-  }
-}
-
-function UpdateController () {
-  const form = document.querySelectorAll('.form-control')
-
-  const enableUpdate = () => {
-    for (const f of form) { f.disabled = false }
-  }
-
-  const cancelUpdate = () => {
-    for (const f of form) { f.disabled = true }
-  }
-
-  const confirmUpdate = async () => ProductController().updateProduct(() => {
-    const banner = document.querySelector('.alert')
-    banner.hidden = false
-
-    const alertText = document.querySelector('#alertText')
-    alertText.innerHTML = '更新成功'
-  })
-
-  return {
-    enableUpdate: () => enableUpdate(),
-    cancelUpdate: () => cancelUpdate(),
-    confirmUpdate: () => confirmUpdate()
-  }
+function handleEditProduct (cardId) {
+  CurrentProduct().set(document.querySelector(`#${cardId}`))
 }

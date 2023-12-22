@@ -1,6 +1,4 @@
-Filter()
-
-function Filter () {
+export default function Filters () {
   const operate = FilterOperation('#searchInput')
   const filters = [
     {
