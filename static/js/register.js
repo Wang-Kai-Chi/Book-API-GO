@@ -1,6 +1,4 @@
-Register()
-
-function Register () {
+export default function Register () {
   const User = () => {
     const user = {
       Id: '',

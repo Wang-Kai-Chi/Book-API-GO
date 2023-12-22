@@ -4,6 +4,11 @@
     <img src="/static/assets/search32.png" alt="blank">
 </button>
 
+<script type="module">
+    import SearchDialog from "./static/js/search_dialog.js"
+    document.querySelector('#confirmSearch').onclick = () => SearchDialog()
+</script>
+
 <div class="modal fade" id="searchDialog" tabindex="-1" data-bs-backdrop="true" data-bs-keyboard="true" role="dialog"
     aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">

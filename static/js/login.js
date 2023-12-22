@@ -1,9 +1,7 @@
 import UserInfo from './localstorage/user_info.js'
 import IknowToken from './localstorage/iknow_token.js'
 
-Login()
-
-function Login () {
+export default function Login () {
   const User = () => {
     const user = {
       Id: '',

@@ -1,9 +1,7 @@
 import UserInfo from './localstorage/user_info.js'
 import IknowToken from './localstorage/iknow_token.js'
 
-UserAvatar()
-
-function UserAvatar () {
+export default function UserAvatar () {
   const user = UserInfo().json()
 
   const logout = () => {
