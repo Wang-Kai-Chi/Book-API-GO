@@ -1,17 +1,9 @@
+import LocalStorage from './local_storage.js'
 /**
  * Interacting with iknow bearer token in localStorage
  * @constructor
- * @return {UserInfo}
- * json(): json of IknowToken
- * remove(): remove IknowToken from localStorage
- * set(): set string of IknowToken to localStorage
+ * @return {LocalStorage}
  */
 export default function IknowToken () {
-  const id = 'iknowtoken'
-
-  return {
-    json: () => { return JSON.parse(localStorage.getItem(id)) },
-    remove: () => localStorage.removeItem(id),
-    set: (info = '') => localStorage.setItem(id, info)
-  }
+  return LocalStorage('iknowtoken')
 }

@@ -14,9 +14,12 @@ function nodeScriptClone (node) {
   const script = document.createElement('script')
   script.text = node.innerHTML
 
-  let i = -1; const attrs = node.attributes; let attr
+  let i = -1
+  const attrs = node.attributes
+
   while (++i < attrs.length) {
-    script.setAttribute((attr = attrs[i]).name, attr.value)
+    const attr = attrs[i]
+    script.setAttribute(attr.name, attr.value)
   }
   return script
 }

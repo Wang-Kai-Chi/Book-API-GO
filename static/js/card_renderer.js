@@ -85,7 +85,7 @@ function CardHTML (product = { Product_title: '', Price: 0 }, index = 0) {
  * @param {*} cardId
  */
 function handleDeleteProduct (cardId) {
-  CurrentProduct().set(document.querySelector(`#${cardId}`))
+  CurrentProduct().set(document.querySelector(`#${cardId}`).innerHTML)
 
   if (confirm('Confirm delete?')) {
     ProductController().deleteProduct(() => alert('刪除成功'))
@@ -94,5 +94,5 @@ function handleDeleteProduct (cardId) {
 }
 
 function handleEditProduct (cardId) {
-  CurrentProduct().set(document.querySelector(`#${cardId}`))
+  CurrentProduct().set(document.querySelector(`#${cardId}`).innerHTML)
 }

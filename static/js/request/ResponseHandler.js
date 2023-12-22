@@ -1,4 +1,4 @@
-import NodeScriptReplace from '../node_script_replace.js'
+import NodeScriptReplace from './node_script_replace.js'
 
 export default function ResponseHandler () {
   const handleAuthurizationExpired = () => {
