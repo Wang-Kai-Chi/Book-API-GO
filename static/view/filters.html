@@ -1,7 +1,26 @@
 <script type="module" src="/static/js/filters.js"></script>
 <script type="module">
     import Filters from './static/js/filters.js'
-    Filters()
+    const filters = [
+        {
+            name: '名稱',
+            value: 'title'
+        },
+        {
+            name: '最低價格',
+            value: 'min'
+        },
+        {
+            name: '最高價格',
+            value: 'max'
+        },
+        {
+            name: '廠商',
+            value: 'publisher'
+        }
+    ]
+    Filters(filters)
 </script>
+
 <ul id="searchFilter" class="list-group ">
 </ul>

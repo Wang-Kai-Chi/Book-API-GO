@@ -1,23 +1,5 @@
-export default function Filters () {
+export default function Filters (filters = []) {
   const operate = FilterOperation('#searchInput')
-  const filters = [
-    {
-      name: '名稱',
-      value: 'title'
-    },
-    {
-      name: '最低價格',
-      value: 'min'
-    },
-    {
-      name: '最高價格',
-      value: 'max'
-    },
-    {
-      name: '廠商',
-      value: 'publisher'
-    }
-  ]
   const filterItems = () => {
     let temp = ''
     for (const f of filters) {
