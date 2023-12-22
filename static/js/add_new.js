@@ -1,12 +1,11 @@
 import DetailRenderer from './detail_renderer.js'
 import ProductController from './controller/product_controller.js'
 
-AddNewProduct()
 /**
  *Showing details of json object
  *
  */
-function AddNewProduct () {
+export default function AddNew () {
   const product = {
     Product_id: 'id',
     Product_title: '名稱',

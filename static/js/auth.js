@@ -1,23 +1,7 @@
 import IknowToken from './localstorage/iknow_token.js'
 import UserInfo from './localstorage/user_info.js'
 
-Auth()
-
-function Auth () {
-  const User = () => {
-    const user = {
-      Id: '',
-      Name: '',
-      Email: '',
-      Phone: '',
-      Password: ''
-    }
-    return {
-      this: () => { return user },
-      keys: () => { return Object.keys(user) }
-    }
-  }
-
+export default function Auth () {
   const getToken = async (user) => {
     fetch('/api/v1/jwt/token', {
       method: 'POST',
@@ -41,9 +25,8 @@ function Auth () {
 
   const submit = () => {
     const password = document.querySelector('#password')
-    let user = User().this()
 
-    user = UserInfo().json()
+    const user = UserInfo().json()
     user.Password = password.value
 
     getToken(JSON.stringify(user))
