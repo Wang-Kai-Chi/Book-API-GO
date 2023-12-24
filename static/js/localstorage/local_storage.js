@@ -1,3 +1,10 @@
+/**
+ * Encapsulating localStorage API
+ *
+ * @export
+ * @param {string} [key='']
+ * @return {*}
+ */
 export default function LocalStorage (key = '') {
   return {
     string: () => { return localStorage.getItem(key) },

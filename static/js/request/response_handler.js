@@ -21,7 +21,7 @@ export default function ResponseHandler () {
    * @param {*} [success=() => { }]
    * @return {Promise().json()}
    */
-  const handleResponse = (res = Promise(), success = () => { }) => {
+  const handleResponse = (res = Promise(), success = () => {}) => {
     const d = res.json()
     if (res.status === 200) {
       success()

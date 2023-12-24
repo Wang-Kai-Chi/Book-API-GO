@@ -17,6 +17,8 @@ export default function Register () {
   const submit = component('#submit')
 
   submit.onclick = () => {
+    const user = User().this()
+
     if (component('#password').value !== component('#confirmpw').value) {
       const alertText = component('#alertText')
       alertText.innerHTML = '確認密碼錯誤'
@@ -24,14 +26,13 @@ export default function Register () {
       const alert = component('.alert')
       alert.hidden = false
     } else {
-      const user = User().this()
       for (const k of User().keys()) {
         const compV = (component(`#${k.toLowerCase()}`) === null)
           ? ''
           : component(`#${k.toLowerCase()}`).value
         user[k] = compV
       }
-      console.log(user)
+
       fetch('/api/v1/user/insert', {
         method: 'POST',
         body: JSON.stringify(user),

@@ -1,4 +1,5 @@
 import CurrentProduct from './localstorage/current_product.js'
+import ProductFormExtractor from './product_form_extractor.js'
 import ProductController from './controller/product_controller.js'
 import DetailRenderer from './detail_renderer.js'
 
@@ -96,13 +97,18 @@ function UpdateController () {
     for (const f of form) { f.disabled = true }
   }
 
-  const confirmUpdate = async () => ProductController().updateProduct(() => {
+  function updateSuccess () {
     const banner = document.querySelector('.alert')
     banner.hidden = false
 
     const alertText = document.querySelector('#alertText')
     alertText.innerHTML = '更新成功'
-  })
+  }
+
+  const confirmUpdate = async () => {
+    const bodyStr = JSON.stringify([ProductFormExtractor().extractProduct()])
+    ProductController().updateProduct(updateSuccess, bodyStr)
+  }
 
   return {
     enableUpdate: () => enableUpdate(),

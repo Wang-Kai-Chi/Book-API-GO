@@ -1,7 +1,5 @@
-import ProductFormExtractor from '../product_form_extractor.js'
-import IknowHeaders from '../request/IknowHeaders.js'
-import ResponseHandler from '../request/ResponseHandler.js'
-import CurrentProduct from '../localstorage/current_product.js'
+import IknowHeaders from '../request/iknow_headers.js'
+import ResponseHandler from '../request/response_handler.js'
 
 /**
  *
@@ -12,32 +10,32 @@ import CurrentProduct from '../localstorage/current_product.js'
 export default function ProductController () {
   const service = ProductService()
 
-  const getProductsByConditions = async (conditions) => {
+  const getProductsByConditions = (conditions) => {
     return service.getProduct(`/api/v1/product/query/?${conditions}`)
   }
 
-  const getProductsByBarcode = async (barcode) => {
+  const getProductsByBarcode = (barcode) => {
     return service.getProduct(`/api/v1/product/query/barcode/${barcode}`)
   }
 
-  const updateProduct = async (success = () => {}) => {
-    return service.updateProduct('/api/v1/product/update', success())
+  const updateProduct = (success = () => {}, bodyStr = '') => {
+    return service.updateProduct('/api/v1/product/update', success, bodyStr)
   }
 
-  const deleteProduct = async (success = () => {}) => {
-    return service.deleteProduct('/api/v1/product/delete', success())
+  const deleteProduct = (success = () => {}, bodyStr = '') => {
+    return service.deleteProduct('/api/v1/product/delete', success, bodyStr)
   }
 
-  const addProduct = async (success = () => {}) => {
-    return service.addProduct('/api/v1/product/insert', success())
+  const addProduct = (success = () => {}, bodyStr = '') => {
+    return service.addProduct('/api/v1/product/insert', success, bodyStr)
   }
 
   return {
     getProductsByConditions: (conditions = '') => getProductsByConditions(conditions),
     getProductsByBarcode: (barcode = '') => getProductsByBarcode(barcode),
-    updateProduct: (success = () => {}) => updateProduct(success()),
-    deleteProduct: (success = () => {}) => deleteProduct(success()),
-    addProduct: (success = () => {}) => addProduct(success())
+    updateProduct: (success = () => {}, bodyStr = '') => updateProduct(success, bodyStr),
+    deleteProduct: (success = () => {}, bodyStr = '') => deleteProduct(success, bodyStr),
+    addProduct: (success = () => {}, bodyStr = '') => addProduct(success, bodyStr)
   }
 }
 
@@ -50,36 +48,31 @@ function ProductService () {
       .catch(err => console.log(err))
   }
 
-  const updateProduct = async (url, success = () => {}) => {
+  const ajax = async (url = '', met = '', bodyStr = '', success = () => {}) => {
     return fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify([ProductFormExtractor().extractProduct()]),
+      method: met,
+      body: bodyStr,
       headers: IknowHeaders().get()
-    }).then(res => ResponseHandler().run(res, success())).catch(err => console.log(err))
-  }
-
-  const deleteProduct = async (url, success = () => {}) => {
-    return fetch(url, {
-      method: 'DELETE',
-      body: JSON.stringify([CurrentProduct().json()]),
-      headers: IknowHeaders().get()
-    }).then(res => ResponseHandler().run(res, success(res)))
+    }).then(res => ResponseHandler().run(res, success))
       .catch(err => console.log(err))
   }
 
-  const addProduct = async (url, success = () => {}) => {
-    return fetch(url, {
-      method: 'POST',
-      body: JSON.stringify([ProductFormExtractor().extractProduct()]),
-      headers: IknowHeaders().get()
-    }).then(res => ResponseHandler().run(res, success()))
-      .catch(err => console.log(err))
+  const updateProduct = (url, success = () => {}, bodyStr = '') => {
+    return ajax(url, 'PUT', bodyStr, success)
+  }
+
+  const deleteProduct = (url, success = () => {}, bodyStr = '') => {
+    return ajax(url, 'DELETE', bodyStr, success)
+  }
+
+  const addProduct = (url, success = () => {}, bodyStr = '') => {
+    return ajax(url, 'POST', bodyStr, success)
   }
 
   return {
     getProduct: (url = '') => getProduct(url),
-    updateProduct: (url = '', success = () => {}) => updateProduct(url, success()),
-    deleteProduct: (url = '', success = () => {}) => deleteProduct(url, success()),
-    addProduct: (url = '', success = () => {}) => addProduct(url, success())
+    updateProduct: (url = '', success = () => {}, bodyStr = '') => updateProduct(url, success, bodyStr),
+    deleteProduct: (url = '', success = () => {}, bodyStr = '') => deleteProduct(url, success, bodyStr),
+    addProduct: (url = '', success = () => {}, bodyStr = '') => addProduct(url, success, bodyStr)
   }
 }

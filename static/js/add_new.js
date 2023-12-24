@@ -1,5 +1,6 @@
 import DetailRenderer from './detail_renderer.js'
 import ProductController from './controller/product_controller.js'
+import ProductFormExtractor from '../product_form_extractor.js'
 
 /**
  *Showing details of json object
@@ -34,5 +35,7 @@ export default function AddNew () {
 
   for (const f of form) { f.disabled = false }
 
-  document.querySelector('#confirmAdd').onclick = () => ProductController().addProduct(() => alert('新增成功'))
+  document.querySelector('#confirmAdd').onclick = () => ProductController().addProduct(
+    () => alert('新增成功'),
+    JSON.stringify([ProductFormExtractor().extractProduct()]))
 }

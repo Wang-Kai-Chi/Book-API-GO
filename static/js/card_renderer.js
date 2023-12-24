@@ -88,7 +88,8 @@ function handleDeleteProduct (cardId) {
   CurrentProduct().set(document.querySelector(`#${cardId}`).innerHTML)
 
   if (confirm('Confirm delete?')) {
-    ProductController().deleteProduct(() => alert('刪除成功'))
+    ProductController().deleteProduct(() => alert('刪除成功'),
+      JSON.stringify([CurrentProduct().json()]))
     document.querySelector(`#card${cardId}`).hidden = true
   }
 }
