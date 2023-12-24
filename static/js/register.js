@@ -1,3 +1,5 @@
+import UserController from './controller/user_controller.js'
+
 export default function Register () {
   const User = () => {
     const user = {
@@ -33,22 +35,7 @@ export default function Register () {
         user[k] = compV
       }
 
-      fetch('/api/v1/user/insert', {
-        method: 'POST',
-        body: JSON.stringify(user),
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      }).then(res => {
-        const d = res.json()
-        if (res.status === 200) {
-          return d
-        } else {
-          console.log('Register failed')
-          return d.then(Promise.reject.bind(Promise))
-        }
-      }).then(() => location.reload())
-        .catch(err => console.log(err))
+      UserController().addUser(JSON.stringify(user))
     }
   }
 }

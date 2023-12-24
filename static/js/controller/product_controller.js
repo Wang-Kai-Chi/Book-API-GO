@@ -48,31 +48,39 @@ function ProductService () {
       .catch(err => console.log(err))
   }
 
-  const ajax = async (url = '', met = '', bodyStr = '', success = () => {}) => {
-    return fetch(url, {
+  const RequestArgs = () => {
+    return {
+      url: '',
+      bodyStr: '',
+      success: () => {}
+    }
+  }
+
+  const ajax = async (met = '', args = RequestArgs()) => {
+    return fetch(args.url, {
       method: met,
-      body: bodyStr,
+      body: args.bodyStr,
       headers: IknowHeaders().get()
-    }).then(res => ResponseHandler().run(res, success))
+    }).then(res => ResponseHandler().run(res, args.success))
       .catch(err => console.log(err))
   }
 
-  const updateProduct = (url, success = () => {}, bodyStr = '') => {
-    return ajax(url, 'PUT', bodyStr, success)
+  const updateProduct = (args = RequestArgs()) => {
+    return ajax('PUT', args)
   }
 
-  const deleteProduct = (url, success = () => {}, bodyStr = '') => {
-    return ajax(url, 'DELETE', bodyStr, success)
+  const deleteProduct = (args = RequestArgs()) => {
+    return ajax('DELETE', args)
   }
 
-  const addProduct = (url, success = () => {}, bodyStr = '') => {
-    return ajax(url, 'POST', bodyStr, success)
+  const addProduct = (args = RequestArgs()) => {
+    return ajax('POST', args)
   }
 
   return {
     getProduct: (url = '') => getProduct(url),
-    updateProduct: (url = '', success = () => {}, bodyStr = '') => updateProduct(url, success, bodyStr),
-    deleteProduct: (url = '', success = () => {}, bodyStr = '') => deleteProduct(url, success, bodyStr),
-    addProduct: (url = '', success = () => {}, bodyStr = '') => addProduct(url, success, bodyStr)
+    updateProduct: (url = '', success = () => {}, bodyStr = '') => updateProduct({ url, bodyStr, success }),
+    deleteProduct: (url = '', success = () => {}, bodyStr = '') => deleteProduct({ url, bodyStr, success }),
+    addProduct: (url = '', success = () => {}, bodyStr = '') => addProduct({ url, bodyStr, success })
   }
 }
