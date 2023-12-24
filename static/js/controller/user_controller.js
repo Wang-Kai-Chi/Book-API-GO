@@ -37,10 +37,16 @@ export default function UserController () {
         return d.then(Promise.reject.bind(Promise))
       }
     }).then(data => {
-      JwtController().getToken(JSON.stringify(data))
+      const noPswUser = () => {
+        const temp = data
+        temp.Password = ''
+        return JSON.stringify(temp)
+      }
 
-      data.Password = ''
-      UserInfo().set(JSON.stringify(data))
+      UserInfo().set(noPswUser())
+
+      JwtController().getToken(JSON.stringify(data))
+        .then(() => location.reload())
     }).catch(err => console.log(err))
   }
 

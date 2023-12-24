@@ -18,7 +18,6 @@ export default function JwtController () {
       }
     }).then(data => {
       IknowToken().set(JSON.stringify(data))
-      location.reload()
     }).catch(err => console.log(err))
   }
 
