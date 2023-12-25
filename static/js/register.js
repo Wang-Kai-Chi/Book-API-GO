@@ -23,7 +23,9 @@ export default function Register () {
         user[k] = compV
       }
 
-      UserController().addUser(JSON.stringify(user))
+      const userStr = JSON.stringify(user)
+
+      UserController().addUser(userStr)
     }
   }
 }

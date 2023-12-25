@@ -112,6 +112,21 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 	readAndHandleRequestBody(ctx, handleUser)
 }
 
+func (serv UserService) FindUserId(ctx *gin.Context) {
+	readAndHandleRequestBody(ctx, func(user User) {
+		users := serv.repo.FindUserInfo(user)
+		if len(users) > 0 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"id": users[0].Id,
+			})
+		} else {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"Response": "user not found",
+			})
+		}
+	})
+}
+
 func (ser UserService) UpdateUserAuth(ctx *gin.Context) {
 	handleUser := func(usr User) {
 		result := ser.repo.UpdateUserAuth(usr)
