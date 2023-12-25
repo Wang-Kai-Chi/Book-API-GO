@@ -50,8 +50,29 @@ export default function UserController () {
     }).catch(err => console.log(err))
   }
 
+  const authurize = (bodyStr) => {
+    return fetch('/api/v1/user/auth', {
+      method: 'POST',
+      body: bodyStr,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(res => {
+      const d = res.json()
+      if (res.status === 200) {
+        return d
+      } else {
+        return d.then(Promise.reject.bind(Promise))
+      }
+    }).then(data => {
+      console.log(data)
+    })
+      .catch(err => console.log(err))
+  }
+
   return {
     addUser: (bodyStr = '') => addUser(bodyStr),
-    login: (bodyStr = '') => login(bodyStr)
+    login: (bodyStr = '') => login(bodyStr),
+    authurize: (bodyStr = '') => authurize(bodyStr)
   }
 }

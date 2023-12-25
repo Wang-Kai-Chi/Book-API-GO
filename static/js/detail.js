@@ -3,8 +3,8 @@ import CurrentProduct from './localstorage/current_product.js'
 import ProductFormExtractor from './product_form_extractor.js'
 import DetailRenderer from './detail_renderer.js'
 import ProductController from './controller/product_controller.js'
-import DatePicker from './date_picker.js'
-import { product } from './product.js'
+import DatePicker from './util/date_picker.js'
+import { product } from './data/product.js'
 
 /**
  *Showing details of json object

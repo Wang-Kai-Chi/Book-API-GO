@@ -1,5 +1,5 @@
 import UserController from './controller/user_controller.js'
-import User from './user.js'
+import User from './data/user.js'
 
 export default function Register () {
   const component = (selector = '') => { return document.querySelector(selector) }

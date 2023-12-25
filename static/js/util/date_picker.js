@@ -1,10 +1,11 @@
 export default function DatePicker () {
   const setDatePicker = (selector) => {
-    const currentDate = new Date().toJSON().slice(0, 10)
     const publicationDate = document.querySelector(selector)
 
     publicationDate.type = 'date'
     publicationDate.min = '1900-01-01'
+
+    const currentDate = new Date().toJSON().slice(0, 10)
     publicationDate.max = `${currentDate}`
   }
 
