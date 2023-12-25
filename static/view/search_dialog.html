@@ -1,9 +1,8 @@
-<script type="module" src="/static/js/search_dialog.js"></script>
-
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#searchDialog">
     <img src="/static/assets/search32.png" alt="blank">
 </button>
 
+<script type="module" src="/static/js/search_dialog.js"></script>
 <script type="module">
     import SearchDialog from "./static/js/search_dialog.js"
     document.querySelector('#confirmSearch').onclick = () => SearchDialog()
@@ -32,8 +31,6 @@
                 </div>
                 <h4>結果</h4>
                 <div id="resultView">
-                    <div id="cardResult">
-                    </div>
                 </div>
             </div>
             <div class="modal-footer float-start ">

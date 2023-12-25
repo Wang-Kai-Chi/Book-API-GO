@@ -1,38 +1,22 @@
 import CurrentProduct from './localstorage/current_product.js'
+
 import ProductFormExtractor from './product_form_extractor.js'
-import ProductController from './controller/product_controller.js'
 import DetailRenderer from './detail_renderer.js'
+import ProductController from './controller/product_controller.js'
+import DatePicker from './date_picker.js'
+import { product } from './product.js'
 
 /**
  *Showing details of json object
  *
  */
 export default function Detail () {
-  const product = {
-    Product_id: 'id',
-    Product_title: '名稱',
-    Price: '價格',
-    Barcode: '條碼',
-    Publisher: '出版商',
-    Publication_date: '發行日',
-    Quantity: '數量',
-    Description: '說明'
-  }
-
-  const setDatePicker = (id) => {
-    const currentDate = new Date().toJSON().slice(0, 10)
-    const publicationDate = document.querySelector(`#${id}`)
-
-    publicationDate.type = 'date'
-    publicationDate.min = '1900-01-01'
-    publicationDate.max = `${currentDate}`
-  }
-
   const addDetailValues = (obj = {}) => {
+    const dateId = '#Publication_date'
+    DatePicker().set(dateId)
+
     const keys = Object.keys(obj)
     const current = CurrentProduct().json()
-    const dateId = 'Publication_date'
-    setDatePicker(dateId)
 
     for (const i in keys) {
       const k = keys[i]
@@ -40,7 +24,9 @@ export default function Detail () {
 
       if (k === dateId) {
         el.value = current[k].substring(0, 10)
-      } else { el.value = current[k] }
+      } else {
+        el.value = current[k]
+      }
     }
   }
 

@@ -1,19 +1,7 @@
 import UserController from './controller/user_controller.js'
+import User from './user.js'
 
 export default function Register () {
-  const User = () => {
-    const user = {
-      Id: '',
-      Name: '',
-      Email: '',
-      Phone: '',
-      Password: ''
-    }
-    return {
-      this: () => { return user },
-      keys: () => { return Object.keys(user) }
-    }
-  }
   const component = (selector = '') => { return document.querySelector(selector) }
 
   const submit = component('#submit')

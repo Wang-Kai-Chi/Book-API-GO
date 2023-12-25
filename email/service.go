@@ -5,17 +5,20 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	. "iknowbook.com/app/data"
+	. "iknowbook.com/app/user"
 )
 
 type EmailService struct {
+	userRepo UserRepository
 }
 
-func NewEmailService() EmailService {
-	return EmailService{}
+func NewEmailService(userRepo UserRepository) EmailService {
+	return EmailService{
+		userRepo: userRepo,
+	}
 }
 
 func handleInternalError(err error, ctx *gin.Context) {
@@ -37,20 +40,12 @@ func mustGetUserFromBody(ctx *gin.Context) User {
 	return us
 }
 
-func mustReadEmailForm() string {
-	htmlF, err := os.ReadFile("../static/verify_email_form.html")
-	if err != nil {
-		panic(err)
-	}
-	return string(htmlF)
-}
-
 func (serv EmailService) SendVerificationEmail(ctx *gin.Context) {
 	sendVerificationMail := func(receiver string) {
 		form := EMail{
 			Sender:   "ericwangcatch@gmail.com",
 			Subject:  "Iknowbook email Verification",
-			HTMLBody: string(mustReadEmailForm()),
+			HTMLBody: string(MustReadEmailForm()),
 		}
 		form.Receiver = receiver
 
@@ -68,7 +63,14 @@ func (serv EmailService) SendVerificationEmail(ctx *gin.Context) {
 
 	VerifyUserEmail(ctx,
 		func(ctx *gin.Context, user User) {
-			sendVerificationMail(user.Email)
+			users := serv.userRepo.FindExactUserInfo(user)
+			if len(users) > 0 {
+				sendVerificationMail(user.Email)
+			} else {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"Response": "Not registered user.",
+				})
+			}
 		},
 	)
 }

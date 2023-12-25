@@ -1,20 +1,7 @@
 import UserController from './controller/user_controller.js'
+import User from './user.js'
 
 export default function Login () {
-  const User = () => {
-    const user = {
-      Id: '',
-      Name: '',
-      Email: '',
-      Phone: '',
-      Password: ''
-    }
-    return {
-      this: () => { return user },
-      keys: () => { return Object.keys(user) }
-    }
-  }
-
   const submit = () => {
     const email = document.querySelector('#email')
     const password = document.querySelector('#password')
