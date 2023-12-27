@@ -8,8 +8,12 @@
 </head>
 
 <body>
-    <h2>Email Verify Successful</h2>
-    <p>You can close this page, and return to website now.</p>
+    <div id="message">User Authurization failed.</div>
+    <script type="module" src="/static/js/verify_success.js"></script>
+    <script type="module">
+        import VerifySuccess from "/static/js/verify_success.js"
+        VerifySuccess()
+    </script>
 </body>
 
 </html>

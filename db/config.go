@@ -3,6 +3,7 @@ package db
 import (
 	"embed"
 	"encoding/json"
+	"log"
 )
 
 type Config struct {
@@ -21,10 +22,10 @@ func MustGetConfig() Config {
 	if err == nil {
 		err := json.Unmarshal(raw, &con)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	} else {
-		panic(err)
+		log.Println(err)
 	}
 	return con
 }

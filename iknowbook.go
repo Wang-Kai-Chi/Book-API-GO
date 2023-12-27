@@ -29,7 +29,7 @@ func mustInitRepos() {
 		productRepo = product.NewProductRepository(db)
 		userRepo = user.NewUserRepository(db)
 	} else {
-		log.Fatal("No Database connection")
+		log.Println("No Database connection. ERROR: " + err.Error())
 	}
 }
 
@@ -69,9 +69,11 @@ func (w Iknowbook) Init() {
 
 	addr := "localhost"
 	port := ":8081"
-	println("server start at " + addr + port)
 
-	router.Run(addr + port)
+	err := router.Run(addr + port)
+	if err != nil {
+		log.Println("server start failed" + err.Error())
+	}
 
 }
 

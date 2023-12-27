@@ -1,5 +1,6 @@
 import UserInfo from '../localstorage/user_info.js'
 import JwtController from './jwt_controller.js'
+import ResponseHandler from '../request/response_handler.js'
 
 export default function UserController () {
   const addUser = (bodyStr) => {
@@ -10,13 +11,7 @@ export default function UserController () {
         'Content-Type': 'application/json'
       })
     }).then(res => {
-      const d = res.json()
-      if (res.status === 200) {
-        return d
-      } else {
-        console.log('Register failed')
-        return d.then(Promise.reject.bind(Promise))
-      }
+      ResponseHandler.run(res)
     }).then(() => location.reload())
       .catch(err => console.log(err))
   }
@@ -29,13 +24,7 @@ export default function UserController () {
         'Content-Type': 'application/json'
       })
     }).then(res => {
-      const d = res.json()
-      if (res.status === 200) {
-        return d
-      } else {
-        alert('電子郵件或密碼錯誤')
-        return d.then(Promise.reject.bind(Promise))
-      }
+      ResponseHandler.run(res)
     }).then(data => {
       const noPswUser = () => {
         const temp = data
@@ -50,7 +39,7 @@ export default function UserController () {
     }).catch(err => console.log(err))
   }
 
-  const authurize = (bodyStr) => {
+  const authurize = (bodyStr, success = () => {}) => {
     return fetch('/api/v1/user/auth', {
       method: 'POST',
       body: bodyStr,
@@ -58,14 +47,22 @@ export default function UserController () {
         'Content-Type': 'application/json'
       })
     }).then(res => {
-      const d = res.json()
-      if (res.status === 200) {
-        return d
-      } else {
-        return d.then(Promise.reject.bind(Promise))
-      }
+      ResponseHandler().run(res, success)
+    })
+      .catch(err => console.log(err))
+  }
+
+  const getUserId = (bodyStr) => {
+    return fetch('/api/v1/user/auth', {
+      method: 'POST',
+      body: bodyStr,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(res => {
+      ResponseHandler.run(res)
     }).then(data => {
-      console.log(data)
+      UserInfo().set(data)
     })
       .catch(err => console.log(err))
   }
@@ -73,6 +70,7 @@ export default function UserController () {
   return {
     addUser: (bodyStr = '') => addUser(bodyStr),
     login: (bodyStr = '') => login(bodyStr),
-    authurize: (bodyStr = '') => authurize(bodyStr)
+    authurize: (bodyStr = '', success = () => {}) => authurize(bodyStr, success),
+    getUserId: (bodyStr = '') => getUserId(bodyStr)
   }
 }
