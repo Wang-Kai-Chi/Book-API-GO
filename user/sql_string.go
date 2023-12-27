@@ -9,6 +9,7 @@ type UserSqlStr struct {
 	QueryWithLimit       string
 	QueryByUserInfo      string
 	QueryByExactUserInfo string
+	QueryById            string
 
 	UpdateUserAuth string
 	Insert         string
@@ -35,6 +36,7 @@ func NewUserSqlStr() UserSqlStr {
 		QueryWithLimit:       getSql("query_with_limit.sql"),
 		QueryByUserInfo:      getSql("query_by_userinfo.sql"),
 		QueryByExactUserInfo: getSql("query_by_exact_userinfo.sql"),
+		QueryById:            getSql("query_by_id.sql"),
 
 		UpdateUserAuth: getSql("update_user_auth.sql"),
 		Insert:         getSql("insert.sql"),

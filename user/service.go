@@ -43,6 +43,10 @@ func readAndHandleRequestBody(ctx *gin.Context, operation func(User)) {
 	}
 }
 
+func (ser UserService) QueryById(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, ser.repo.QueryById(ctx.Param("id")))
+}
+
 func (ser UserService) InsertUser(ctx *gin.Context, user User) {
 	checkUserExist := func(result sql.Result, us User) {
 		affectedRows, err := result.RowsAffected()

@@ -84,3 +84,10 @@ func TestUpdataUserAuth(t *testing.T) {
 		t.Log(u.UpdateUserAuth(user).RowsAffected())
 	}, t)
 }
+
+func TestQueryById(t *testing.T) {
+	startDBOperateTest(func(ur UserRepository) {
+		id := "d8f34f29-2f6b-4725-ba78-bbc871e6f5e6"
+		t.Log(ur.QueryById(id))
+	}, t)
+}

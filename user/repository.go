@@ -32,6 +32,10 @@ func (repo UserRepository) QueryWithLimit(limit int) []User {
 	return repo.QueryEntity(NewUserSqlStr().QueryWithLimit, limit)
 }
 
+func (repo UserRepository) QueryById(id string) []User {
+	return repo.QueryEntity(NewUserSqlStr().QueryById, id)
+}
+
 func (repo UserRepository) ExecSql(str string, us []User) sql.Result {
 	return ExecSql[[]User](repo.Connection, str, us)
 }
