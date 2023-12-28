@@ -133,7 +133,12 @@ func (serv UserService) FindUserId(ctx *gin.Context) {
 
 func (ser UserService) UpdateUserAuth(ctx *gin.Context) {
 	handleUser := func(usr User) {
-		result := ser.repo.UpdateUserAuth(usr)
+		var auth UserAuth
+		userWithAuth := User{
+			Id:   usr.Id,
+			Auth: string(auth.MustGetAuth()),
+		}
+		result := ser.repo.UpdateUserAuth(userWithAuth)
 		affectedRows, err := result.RowsAffected()
 		if err == nil {
 			if affectedRows > 0 {
