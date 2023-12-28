@@ -45,7 +45,7 @@ function ProductService () {
       method: 'GET',
       headers: IknowHeaders().get()
     }).then(res => ResponseHandler().run(res))
-      .catch(err => console.log(err))
+      .catch(err => alert(err.Response))
   }
 
   const RequestArgs = () => {
@@ -62,7 +62,7 @@ function ProductService () {
       body: args.bodyStr,
       headers: IknowHeaders().get()
     }).then(res => ResponseHandler().run(res, args.success))
-      .catch(err => console.log(err))
+      .catch(err => alert(err.Response))
   }
 
   const updateProduct = (args = RequestArgs()) => {

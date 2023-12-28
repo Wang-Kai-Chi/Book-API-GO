@@ -1,5 +1,6 @@
 import UserController from './controller/user_controller.js'
 import User from './data/user.js'
+import UserInfo from './localstorage/user_info.js'
 
 export default function Register () {
   const component = (selector = '') => { return document.querySelector(selector) }
@@ -25,7 +26,20 @@ export default function Register () {
 
       const userStr = JSON.stringify(user)
 
-      UserController().addUser(userStr)
+      UserController().addUser(userStr).then(data => {
+        fetch('/api/v1/email/send', {
+          method: 'POST',
+          body: userStr,
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          })
+        }).then(res => {
+          return res.json()
+        }).then(data => {
+          UserInfo().set(JSON.stringify(data))
+          alert(data.Response)
+        }).catch(err => console.log(err.Response))
+      })
     }
   }
 }

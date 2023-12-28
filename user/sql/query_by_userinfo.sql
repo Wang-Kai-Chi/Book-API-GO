@@ -1,5 +1,5 @@
 select * from admin_user 
 where 
-name=? or
-email=? or
+name=? and 
+email=? and
 phone=?

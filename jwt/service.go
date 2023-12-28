@@ -83,11 +83,11 @@ func VerifyBearerToken(ctx *gin.Context, authOp func(ctx *gin.Context)) {
 			} else {
 				if len(bearer) <= 0 {
 					ctx.JSON(http.StatusBadRequest, gin.H{
-						"Result": "No bearer token found in header.",
+						"Response": "No bearer token found in header.",
 					})
 				} else {
 					ctx.JSON(http.StatusUnauthorized, gin.H{
-						"Result": "Token expired or not jwt.",
+						"Response": "Token expired or not jwt.",
 					})
 				}
 			}
@@ -112,7 +112,7 @@ func (serv JwtService) VerifyJWTToken(ctx *gin.Context) {
 	VerifyBearerToken(ctx,
 		func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
-				"Result": "Authorized",
+				"Response": "Authorized",
 			})
 		},
 	)
