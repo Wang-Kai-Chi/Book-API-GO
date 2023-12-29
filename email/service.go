@@ -63,7 +63,7 @@ func (serv EmailService) SendVerificationEmail(ctx *gin.Context) {
 
 	VerifyUserEmail(ctx,
 		func(ctx *gin.Context, user User) {
-			users := serv.userRepo.FindUserInfo(user)
+			users := serv.userRepo.FindUserByEmail(user)
 			if len(users) > 0 {
 				sendVerificationMail(user.Email)
 			} else {

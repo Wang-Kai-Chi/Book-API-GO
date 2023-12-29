@@ -11,7 +11,6 @@ not exists (
 	from admin_user
 	where 
 	name=$1 or 
-	email=$2 or
-	phone=$3
+	email=$2
 )
 on conflict do nothing;

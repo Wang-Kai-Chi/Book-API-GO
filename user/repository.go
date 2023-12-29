@@ -47,11 +47,8 @@ func (repo UserRepository) Insert(us User) sql.Result {
 	)
 }
 
-func (repo UserRepository) FindUserInfo(us User) []User {
-	return repo.QueryEntity(
-		NewUserSqlStr().QueryByUserInfo,
-		us.Name, us.Email, us.Phone,
-	)
+func (repo UserRepository) FindUserByEmail(us User) []User {
+	return repo.QueryEntity(NewUserSqlStr().QueryByEmail, us.Email)
 }
 
 func (repo UserRepository) FindExactUserInfo(us User) []User {

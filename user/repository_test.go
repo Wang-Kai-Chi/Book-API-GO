@@ -51,12 +51,12 @@ func TestFindUserInfo(t *testing.T) {
 	startDBOperateTest(func(u UserRepository) {
 		user := User{
 			Id:       "",
-			Name:     "testuserA",
-			Email:    "testA@mail.com",
-			Phone:    "a123456",
-			Password: "testPassword",
+			Name:     "",
+			Email:    "ericwangcatch@gmail.com",
+			Phone:    "",
+			Password: "",
 		}
-		t.Log(u.FindUserInfo(user))
+		t.Log(u.FindUserByEmail(user))
 	}, t)
 }
 

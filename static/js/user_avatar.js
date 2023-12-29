@@ -10,9 +10,13 @@ export default function UserAvatar () {
     location.reload()
   }
   const userDropList = document.querySelector('#userDroplist')
-  if (user !== null) {
-    userDropList.innerHTML = LoggedinListHTML(user.Name)
-    document.querySelector('#logout').onclick = () => logout()
+  if (user !== null && user !== '') {
+    if (user.Name !== null && user.Name !== '') {
+      userDropList.innerHTML = LoggedinListHTML(user.Name)
+      document.querySelector('#logout').onclick = () => logout()
+    } else {
+      userDropList.innerHTML = DefaultListHTML()
+    }
   } else {
     userDropList.innerHTML = DefaultListHTML()
   }

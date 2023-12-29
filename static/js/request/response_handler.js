@@ -30,6 +30,7 @@ export default function ResponseHandler () {
       handleAuthurizationExpired()
       return d.then(Promise.reject.bind(Promise))
     } else {
+      alert('驗證失敗')
       return d.then(Promise.reject.bind(Promise))
     }
   }

@@ -89,7 +89,7 @@ func (ser UserService) Insert(ctx *gin.Context) {
 	readAndHandleRequestBody(ctx, insertUser)
 }
 
-func (ser UserService) FindUserInfo(ctx *gin.Context) {
+func (ser UserService) Login(ctx *gin.Context) {
 	handleUser := func(us User) {
 		comparePassword := func(user User, pw string, ctx *gin.Context) {
 			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pw))
@@ -102,7 +102,7 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 			}
 		}
 
-		users := ser.repo.FindUserInfo(us)
+		users := ser.repo.FindUserByEmail(us)
 
 		if len(users) > 0 {
 			comparePassword(users[0], us.Password, ctx)
@@ -118,7 +118,7 @@ func (ser UserService) FindUserInfo(ctx *gin.Context) {
 
 func (serv UserService) FindUserId(ctx *gin.Context) {
 	readAndHandleRequestBody(ctx, func(user User) {
-		users := serv.repo.FindUserInfo(user)
+		users := serv.repo.FindUserByEmail(user)
 		if len(users) > 0 {
 			ctx.JSON(http.StatusOK, gin.H{
 				"id": users[0].Id,

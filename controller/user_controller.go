@@ -21,7 +21,7 @@ func NewUserController(service UserService, router *gin.Engine) UserController {
 func (ctr UserController) Run() {
 	ctr.QueryById()
 
-	ctr.FindExactUserInfo()
+	ctr.Login()
 	ctr.FindUserId()
 	ctr.Insert()
 	ctr.UpdateUserAuth()
@@ -39,8 +39,8 @@ func (ctr UserController) Insert() {
 	)
 }
 
-func (ctr UserController) FindExactUserInfo() {
-	ctr.group.POST("/login", ctr.service.FindUserInfo)
+func (ctr UserController) Login() {
+	ctr.group.POST("/login", ctr.service.Login)
 }
 
 func (ctr UserController) UpdateUserAuth() {

@@ -7,7 +7,7 @@ import (
 
 type UserSqlStr struct {
 	QueryWithLimit       string
-	QueryByUserInfo      string
+	QueryByEmail         string
 	QueryByExactUserInfo string
 	QueryById            string
 
@@ -34,7 +34,7 @@ func getSql(fileName string) string {
 func NewUserSqlStr() UserSqlStr {
 	return UserSqlStr{
 		QueryWithLimit:       getSql("query_with_limit.sql"),
-		QueryByUserInfo:      getSql("query_by_userinfo.sql"),
+		QueryByEmail:         getSql("query_by_email.sql"),
 		QueryByExactUserInfo: getSql("query_by_exact_userinfo.sql"),
 		QueryById:            getSql("query_by_id.sql"),
 

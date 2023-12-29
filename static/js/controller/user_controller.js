@@ -3,7 +3,7 @@ import JwtController from './jwt_controller.js'
 import ResponseHandler from '../request/response_handler.js'
 
 export default function UserController () {
-  const addUser = (bodyStr, success) => {
+  const addUser = async (bodyStr) => {
     return fetch('/api/v1/user/insert', {
       method: 'POST',
       body: bodyStr,
@@ -11,11 +11,11 @@ export default function UserController () {
         'Content-Type': 'application/json'
       })
     }).then(res => {
-      ResponseHandler().run(res, success)
+      ResponseHandler().run(res)
     }).catch(err => console.log(err))
   }
 
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     const noPswUser = (data) => {
       const temp = data
       temp.Password = ''
@@ -27,7 +27,7 @@ export default function UserController () {
       .then(() => location.reload())
   }
 
-  const login = (bodyStr) => {
+  const login = async (bodyStr) => {
     return fetch('/api/v1/user/login', {
       method: 'POST',
       body: bodyStr,
@@ -40,7 +40,7 @@ export default function UserController () {
       }).catch(err => console.log(err))
   }
 
-  const authurize = (bodyStr, success = () => {}) => {
+  const authurize = async (bodyStr, success) => {
     return fetch('/api/v1/user/auth', {
       method: 'POST',
       body: bodyStr,
@@ -54,7 +54,7 @@ export default function UserController () {
   }
 
   return {
-    addUser: (bodyStr = '', success = () => {}) => addUser(bodyStr, success),
+    addUser: (bodyStr = '') => addUser(bodyStr),
     login: (bodyStr = '') => login(bodyStr),
     authurize: (bodyStr = '', success = () => {}) => authurize(bodyStr, success)
   }
