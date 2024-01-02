@@ -14,6 +14,7 @@ export default function VerifySuccess () {
 
     UserController().authurize(UserInfo().string(), function () {
       message.innerHTML = getSuccessMsg()
+      UserInfo().remove()
     })
   }
 

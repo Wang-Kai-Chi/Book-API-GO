@@ -49,13 +49,26 @@ func (ser UserService) QueryById(ctx *gin.Context) {
 
 func (ser UserService) InsertUser(ctx *gin.Context, user User) {
 	checkUserExist := func(result sql.Result, us User) {
+		responseWithUID := func() {
+			users := ser.repo.FindUserByEmail(us)
+			if len(users) > 0 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"Id": users[0].Id,
+				})
+			} else {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"Response": "User ID not found.",
+				})
+			}
+		}
+
 		affectedRows, err := result.RowsAffected()
 		if err == nil {
 			if affectedRows > 0 {
-				ctx.JSON(http.StatusOK, us)
+				responseWithUID()
 			} else {
 				ctx.JSON(http.StatusBadRequest, gin.H{
-					"Response": "User exist",
+					"Response": "User already existed",
 				})
 			}
 		} else {
