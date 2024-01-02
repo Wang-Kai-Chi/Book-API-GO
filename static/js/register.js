@@ -25,11 +25,25 @@ export default function Register () {
         user[k] = compV
       }
 
+      const loadingMessage = document.querySelector('#loadingMessage')
+      const returnHome = document.querySelector('#returnHome')
+      returnHome.onclick = () => {
+        location.reload()
+      }
+
       const userStr = JSON.stringify(user)
 
       UserController().addUser(userStr).then(data => {
+        console.log(data)
         UserInfo().set(JSON.stringify(data))
-        EmailController().sendVerificationMail(userStr)
+        EmailController().sendVerificationMail(userStr).then(() => {
+          returnHome.hidden = false
+          loadingMessage.innerHTML = '驗證電子郵件已寄出，請至電子信箱查看'
+        }).catch(err => {
+          console.log(err)
+          returnHome.hidden = false
+          loadingMessage.innerHTML = '驗證失敗，請重新註冊'
+        })
       })
     }
   }

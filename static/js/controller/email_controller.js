@@ -8,9 +8,7 @@ export default function EmailController () {
       })
     }).then(res => {
       return res.json()
-    }).then(data => {
-      alert(data.Response)
-    }).catch(err => console.log(err.Response))
+    })
   }
 
   return {

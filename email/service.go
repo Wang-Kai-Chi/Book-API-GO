@@ -85,7 +85,7 @@ func VerifyUserEmail(ctx *gin.Context, authOp func(*gin.Context, User)) {
 		authOp(ctx, us)
 	} else {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Response": "Email verify failed.",
+			"Response": "Email invaild.",
 		})
 	}
 }

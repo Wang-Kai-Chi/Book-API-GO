@@ -11,7 +11,7 @@ export default function UserController () {
         'Content-Type': 'application/json'
       })
     }).then(res => {
-      ResponseHandler().run(res)
+      return res.json()
     }).catch(err => console.log(err))
   }
 
