@@ -29,8 +29,11 @@ export default function ResponseHandler () {
     } else if (res.status === 401) {
       handleAuthurizationExpired()
       return d.then(Promise.reject.bind(Promise))
+    } else if (res.status === 400) {
+      alert('資料錯誤，請再次確認')
+      return d.then(Promise.reject.bind(Promise))
     } else {
-      alert('驗證失敗')
+      alert('系統錯誤，請重新操作')
       return d.then(Promise.reject.bind(Promise))
     }
   }

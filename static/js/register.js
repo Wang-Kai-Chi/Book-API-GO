@@ -1,6 +1,5 @@
 import UserController from './controller/user_controller.js'
 import User from './data/user.js'
-import UserInfo from './localstorage/user_info.js'
 import EmailController from './controller/email_controller.js'
 
 export default function Register () {
@@ -33,18 +32,20 @@ export default function Register () {
 
       const userStr = JSON.stringify(user)
 
-      UserController().addUser(userStr).then(data => {
-        console.log(data)
-        UserInfo().set(JSON.stringify(data))
-        EmailController().sendVerificationMail(userStr).then(() => {
-          returnHome.hidden = false
-          loadingMessage.innerHTML = '驗證電子郵件已寄出，請至電子信箱查看'
-        }).catch(err => {
-          console.log(err)
-          returnHome.hidden = false
-          loadingMessage.innerHTML = '驗證失敗，請重新註冊'
-        })
-      })
+      const sendMail = () => {
+        EmailController().sendVerificationMail(userStr)
+          .then(() => {
+            returnHome.hidden = false
+            loadingMessage.innerHTML = '驗證電子郵件已寄出，請至電子信箱查看'
+          }).catch(err => {
+            console.log(err)
+            returnHome.hidden = false
+            loadingMessage.innerHTML = '驗證失敗，請重新註冊'
+          })
+      }
+
+      UserController().addUser(userStr)
+        .then(() => sendMail())
     }
   }
 }

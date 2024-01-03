@@ -10,9 +10,15 @@ export default function UserController () {
       headers: new Headers({
         'Content-Type': 'application/json'
       })
-    }).then(res => {
-      return res.json()
-    }).catch(err => console.log(err))
+    }).then(res => ResponseHandler().run(res))
+      .then(data => {
+        try {
+          UserInfo().set(JSON.stringify(data))
+        } catch (err) {
+          console.log('store userId failed. error: ' + err)
+        }
+      })
+      .catch(err => console.log(err))
   }
 
   const handleLogin = async (data) => {
@@ -21,8 +27,11 @@ export default function UserController () {
       temp.Password = ''
       return JSON.stringify(temp)
     }
-    UserInfo().set(noPswUser(data))
-
+    try {
+      UserInfo().set(noPswUser(data))
+    } catch (err) {
+      console.log(err)
+    }
     JwtController().getToken(JSON.stringify(data))
       .then(() => location.reload())
   }
@@ -49,8 +58,7 @@ export default function UserController () {
       })
     }).then(res => {
       ResponseHandler().run(res, success)
-    })
-      .catch(err => console.log(err))
+    }).catch(err => console.log(err))
   }
 
   return {
