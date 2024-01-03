@@ -40,7 +40,7 @@ export default function Register () {
           }).catch(err => {
             console.log(err)
             returnHome.hidden = false
-            loadingMessage.innerHTML = '驗證失敗，請重新註冊'
+            loadingMessage.innerHTML = '註冊失敗，請重新操作'
           })
       }
 

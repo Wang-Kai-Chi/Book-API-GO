@@ -1,16 +1,20 @@
 import UserInfo from '../localstorage/user_info.js'
 import JwtController from './jwt_controller.js'
 import ResponseHandler from '../request/response_handler.js'
+import HttpStatusHandler from '../request/http_status_handler.js'
 
 export default function UserController () {
   const addUser = async (bodyStr) => {
+    const statusHandler = HttpStatusHandler()
+    statusHandler.BadRequest = () => alert('帳戶已存在，請使用其他名稱或電子郵件')
+
     return fetch('/api/v1/user/insert', {
       method: 'POST',
       body: bodyStr,
       headers: new Headers({
         'Content-Type': 'application/json'
       })
-    }).then(res => ResponseHandler().run(res))
+    }).then(res => ResponseHandler().run(res, statusHandler))
       .then(data => {
         try {
           UserInfo().set(JSON.stringify(data))
@@ -37,19 +41,26 @@ export default function UserController () {
   }
 
   const login = async (bodyStr) => {
+    const statusHandler = HttpStatusHandler()
+    statusHandler.BadRequest = () => alert('電子郵件錯誤')
+    statusHandler.Unauthorized = () => alert('密碼錯誤')
+
     return fetch('/api/v1/user/login', {
       method: 'POST',
       body: bodyStr,
       headers: new Headers({
         'Content-Type': 'application/json'
       })
-    }).then(res => ResponseHandler().run(res))
+    }).then(res => ResponseHandler().run(res, statusHandler))
       .then(data => {
         handleLogin(data)
       }).catch(err => console.log(err))
   }
 
   const authurize = async (bodyStr, success) => {
+    const statusHandler = HttpStatusHandler()
+    statusHandler.OK = success
+
     return fetch('/api/v1/user/auth', {
       method: 'POST',
       body: bodyStr,
@@ -57,7 +68,7 @@ export default function UserController () {
         'Content-Type': 'application/json'
       })
     }).then(res => {
-      ResponseHandler().run(res, success)
+      ResponseHandler().run(res, statusHandler)
     }).catch(err => console.log(err))
   }
 

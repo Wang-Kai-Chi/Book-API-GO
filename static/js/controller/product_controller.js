@@ -1,5 +1,7 @@
+import HttpStatusHandler from '../request/http_status_handler.js'
 import IknowHeaders from '../request/iknow_headers.js'
 import ResponseHandler from '../request/response_handler.js'
+import TokenManager from '../token_manager.js'
 
 /**
  *
@@ -41,11 +43,14 @@ export default function ProductController () {
 
 function ProductService () {
   const getProduct = async (url = '') => {
+    const statusHandler = HttpStatusHandler()
+    statusHandler.Unauthorized = () => TokenManager().handleAuthurizationExpired()
+
     return fetch(url, {
       method: 'GET',
       headers: IknowHeaders().get()
-    }).then(res => ResponseHandler().run(res))
-      .catch(err => alert(err.Response))
+    }).then(res => ResponseHandler().run(res, statusHandler))
+      .catch(err => console.log(err.Response))
   }
 
   const RequestArgs = () => {
@@ -57,11 +62,16 @@ function ProductService () {
   }
 
   const ajax = async (met = '', args = RequestArgs()) => {
+    const statusHandler = HttpStatusHandler()
+    statusHandler.OK = () => args.success()
+    statusHandler.Unauthorized = () => TokenManager().handleAuthurizationExpired()
+    statusHandler.BadRequest = () => alert('not a product')
+
     return fetch(args.url, {
       method: met,
       body: args.bodyStr,
       headers: IknowHeaders().get()
-    }).then(res => ResponseHandler().run(res, args.success))
+    }).then(res => ResponseHandler().run(res, statusHandler))
       .catch(err => alert(err.Response))
   }
 

@@ -68,7 +68,7 @@ func (serv EmailService) SendVerificationEmail(ctx *gin.Context) {
 				sendVerificationMail(user.Email)
 			} else {
 				ctx.JSON(http.StatusBadRequest, gin.H{
-					"Response": "Not registered user.",
+					"Response": "User email incorrect.",
 				})
 			}
 		},

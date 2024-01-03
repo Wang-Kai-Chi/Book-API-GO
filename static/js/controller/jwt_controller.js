@@ -1,24 +1,22 @@
 import IknowToken from '../localstorage/iknow_token.js'
+import ResponseHandler from '../request/response_handler.js'
+import HttpStatusHandler from '../request/http_status_handler.js'
 
 export default function JwtController () {
   const getToken = (bodyStr) => {
+    const statusHandler = HttpStatusHandler()
+    statusHandler.BadRequest = () => alert('找不到使用者')
+
     return fetch('/api/v1/jwt/token', {
       method: 'POST',
       body: bodyStr,
       headers: new Headers({
         'Content-Type': 'application/json'
       })
-    }).then(res => {
-      const d = res.json()
-      if (res.status === 200) {
-        return d
-      } else {
-        console.log('user info incorrect')
-        return d.then(Promise.reject.bind(Promise))
-      }
-    }).then(data => {
-      IknowToken().set(JSON.stringify(data))
-    }).catch(err => console.log(err))
+    }).then(res => ResponseHandler().run(res, statusHandler))
+      .then(data => {
+        IknowToken().set(JSON.stringify(data))
+      }).catch(err => console.log(err))
   }
 
   return {
