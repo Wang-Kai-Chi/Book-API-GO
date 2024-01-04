@@ -1,4 +1,4 @@
-import CardRenderer from './card_renderer.js'
+import CardRenderer from './util/card_renderer.js'
 
 export default function RecentProduct () {
   const RECENT_PRODUCT_COUNT = 8

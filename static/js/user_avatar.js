@@ -1,5 +1,6 @@
 import UserInfo from './localstorage/user_info.js'
 import IknowToken from './localstorage/iknow_token.js'
+import { HTMX } from './util/htmx.js'
 
 export default function UserAvatar () {
   const user = UserInfo().json()
@@ -21,7 +22,7 @@ export default function UserAvatar () {
     userDropList.innerHTML = DefaultListHTML()
   }
 
-  htmx.process(userDropList)
+  HTMX.process(userDropList)
 }
 
 function LoggedinListHTML (name = '') {

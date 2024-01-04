@@ -1,7 +1,7 @@
 import HttpStatusHandler from '../request/http_status_handler.js'
 import IknowHeaders from '../request/iknow_headers.js'
 import ResponseHandler from '../request/response_handler.js'
-import TokenManager from '../token_manager.js'
+import TokenManager from '../util/token_manager.js'
 
 /**
  *

@@ -1,5 +1,5 @@
 import ProductController from './controller/product_controller.js'
-import CardRenderer from './card_renderer.js'
+import CardRenderer from './util/card_renderer.js'
 
 export default function SearchDialog () {
   const filters = document.querySelector('#searchInput').value

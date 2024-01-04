@@ -1,5 +1,6 @@
-import CurrentProduct from './localstorage/current_product.js'
-import ProductController from './controller/product_controller.js'
+import CurrentProduct from '../localstorage/current_product.js'
+import ProductController from '../controller/product_controller.js'
+import { HTMX } from './htmx.js'
 
 const VALUE_ID = (index) => `v${index}`
 /**
@@ -18,7 +19,7 @@ export default function CardRenderer (selector = '') {
     }
     const cardResult = document.querySelector(selector)
     cardResult.innerHTML = cards()
-    htmx.process(cardResult)
+    HTMX.process(cardResult)
 
     for (const i in value) {
       document.querySelector(`#editBtn${VALUE_ID(i)}`).onclick = () => {

@@ -1,4 +1,4 @@
-import NodeScriptReplace from './request/node_script_replace.js'
+import NodeScriptReplace from '../request/node_script_replace.js'
 
 export default function TokenManager () {
   const handleAuthurizationExpired = () => {
