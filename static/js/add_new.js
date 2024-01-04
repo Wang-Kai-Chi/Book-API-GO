@@ -13,7 +13,7 @@ export default function AddNew () {
   document.querySelector('#formProduct_id').hidden = true
   const form = document.querySelectorAll('.form-control')
 
-  DatePicker().set('#Publication_date')
+  DatePicker().set('Publication_date')
 
   for (const f of form) { f.disabled = false }
 

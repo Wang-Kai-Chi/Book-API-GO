@@ -2,6 +2,7 @@ package product
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 
 	. "iknowbook.com/app/data"
@@ -10,12 +11,13 @@ import (
 
 func getProductForTest() []Product {
 	return []Product{{
-		Barcode:          "1111",
-		Product_title:    "test1111",
-		Publisher:        "test",
-		Publication_date: "1995-01-01",
-		Price:            "69",
-		Description:      "",
+		Product_id:       1464,
+		Barcode:          "9789861043128",
+		Product_title:    "妖怪少爺 (6)",
+		Publisher:        "東立",
+		Publication_date: "2022-03-19T00:00:00Z",
+		Price:            "85元",
+		Description:      "none",
 		Quantity:         1,
 	}}
 }
@@ -62,7 +64,7 @@ func TestQueryByBarcode(t *testing.T) {
 	db, err := ConnectDB()
 	if err == nil {
 		p := NewProductRepository(db)
-		products := p.QueryByBarcode("602508588662")
+		products := p.QueryByBarcode("9789861043128")
 		t.Log(products)
 	} else {
 		t.Fatal(err)
@@ -74,7 +76,13 @@ func TestUpdate(t *testing.T) {
 	if err == nil {
 		p := NewProductRepository(db)
 		res := p.Update(getProductForTest())
-		t.Log(res)
+		num, err := res.RowsAffected()
+		if err == nil {
+			rowCount := strconv.Itoa(int(num))
+			if err == nil {
+				t.Log("Update success, " + rowCount + " affected")
+			}
+		}
 	} else {
 		t.Fatal(err)
 	}

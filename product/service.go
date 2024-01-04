@@ -20,12 +20,33 @@ func NewProductService(repo ProductRepository) ProductService {
 }
 
 func handleProductsFromContext(operation func([]Product) sql.Result, ctx *gin.Context) {
+	showOpertionResult := func(res sql.Result) {
+		rows, err := res.RowsAffected()
+		if err == nil {
+			rowsStr := strconv.Itoa(int(rows))
+			ctx.JSON(http.StatusOK, gin.H{
+				"Response": "Operation success. " + rowsStr + " row effected",
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"Response": "Database or system error, please try again later.",
+			})
+		}
+	}
+
 	handleBody := func(body []byte, operation func([]Product) sql.Result, ctx *gin.Context) {
 		var ps []Product
 		err := json.Unmarshal(body, &ps)
 		if err == nil {
-			operation(ps)
-			ctx.JSON(http.StatusOK, ps)
+			res := operation(ps)
+			if res != nil {
+				showOpertionResult(res)
+			} else {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"Response": "Database or system error, please try again later.",
+				})
+			}
+
 		} else {
 			ctx.JSON(http.StatusBadRequest, gin.H{
 				"Response": "not products",

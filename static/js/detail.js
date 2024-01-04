@@ -12,7 +12,7 @@ import { product } from './data/product.js'
  */
 export default function Detail () {
   const addDetailValues = (obj = {}) => {
-    const dateId = '#Publication_date'
+    const dateId = 'Publication_date'
     DatePicker().set(dateId)
 
     const keys = Object.keys(obj)
@@ -92,8 +92,17 @@ function UpdateController () {
   }
 
   const confirmUpdate = async () => {
-    const bodyStr = JSON.stringify([ProductFormExtractor().extractProduct()])
-    ProductController().updateProduct(updateSuccess, bodyStr)
+    const bodyStr = () => {
+      let temp = ''
+      try {
+        const ps = [ProductFormExtractor().extractProduct()]
+        temp = JSON.stringify(ps)
+      } catch (err) {
+        console.log(err)
+      }
+      return temp
+    }
+    ProductController().updateProduct(updateSuccess, bodyStr())
   }
 
   return {
