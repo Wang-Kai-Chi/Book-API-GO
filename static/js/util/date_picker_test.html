@@ -1,8 +1,13 @@
 <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 <script src="/static/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="/static/js/util/date_picker.js"></script>
+<script type="module">
+    import DatePicker from "/static/js/util/date_picker.js"
+    DatePicker().set('datePicker') 
+</script>
 <div class="container">
     <div class="form-floating mb-3">
-        <input type="date" class="form-control" id="datePicker" value="" min="1900-01-01" max="new Date().toJSON().slice(0, 10)">
+        <input type="date" class="form-control" id="datePicker">
         <label for="datePicker">日期</label>
     </div>
     <button class="btn" onclick="alert(document.querySelector('#datePicker').value)">show date</button>
