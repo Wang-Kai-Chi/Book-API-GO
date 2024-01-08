@@ -1,0 +1,27 @@
+<script type="module">
+    import UserController from './user_controller.js'
+
+    function UserControllerTest() {
+        const userController = UserController()
+
+        return {
+            TestLogin: () => {
+                userController.login(`{"Email": "ericwangcatch@gmail.com","Password": "123"}`)
+                    .then(() => {
+                        console.log('TestLogin')
+                        console.log('pass')
+                    })
+            },
+            TestAuthurize: () => {
+                userController.authurize('{"Id": "c5527b52-3804-4ac3-bad8-7065a85fa600"}', 
+                function () {
+                    console.log('TestAuthurize')
+                    console.log('pass')
+                })
+            }
+        }
+    }
+
+    UserControllerTest().TestLogin()
+    UserControllerTest().TestAuthurize()
+</script>

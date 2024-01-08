@@ -11,6 +11,7 @@ export default function Login () {
     user.this().Password = password.value
 
     UserController().login(JSON.stringify(user.this()))
+      .then(() => location.reload())
   }
 
   document.querySelector('#submit').onclick = () => submit()

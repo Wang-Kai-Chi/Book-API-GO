@@ -1,0 +1,23 @@
+<script type="module">
+    import EmailController from './email_controller.js'
+
+    function EmailControllerTest() {
+        const emailController = EmailController()
+
+        return {
+            TestSendVerificationMail: () => {
+                emailController.sendVerificationMail('{"Email": "ericwangcatch@gmail.com"}')
+                    .then(data => {
+                        console.log('TestSendVerificationMail')
+                        if (data === undefined) {
+                            console.log('%cfailed', 'color:red')
+                        } else {
+                            console.log('pass')
+                        }
+                    })
+            }
+        }
+    }
+
+    EmailControllerTest().TestSendVerificationMail()
+</script>

@@ -3,6 +3,16 @@ import JwtController from './jwt_controller.js'
 import ResponseHandler from '../request/response_handler.js'
 import HttpStatusHandler from '../request/http_status_handler.js'
 
+/**
+ *
+ *
+ * @export
+ * @return {{
+ * addUser: (string) => {},
+ * login: (string) => {},
+ * authurize: (string, function) => {}
+ * }}
+ */
 export default function UserController () {
   const addUser = async (bodyStr) => {
     const statusHandler = HttpStatusHandler()
@@ -37,7 +47,6 @@ export default function UserController () {
       console.log(err)
     }
     JwtController().getToken(JSON.stringify(data))
-      .then(() => location.reload())
   }
 
   const login = async (bodyStr) => {
@@ -75,6 +84,6 @@ export default function UserController () {
   return {
     addUser: (bodyStr = '') => addUser(bodyStr),
     login: (bodyStr = '') => login(bodyStr),
-    authurize: (bodyStr = '', success = () => {}) => authurize(bodyStr, success)
+    authurize: (bodyStr = '', success = () => { }) => authurize(bodyStr, success)
   }
 }
