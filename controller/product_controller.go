@@ -31,12 +31,9 @@ func (ctr ProductController) Run() {
 }
 
 func (ctr ProductController) Insert() {
-	ctr.group.POST(
-		"/insert",
-		func(ctx *gin.Context) {
-			jwt.VerifyBearerToken(ctx, ctr.service.Insert)
-		},
-	)
+	ctr.group.POST("/insert", func(ctx *gin.Context) {
+		jwt.VerifyBearerToken(ctx, ctr.service.Insert)
+	})
 }
 
 func (ctr ProductController) Update() {

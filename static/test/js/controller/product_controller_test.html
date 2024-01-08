@@ -6,10 +6,42 @@
         return {
             TestGetProductByConditions: () => {
                 productController.getProductsByConditions('min=300&max=500')
-                    .then(data => console.log(data))
+                    .then(data => {
+                        console.log('TestGetProductByConditions')
+                        console.log('pass')
+                    })
+            },
+            TestGetProductsByBarcode: () => {
+                productController.getProductsByBarcode('9789863656548')
+                    .then(data => {
+                        console.log('TestGetProductsByBarcode')
+                        console.log('pass')
+                    })
+            },
+            TestUpdateProduct: () => {
+                productController.updateProduct(function(){},`[{
+                    "Product_id": 1464,
+                    "Barcode": "9789861043128",
+                    "Publication_date": "2022-03-19T00:00:00Z",
+                    "Product_title": "妖怪少爺 (6)",
+                    "Price": "85元",
+                    "Publisher": "東立",
+                    "Quantity": 1,
+                    "Description": "none"
+                }]`)
+                    .then(data => {
+                        console.log('TestUpdateProduct')
+                        if (data === undefined) {
+                            console.log('failed')
+                        } else {
+                            console.log('pass')
+                        }
+                    })
             }
         }
     }
-    
+
     ProductControllerTest().TestGetProductByConditions()
+    ProductControllerTest().TestGetProductsByBarcode()
+    ProductControllerTest().TestUpdateProduct()
 </script>

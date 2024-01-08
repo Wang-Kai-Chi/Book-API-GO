@@ -1,0 +1,21 @@
+<script type="module">
+    import JwtController from '../../../js/controller/jwt_controller.js'
+
+    function JwtControllerTest() {
+        const jwtController = JwtController()
+        return {
+            TestGetToken: () => {
+                jwtController.getToken(`{
+                    "Id": "c5527b52-3804-4ac3-bad8-7065a85fa600",
+                    "Name": "eric",
+                    "Email": "ericwangcatch@gmail.com",
+                    "Phone": "",
+                    "Password": "$2a$10$/tOuPovefudhm/E.h0IKf.HHZI8zsxKYqoMJ8vTnLpc6iEFs1wIwm",
+                    "Auth": "$2a$10$J7NrYkz1EwggF7EjrMetnOFd9o74vUK6R71Q8GBqbSEGYQKSmG2Me"
+                }`).then(() => { console.log('pass') })
+            }
+        }
+    }
+
+    JwtControllerTest().TestGetToken()
+</script>

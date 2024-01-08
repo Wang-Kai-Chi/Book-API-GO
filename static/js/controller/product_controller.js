@@ -7,6 +7,7 @@ import TokenManager from '../util/token_manager.js'
  *
  *
  * @export
+ * @constructor
  * @return {
  * getProductsByConditions: (string)=>{Product},
  * getProductsByBarcode: (string)=>{Product},
@@ -78,7 +79,7 @@ function ProductService () {
       body: args.bodyStr,
       headers: IknowHeaders().get()
     }).then(res => ResponseHandler().run(res, statusHandler))
-      .catch(err => alert(err.Response))
+      .catch(err => console.log(err.Response))
   }
 
   const updateProduct = (args = RequestArgs()) => {

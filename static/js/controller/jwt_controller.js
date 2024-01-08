@@ -2,6 +2,12 @@ import IknowToken from '../localstorage/iknow_token.js'
 import ResponseHandler from '../request/response_handler.js'
 import HttpStatusHandler from '../request/http_status_handler.js'
 
+/**
+ *
+ *
+ * @export
+ * @return {{getToken:(string)=>{}}}
+ */
 export default function JwtController () {
   const getToken = (bodyStr) => {
     const statusHandler = HttpStatusHandler()
