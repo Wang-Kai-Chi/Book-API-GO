@@ -7,7 +7,13 @@ import TokenManager from '../util/token_manager.js'
  *
  *
  * @export
- * @return {*}
+ * @return {
+ * getProductsByConditions: (string)=>{Product},
+ * getProductsByBarcode: (string)=>{Product},
+ * updateProduct: (function, string)=>{Product},
+ * deleteProduct: (function, string)=>{Product},
+ * addProduct: (function, string)=>{Product}
+ * }
  */
 export default function ProductController () {
   const service = ProductService()
